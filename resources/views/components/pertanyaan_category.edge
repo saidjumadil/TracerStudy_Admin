@@ -1,0 +1,131 @@
+@set('umum_pilihan',false)
+@each(soal in soals)
+  @if(angka_dependency)
+    @set('angka_pertanyaan',angka_dependency + (ascii[97 + $loop.index]))
+  @else
+    @set('angka_pertanyaan',$loop.index+1)
+  @endif
+
+  @if(soal.id_jenis_pertanyaan == 1)
+    @if(soal.nama_field == 'kontak_email')
+      @set('information',auth['email'])
+    @elseif(soal.nama_field == 'tahun_lulus')
+      @set('information',periode_wisuda)
+    @else
+      @set('information',auth[soal.nama_field])
+    @endif
+
+    @!component('components/database',{
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'name':soal.nama_field,
+      'information':information
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 2)
+
+    @!component('components/input',{
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'name':soal.nama_field,
+      'validasi':soal.rules,
+      'type': 'text',
+      'form_class':form_class,
+      'target':soal.dependency_pertanyaan_id,
+      'answer':soal.dependency_jawaban
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 3)
+
+  {{--  // TODO: pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
+    @!component('components/dropdown',{
+      'id':soal.id,
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'name':soal.nama_field,
+      'validasi':soal.rules,
+      'choice':soal.list_pilihan,
+      'form_class':form_class,
+      'target':soal.dependency_pertanyaan_id,
+      'answer':soal.dependency_jawaban
+
+
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 4)
+
+  {{--  // TODO: pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
+    @!component('components/dropdown-dependency',{
+      'id':soal.id,
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'name':soal.nama_field,
+      'validasi':soal.rules,
+      'id':soal.id,
+      'choice':soal.list_pilihan,
+      'soals':soal.dependency_pertanyaan,
+      'angka_dependency':angka_pertanyaan,
+      'ascii':ascii
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 5)
+
+  {{--  // TODO: pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
+
+    @!component('components/radio',{
+      'id':soal.id,
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'name':soal.nama_field,
+      'validasi':soal.rules,
+      'choice':soal.list_pilihan,
+      'form_class':form_class,
+      'soals':soal.dependency_pertanyaan,
+      'target':soal.dependency_pertanyaan_id,
+      'answer':soal.dependency_jawaban,
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 6)
+
+    @!component('components/radio-dependency',{
+      'id':soal.id,
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'name':soal.nama_field,
+      'validasi':soal.rules,
+      'id':soal.id,
+      'choice':soal.list_pilihan,
+      'angka_dependency':angka_pertanyaan,
+      'ascii':ascii
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 7)
+    @!component('components/induk_pertanyaan',{
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'validasi':soal.rules,
+      'form_class':form_class,
+      'soals':soal.dependency_pertanyaan,
+      'target':soal.dependency_pertanyaan_id,
+      'answer':soal.dependency_jawaban,
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 8)
+
+    @!component('components/checkbox',{
+      'id':soal.id,
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'name':soal.nama_field,
+      'validasi':soal.rules,
+      'form_class':form_class,
+      'target':soal.dependency_pertanyaan_id,
+      'answer':soal.dependency_jawaban,
+      'choice':soal.list_pilihan
+    })
+
+  @elseif(soal.id_jenis_pertanyaan == 9)
+
+    @!component('components/textarea',{
+      'label':angka_pertanyaan +'. '+soal.pertanyaan,
+      'validasi':soal.rules,
+      'name':soal.nama_field,
+      'form_class':form_class,
+      'target':soal.dependency_pertanyaan,
+      'answer':soal.dependency_jawaban
+    })
+
+  @endif
+@endeach

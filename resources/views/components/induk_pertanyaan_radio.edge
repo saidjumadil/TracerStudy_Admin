@@ -1,0 +1,48 @@
+<table class="table question">
+  <thead>
+    <tr>
+      <th scope="col"><span class="form-text" style="font-weight:bold">(1: Sangat kecil, 5: Sangat besar)</span></th>
+      <th scope="col" class="text-center w-10px">1</th>
+      <th scope="col" class="text-center w-10px">2</th>
+      <th scope="col" class="text-center w-10px">3</th>
+      <th scope="col" class="text-center w-10px">4</th>
+      <th scope="col" class="text-center w-10px">5</th>
+    </tr>
+  </thead>
+  <tbody>
+    @each((question,index) in questions )
+    <tr class="bg-hover-info form-group">
+      <th scope="row">
+
+        {{question.pertanyaan}}
+      </th>
+
+        <td><label class="radio justify-content-center">
+          <input type="radio" name="{{ question.nama_field }}"
+          data-fv-not-empty='{{ (target) ? false : question.rules[0] }}'
+          data-fv-not-empty___message='Wajib Centang'
+          not-empty='{{question.rules[0]}}'
+          value="{{ index+1 }}"
+          ><span></span>
+        </label></td>
+
+      <td><label class="radio justify-content-center">
+          <input type="radio" name="{{ question.nama_field }}" value="{{ index+1 }}"><span></span>
+        </label></td>
+
+      <td><label class="radio justify-content-center">
+          <input type="radio" name="{{ question.nama_field }}" value="{{ index+1 }}"><span></span>
+        </label></td>
+
+      <td><label class="radio justify-content-center">
+          <input type="radio" name="{{ question.nama_field }}" value="{{ index+1 }}"><span></span>
+        </label></td>
+
+      <td><label class="radio justify-content-center">
+          <input type="radio" name="{{ question.nama_field }}" value="{{ index+1 }}"><span></span>
+        </label></td>
+    </tr>
+    @endeach
+
+  </tbody>
+</table>

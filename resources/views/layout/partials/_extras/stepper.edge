@@ -1,0 +1,16 @@
+{{--  stepper  --}}
+<div class="row justify-content-center mb-5">
+  <div class="col-md-12">
+    {{--  //TODO: perubahan tergantunng data telah diisi atau tidak  --}}
+    <div class="stepper">
+      <li class="{{ (tahap == 1) ? 'pending':'active' }}">
+        Data Pendahuluan
+      </li>
+      <li class="{{ (tahap == 2) ? 'pending':(tahap<2) ? '' : 'active' }}">
+        Pengalaman Kuliah
+      </li>
+      <li class="{{ (tahap == 3) ? 'active':'' }}">Finalisasi</li>
+    </div>
+  </div>
+</div>
+{{--  end stepper  --}}

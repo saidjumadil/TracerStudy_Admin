@@ -1,0 +1,32 @@
+@layout('layout.layout')
+
+@section('content')
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">
+      Import Data Users Monitoring
+    </h3>
+
+  </div>
+  <!--begin::Form-->
+  <form>
+    <div class="card-body">
+      @!component('components/dropdown-range',{
+        'name':'import_user',
+        'label':'Import Data',
+        'required':false,
+        'start':2020,
+        'end':1999
+      })
+    </div>
+  </form>
+  <!--end::Form-->
+</div>
+
+@endsection
+
+@section('script')
+<script src="/assets/js/pages/crud/file-upload/custom-dropzonejs.js"></script>
+
+
+@endsection
