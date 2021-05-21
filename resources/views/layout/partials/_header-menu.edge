@@ -8,74 +8,19 @@
 
       <!--begin::Header Nav-->
       <ul class="menu-nav">
-
-
         {{-- for admin  --}}
-        {{--  //FIXME: handle harusnya bersangkutan dengan role si admin dari user authentikasi  --}}
-        @if(request.url().search('/admin') != -1)
-
-
-        <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/admin')?' menu-item-open menu-item-here':''}}">
-          <a href="{{route('admin.index')}}" class="menu-link">
-            <span class="menu-text">Beranda</span>
-          </a>
-        </li>
-        <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url().search('/data/') !=-1)?' menu-item-open menu-item-here':''}}"
+        <li class="menu-item menu-item-open menu-item-here menu-item-submenu menu-item-rel menu-item-open-dropdown"
           data-menu-toggle="click" aria-haspopup="true">
           <a href="javascript:;" class="menu-link menu-toggle">
-            <span class="menu-text">Data</span>
+            <span class="menu-text">D3</span>
             <span class="menu-desc"></span>
             <i class="menu-arrow"></i>
           </a>
           <div class="menu-submenu menu-submenu-classic menu-submenu-left">
             <ul class="menu-subnav">
-
               <li class="menu-item" aria-haspopup="true">
-                <a href="{{route('admin.data.pengisi')}}" class="menu-link">
+                <a target="_blank" href="{{route('admin.d3.index')}}" class="menu-link">
                   <span class="svg-icon menu-icon">
-                    <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Files\File.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <polygon points="0 0 24 0 24 24 0 24" />
-                        <path
-                          d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z"
-                          fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                        <rect fill="#000000" x="6" y="11" width="9" height="2" rx="1" />
-                        <rect fill="#000000" x="6" y="15" width="5" height="2" rx="1" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <span class="menu-text">Data Pengisi</span>
-                </a>
-              </li>
-              <li class="menu-item" aria-haspopup="true">
-                <a href="{{route('admin.data.hasil')}}" class="menu-link">
-                  <span class="svg-icon menu-icon">
-                    <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Files\Uploaded-file.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <polygon points="0 0 24 0 24 24 0 24" />
-                        <path
-                          d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z"
-                          fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                        <path
-                          d="M8.95128003,13.8153448 L10.9077535,13.8153448 L10.9077535,15.8230161 C10.9077535,16.0991584 11.1316112,16.3230161 11.4077535,16.3230161 L12.4310522,16.3230161 C12.7071946,16.3230161 12.9310522,16.0991584 12.9310522,15.8230161 L12.9310522,13.8153448 L14.8875257,13.8153448 C15.1636681,13.8153448 15.3875257,13.5914871 15.3875257,13.3153448 C15.3875257,13.1970331 15.345572,13.0825545 15.2691225,12.9922598 L12.3009997,9.48659872 C12.1225648,9.27584861 11.8070681,9.24965194 11.596318,9.42808682 C11.5752308,9.44594059 11.5556598,9.46551156 11.5378061,9.48659872 L8.56968321,12.9922598 C8.39124833,13.2030099 8.417445,13.5185067 8.62819511,13.6969416 C8.71848979,13.773391 8.8329684,13.8153448 8.95128003,13.8153448 Z"
-                          fill="#000000" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon--></span>
-                  <span class="menu-text">Data Hasil</span>
-                </a>
-              </li>
-              <li class="menu-item" aria-haspopup="true">
-                <a href="{{route('admin.data.importuser')}}" class="menu-link">
-                  <span class="svg-icon menu-icon">
-
                     <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                       height="24px" viewBox="0 0 24 24" version="1.1">
@@ -89,32 +34,16 @@
                           x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
                       </g>
                     </svg>
-
                     <!--end::Svg Icon-->
                   </span>
-                  <span class="menu-text">Import Users Monitoring</span>
+                  <span class="menu-text">Beranda</span>
                 </a>
               </li>
-            </ul>
-          </div>
-        </li>
-
-        <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url().search('/managemen') != -1)?' menu-item-open menu-item-here':''}}"
-          data-menu-toggle="click" aria-haspopup="true">
-          <a href="javascript:;" class="menu-link menu-toggle">
-            <span class="menu-text">User Management</span>
-            <span class="menu-desc"></span>
-            <i class="menu-arrow"></i>
-          </a>
-          <div class="menu-submenu menu-submenu-classic menu-submenu-left">
-            <ul class="menu-subnav">
-
-              <li class="menu-item" aria-haspopup="true">
-                <a href="{{route('admin.managemen.tambah.admin')}}" class="menu-link">
+              <li class="menu-item menu-item-submenu" data-menu-toggle="hover" aria-haspopup="true">
+                <a href="javascript:;" class="menu-link menu-toggle">
                   <span class="svg-icon menu-icon">
-                    <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Communication\Add-user.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                    <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                       height="24px" viewBox="0 0 24 24" version="1.1">
                       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24" />
@@ -128,14 +57,44 @@
                     </svg>
                     <!--end::Svg Icon-->
                   </span>
-                  <span class="menu-text">Tambah Admin</span>
+                  <span class="menu-text">Data</span>
+                  <i class="menu-arrow"></i>
                 </a>
+                <div class="menu-submenu menu-submenu-classic menu-submenu-right">
+                  <ul class="menu-subnav">
+                    <li class="menu-item" aria-haspopup="true">
+                      <a href="{{ route('admin.d3.data.pengisi') }}" class="menu-link">
+                        <i class="menu-bullet menu-bullet-dot">
+                          <span></span>
+                        </i>
+                        <span class="menu-text">Data Pengisi</span>
+                      </a>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true">
+                      <a href="{{ route('admin.d3.data.hasil') }}" class="menu-link">
+                        <i class="menu-bullet menu-bullet-dot">
+                          <span></span>
+                        </i>
+                        <span class="menu-text">Data Hasil</span>
+                      </a>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true">
+                      <a href="{{ route('admin.d3.data.importuser') }}" class="menu-link">
+                        <i class="menu-bullet menu-bullet-dot">
+                          <span></span>
+                        </i>
+                        <span class="menu-text">Import Users Monitoring</span>
+                      </a>
+                    </li>
+
+                  </ul>
+                </div>
               </li>
-              <li class="menu-item" aria-haspopup="true">
-                <a href="{{route('admin.managemen.tambah.operator')}}" class="menu-link">
+              <li class="menu-item menu-item-submenu" data-menu-toggle="hover" aria-haspopup="true">
+                <a href="javascript:;" class="menu-link menu-toggle">
                   <span class="svg-icon menu-icon">
-                    <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Communication\Add-user.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                    <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                       height="24px" viewBox="0 0 24 24" version="1.1">
                       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24" />
@@ -149,90 +108,171 @@
                     </svg>
                     <!--end::Svg Icon-->
                   </span>
-                  <span class="menu-text">Tambah Operator</span>
+                  <span class="menu-text">User Managemen</span>
+                  <i class="menu-arrow"></i>
                 </a>
+                <div class="menu-submenu menu-submenu-classic menu-submenu-right">
+                  <ul class="menu-subnav">
+
+                    <li class="menu-item" aria-haspopup="true">
+                      <a href="{{route('admin.d3.managemen.tambah.admin')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                          <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Communication\Add-user.svg--><svg
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                            height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <polygon points="0 0 24 0 24 24 0 24" />
+                              <path
+                                d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                              <path
+                                d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                                fill="#000000" fill-rule="nonzero" />
+                            </g>
+                          </svg>
+                          <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text">Tambah Admin</span>
+                      </a>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true">
+                      <a href="{{route('admin.d3.managemen.tambah.operator')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                          <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Communication\Add-user.svg--><svg
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                            height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <polygon points="0 0 24 0 24 24 0 24" />
+                              <path
+                                d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                              <path
+                                d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                                fill="#000000" fill-rule="nonzero" />
+                            </g>
+                          </svg>
+                          <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text">Tambah Operator</span>
+                      </a>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true">
+                      <a href="{{route('admin.d3.managemen.tambah.akunresponden')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                          <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Communication\Add-user.svg--><svg
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                            height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <polygon points="0 0 24 0 24 24 0 24" />
+                              <path
+                                d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                              <path
+                                d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                                fill="#000000" fill-rule="nonzero" />
+                            </g>
+                          </svg>
+                          <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text">Tambah Akun Responden</span>
+                      </a>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true">
+                      <a href="{{route('admin.d3.managemen.edit.dataresponden')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                          <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Design\Edit.svg--><svg
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                            height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <rect x="0" y="0" width="24" height="24" />
+                              <path
+                                d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
+                                fill="#000000" fill-rule="nonzero"
+                                transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                              <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1" />
+                            </g>
+                          </svg>
+                          <!--end::Svg Icon--></span>
+                        <span class="menu-text">Edit Data Responden</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </li>
-              <li class="menu-item" aria-haspopup="true">
-                <a href="{{route('admin.managemen.tambah.akunresponden')}}" class="menu-link">
+              <li class="menu-item menu-item-submenu menu-item-rel">
+                <a href="{{route('admin.d3.sasaran')}}" class="menu-link">
                   <span class="svg-icon menu-icon">
-                    <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Communication\Add-user.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                      height="24px" viewBox="0 0 24 24" version="1.1">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <polygon points="0 0 24 0 24 24 0 24" />
-                        <path
-                          d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
-                          fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                        <path
-                          d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
-                          fill="#000000" fill-rule="nonzero" />
-                      </g>
-                    </svg>
-                    <!--end::Svg Icon-->
-                  </span>
-                  <span class="menu-text">Tambah Akun Responden</span>
-                </a>
-              </li>
-              <li class="menu-item" aria-haspopup="true">
-                <a href="{{route('admin.managemen.edit.dataresponden')}}" class="menu-link">
-                  <span class="svg-icon menu-icon">
-                    <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo8\dist/../src/media/svg/icons\Design\Edit.svg--><svg
-                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                    <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                       height="24px" viewBox="0 0 24 24" version="1.1">
                       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <rect x="0" y="0" width="24" height="24" />
                         <path
-                          d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
-                          fill="#000000" fill-rule="nonzero"
-                          transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
-                        <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1" />
+                          d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+                          fill="#000000" />
+                        <rect fill="#000000" opacity="0.3"
+                          transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
+                          x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
                       </g>
                     </svg>
-                    <!--end::Svg Icon--></span>
-                  <span class="menu-text">Edit Data Responden</span>
+                    <!--end::Svg Icon-->
+                  </span>
+                  <!--end::Svg Icon-->
+                  <span class="menu-text">Ubah Sasaran</span>
+                </a>
+              </li>
+              <li class="menu-item menu-item-submenu menu-item-rel">
+                <a href="{{route('admin.d3.jadwal')}}" class="menu-link">
+                  <span class="svg-icon menu-icon">
+                    <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                      height="24px" viewBox="0 0 24 24" version="1.1">
+                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24" />
+                        <path
+                          d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+                          fill="#000000" />
+                        <rect fill="#000000" opacity="0.3"
+                          transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
+                          x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+                      </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                  </span>
+                  <span class="menu-text">Ubah Jadwal</span>
+                </a>
+              </li>
+              <li class="menu-item menu-item-submenu menu-item-rel">
+                <a href="{{route('admin.d3.sms')}}" class="menu-link">
+                  <span class="svg-icon menu-icon">
+                    <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                      height="24px" viewBox="0 0 24 24" version="1.1">
+                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24" />
+                        <path
+                          d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+                          fill="#000000" />
+                        <rect fill="#000000" opacity="0.3"
+                          transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
+                          x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+                      </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                  </span>
+                  <span class="menu-text">SMS</span>
                 </a>
               </li>
             </ul>
-
-
           </div>
         </li>
 
-        <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/admin/sasaran')?' menu-item-open menu-item-here':''}}">
-          <a href="{{route('admin.sasaran')}}" class="menu-link">
-            <span class="menu-text">Ubah Sasaran</span>
-          </a>
-        </li>
-        <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/admin/jadwal')?' menu-item-open menu-item-here':''}}">
-          <a href="{{route('admin.jadwal')}}" class="menu-link">
-            <span class="menu-text">Ubah Jadwal</span>
-          </a>
-        </li>
-        <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/admin/sms')?' menu-item-open menu-item-here':''}}">
-          <a href="{{route('admin.sms')}}" class="menu-link">
-            <span class="menu-text">SMS</span>
-          </a>
-        </li>
 
-        @else
 
-        {{--  for user  --}}
-        <li class="menu-item menu-item-submenu
-          menu-item-rel{{(tahap)?' menu-item-open menu-item-here':''}}">
-          <a href="{{route('kuisoner.tahap1')}}" class="menu-link">
-            <span class="menu-text">Kuisoner</span>
-          </a>
-        </li>
-        <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/faq')?' menu-item-open menu-item-here':''}}">
-          <a href="{{route('faq')}}" class="menu-link">
-            <span class="menu-text">FAQ</span>
-          </a>
-        </li>
-        @endif
+
+
+
+
       </ul>
 
       <!--end::Header Nav-->

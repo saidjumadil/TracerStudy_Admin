@@ -1,0 +1,15 @@
+<div class="form-group {{ form_class }}">
+  <label for="{{ name }}">
+    {{ label }}
+    @if(required)
+    <span class="text-danger">*</span>
+    @endif
+  </label>
+  <select class="form-control" name="{{ name }}" id="{{ name }}">
+    <option value="">-- pilihan anda --</option>
+
+    @each(value in range(start,end ) )
+    <option value="{{ value }}">{{ value }}</option>
+    @endeach
+  </select>
+</div>

@@ -1,4 +1,5 @@
 import Route from '@ioc:Adonis/Core/Route'
+import './hook'
 
 // authentikasi
 Route.group(() => {
@@ -10,41 +11,45 @@ Route.group(() => {
 
 // admin side
 Route.group(() => {
-  // beranda
-  Route.get('', 'Admin/AdminsController.index').as('index')
-
-  // data
   Route.group(() => {
-    Route.get('pengisi', 'Admin/AdminResponsController.pengisi').as('pengisi')
-    Route.get('hasil', 'Admin/AdminResponsController.hasil').as('hasil')
-    Route.get('importuser', 'Admin/AdminResponsController.importuser').as('importuser')
-  })
-    .prefix('data')
-    .as('data')
+    // beranda
+    Route.get('', 'D3/D3AdminsController.index').as('index')
 
-  // user managemen
-  Route.group(() => {
+    // data
     Route.group(() => {
-      Route.get('admin', 'Admin/AdminUserManagemenController.tambah_admin').as('admin')
-      Route.get('operator', 'Admin/AdminUserManagemenController.tambah_operator').as('operator')
-      Route.get('akunresponden', 'Admin/AdminUserManagemenController.tambah_akunresponden').as(
-        'akunresponden'
+      Route.get('pengisi', 'D3/D3AdminResponsController.pengisi').as('pengisi')
+      Route.get('hasil', 'D3/D3AdminResponsController.hasil').as('hasil')
+      Route.get('importuser', 'D3/D3AdminResponsController.importuser').as('importuser')
+    })
+      .prefix('data')
+      .as('data')
+
+    // user managemen
+    Route.group(() => {
+      Route.group(() => {
+        Route.get('admin', 'D3/D3AdminUserManagemenController.tambah_admin').as('admin')
+        Route.get('operator', 'D3/D3AdminUserManagemenController.tambah_operator').as('operator')
+        Route.get('akunresponden', 'D3/D3AdminUserManagemenController.tambah_akunresponden').as(
+          'akunresponden'
+        )
+      })
+        .prefix('tambah')
+        .as('tambah')
+
+      Route.get('edit/dataresponden', 'D3/D3AdminUserManagemenController.edit_dataresponden').as(
+        'edit.dataresponden'
       )
     })
-      .prefix('tambah')
-      .as('tambah')
+      .prefix('managemen')
+      .as('managemen')
 
-    Route.get('edit/dataresponden', 'Admin/AdminUserManagemenController.edit_dataresponden').as(
-      'edit.dataresponden'
-    )
+    // ubah sasaran,ubah jadwal,sms
+    Route.get('sasaran', 'D3/D3AdminsController.sasaran').as('sasaran')
+    Route.get('jadwal', 'D3/D3AdminsController.jadwal').as('jadwal')
+    Route.get('sms', 'D3/D3AdminsController.sms').as('sms')
   })
-    .prefix('managemen')
-    .as('managemen')
-
-  // ubah sasaran,ubah jadwal,sms
-  Route.get('sasaran', 'Admin/AdminsController.sasaran').as('sasaran')
-  Route.get('jadwal', 'Admin/AdminsController.jadwal').as('jadwal')
-  Route.get('sms', 'Admin/AdminsController.sms').as('sms')
+    .prefix('d3')
+    .as('d3')
 })
   .prefix('admin')
   .as('admin')
