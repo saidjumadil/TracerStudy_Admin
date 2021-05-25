@@ -1,14 +1,14 @@
 export default class AuthController {
   public index({ view }) {
-    return view.render('admin/login')
+    return view.render('login')
   }
 
-  public async authentication({ auth, request, view }) {
+  public async authentication({ auth, request, response }) {
     const { nim, password } = request.all()
     const user = await auth.attempt(nim, password)
     console.log(user)
     if (user) {
-      return view.render('admin/index')
+      return response.redirect().toRoute('admin.d3.index')
     } else {
       //TODO: buat misc
     }

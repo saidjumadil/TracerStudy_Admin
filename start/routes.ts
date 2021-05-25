@@ -3,10 +3,10 @@ import './hook'
 
 // authentikasi
 Route.group(() => {
-  Route.get('', 'Admin/AuthController.index').as('login')
-  Route.post('', 'Admin/AuthController.authentication').as('authentication_admin')
+  Route.get('', 'AuthController.index').as('login')
+  Route.post('', 'AuthController.authentication').as('authentication_admin')
 
-  Route.get('logout', 'Admin/AuthController.logout').as('logout')
+  Route.get('logout', 'AuthController.logout').as('logout')
 }).as('auth')
 
 // admin side
