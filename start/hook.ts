@@ -122,3 +122,7 @@ View.global('range', function (start: number, end: number) {
 
   return arr
 })
+
+View.global('conString', function (value1: string, value2: string) {
+  return value1 + value2
+})

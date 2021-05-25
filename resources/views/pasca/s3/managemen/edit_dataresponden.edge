@@ -1,0 +1,67 @@
+@layout('layout.layout')
+@section('style')
+<link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+@endsection
+
+@section('content')
+{{--  //FIXME: perbaiki bentukan tampilan berdasarkan data admin  --}}
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">
+      Data Responden
+    </h3>
+
+  </div>
+
+
+  <!--begin::Card-->
+  <div class="card-body">
+    <!--begin: Datatable-->
+    <table class="table table-separate table-head-custom table-checkable w100" id="kt_datatable2">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>NIM</th>
+          <th>Email</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each((item,index) in [ '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+        '1', '1',
+        '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+        '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', ])
+
+        <tr>
+          <td>Aqil Fiqran Dzi'Ul Haq</td>
+          <td>1708107010026</td>
+          <td>
+            <div class="form-group">
+
+              <input type="text" class="form-control" value="aqilfiqran@mhs.unsyiah.ac.id">
+            </div>
+
+          </td>
+          <td>
+            <button class="btn btn-warning">Edit Email</button>
+          </td>
+        </tr>
+
+
+
+        @endeach
+      </tbody>
+    </table>
+    <!--end: Datatable-->
+  </div>
+
+  <!--end::Card-->
+
+</div>
+@endsection
+@section('script')
+<script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+
+<script src="/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
+
+@endsection

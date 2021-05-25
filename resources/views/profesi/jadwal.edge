@@ -1,0 +1,43 @@
+@layout('layout.layout')
+
+@section('content')
+<div class="card card-custom">
+  <div class="card-header">
+    <div class="card-title">
+
+      <h3 class="card-label">
+        Jadwal
+        <small>Batas Pengisian Kuisoner Tracer Study</small>
+      </h3>
+    </div>
+  </div>
+  <!--begin::Form-->
+  <form>
+    <div class="card-body">
+      <div class="form-group">
+        <label>Set Jadwal <span class="text-danger">*</span></label>
+        <div class="input-group date" id="kt_datetimepicker_1" data-target-input="nearest">
+          <input type="text" class="form-control datetimepicker-input" placeholder="Select date &amp; time"
+            data-target="#kt_datetimepicker_1" />
+          <div class="input-group-append" data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
+            <span class="input-group-text">
+              <i class="ki ki-calendar"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="text-right mt-5">
+
+        <div class="btn btn-success"><i class="fa fa-edit icon-sm"></i> Simpan </div>
+      </div>
+    </div>
+  </form>
+  <!--end::Form-->
+</div>
+
+@endsection
+
+@section('script')
+<script src="/assets/js/pages/crud/forms/widgets/custom-bootstrap-datetimepicker.js"></script>
+
+@endsection

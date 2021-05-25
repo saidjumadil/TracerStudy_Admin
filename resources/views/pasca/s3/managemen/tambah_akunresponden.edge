@@ -1,0 +1,30 @@
+@layout('layout.layout')
+
+@section('content')
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">
+      Tambah Responden
+    </h3>
+
+  </div>
+  <!--begin::Form-->
+  <form>
+    <div class="card-body">
+      <div class="form-group">
+        <label>NIM<span class="text-danger">*</span></label>
+        <input type="number" class="form-control" placeholder="Contoh: 1708107010026">
+
+      </div>
+
+
+      <div class="text-right">
+
+        <div class="btn btn-primary"><i class="fas fa-arrow-right icon-sm"></i> Daftar </div>
+      </div>
+    </div>
+  </form>
+  <!--end::Form-->
+</div>
+
+@endsection
