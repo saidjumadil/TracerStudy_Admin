@@ -1,3 +1,5 @@
+
+
 .table.question th {
   font-weight: 400;
 }
@@ -6,7 +8,6 @@
   color: white;
   transition: 0.6s;
 }
-
 .table.question tr:first-child:hover {
   color: black;
 }

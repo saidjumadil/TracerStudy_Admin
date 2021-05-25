@@ -1,0 +1,83 @@
+/* Default Color */
+html {
+  --primary-bg: #56077e;
+  --primary: #8950fc;
+  --primary-border: #671efb;
+  --primary-hover: #702afb;
+  --primary-state-hover:#7337EE;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
+  --color-form:#ab82fd;
+}
+
+/* Theme D3 */
+html.theme-d3 {
+  --primary-bg: #56077e;
+  --primary: #8950fc;
+  --primary-border: #671efb;
+  --primary-hover: #702afb;
+  --primary-state-hover:#7337EE;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
+  --color-form:#ab82fd;
+}
+
+/* Theme Profesi */
+html.theme-profesi {
+  --primary-bg: #2773a5;
+  --primary: #6993ff;
+  --primary-border: #698ff0;
+  --primary-hover: #6972f0;
+  --primary-state-hover:#7269f0;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
+  --color-form:#6972f0;
+}
+
+/* Theme pasca s2 */
+html.theme-pasca-s2 {
+  --primary-bg: #56077e;
+  --primary: #8950fc;
+  --primary-border: #671efb;
+  --primary-hover: #702afb;
+  --primary-state-hover:#7337EE;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
+  --color-form:#ab82fd;
+}
+
+/* Theme pasca admin */
+html.theme-pasca-s3 {
+  --primary-bg: #56077e;
+  --primary: #8950fc;
+  --primary-border: #671efb;
+  --primary-hover: #702afb;
+  --primary-state-hover:#7337EE;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
+  --color-form:#ab82fd;
+}
+
+/* Theme admin */
+html.theme-admin {
+    --primary-bg: #2773a5;
+  --primary: #6993ff;
+  --primary-border: #698ff0;
+  --primary-hover: #6972f0;
+  --primary-state-hover:#7269f0;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
+  --color-form:#6972f0;
+}
