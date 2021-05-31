@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export default class PascaS2AdminResponsController {
   // TODO: data pengisi
   public pengisi({ view }) {

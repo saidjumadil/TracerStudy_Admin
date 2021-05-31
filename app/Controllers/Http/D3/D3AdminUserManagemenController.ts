@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export default class D3AdminUserManagemenController {
   public tambah_admin({ view }) {
     return view.render('d3/managemen/tambah_admin')

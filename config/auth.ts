@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
  * Config source: https://git.io/JY0mp
  *
@@ -52,7 +53,7 @@ const authConfig: AuthConfig = {
         | the primary key is the right choice.
         |
         */
-        identifierKey: 'id',
+        identifierKey: 'username',
 
         /*
         |--------------------------------------------------------------------------
@@ -64,7 +65,7 @@ const authConfig: AuthConfig = {
         | of the mentioned columns to find their user record.
         |
         */
-        uids: ['nim'],
+        uids: ['username'],
 
         /*
         |--------------------------------------------------------------------------

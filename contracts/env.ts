@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
  * Contract source: https://git.io/JTm6U
  *
