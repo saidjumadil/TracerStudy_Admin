@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { column, BaseModel } from '@ioc:Adonis/Lucid/Orm'
-import { DateTime } from 'luxon'
 
 export default class Jadwal extends BaseModel {
   public static table = 'jadwal'
@@ -10,9 +9,10 @@ export default class Jadwal extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
+  // FIXME: ubah tipe data dari ini
   @column()
-  public waktu_mulai: DateTime
+  public waktu_mulai: string
 
   @column()
-  public waktu_berakhir: DateTime
+  public waktu_berakhir: string
 }

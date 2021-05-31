@@ -151,10 +151,14 @@ export default class D3AdminsController {
   }
 
   //TODO: buat form untuk menampung data waktu mulai dan berakhir
-  public async set_jadwal({ request, session, response }) {
+  public async set_jadwal({ request, session, response, auth }) {
+    await auth.authenticate()
     try {
       const { waktu_mulai, waktu_berakhir } = request.all()
-      const update_jadwal = await Services.set_jadwal(waktu_mulai, waktu_berakhir)
+      const update_jadwal = await Services.set_jadwal(
+        new Date(waktu_mulai),
+        new Date(waktu_berakhir)
+      )
       if (update_jadwal) {
         message(session, 'notification_jadwal', 'success', 'Berhasil mengubah jadwal Tracer Study')
         return response.redirect('back')
