@@ -63,6 +63,7 @@ Route.group(() => {
   })
     .prefix('d3')
     .as('d3')
+    .middleware('d3superadmin')
 
   // pasca
   Route.group(() => {

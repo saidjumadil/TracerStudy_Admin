@@ -1,14 +1,20 @@
+const renderName: string = 'profesi'
+
 export default class ProfesiAdminsController {
-  public index({ view }) {
-    return view.render('profesi/index')
+  public async index({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/index')
   }
-  public sasaran({ view }) {
-    return view.render('profesi/sasaran')
+  public async sasaran({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/sasaran')
   }
-  public jadwal({ view }) {
-    return view.render('profesi/jadwal')
+  public async jadwal({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/jadwal')
   }
-  public sms({ view }) {
-    return view.render('profesi/sms')
+  public async sms({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/sms')
   }
 }

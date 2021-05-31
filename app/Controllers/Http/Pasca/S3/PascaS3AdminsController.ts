@@ -1,14 +1,20 @@
+const renderName: string = 'pasca/s3'
+
 export default class PascaS3AdminsController {
-  public index({ view }) {
-    return view.render('pasca/s3/index')
+  public async index({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/index')
   }
-  public sasaran({ view }) {
-    return view.render('pasca/s3/sasaran')
+  public async sasaran({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/sasaran')
   }
-  public jadwal({ view }) {
-    return view.render('pasca/s3/jadwal')
+  public async jadwal({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/jadwal')
   }
-  public sms({ view }) {
-    return view.render('pasca/s3/sms')
+  public async sms({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/sms')
   }
 }

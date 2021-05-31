@@ -1,14 +1,19 @@
+const renderName: string = 'profesi'
 export default class ProfesiAdminUserManagemenController {
-  public tambah_admin({ view }) {
-    return view.render('profesi/managemen/tambah_admin')
+  public async tambah_admin({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/managemen/tambah_admin')
   }
-  public tambah_operator({ view }) {
-    return view.render('profesi/managemen/tambah_operator')
+  public async tambah_operator({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/managemen/tambah_operator')
   }
-  public tambah_akunresponden({ view }) {
-    return view.render('profesi/managemen/tambah_akunresponden')
+  public async tambah_akunresponden({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/managemen/tambah_akunresponden')
   }
-  public edit_dataresponden({ view }) {
-    return view.render('profesi/managemen/edit_dataresponden')
+  public async edit_dataresponden({ view, auth }) {
+    await auth.authenticate()
+    return view.render(renderName + '/managemen/edit_dataresponden')
   }
 }
