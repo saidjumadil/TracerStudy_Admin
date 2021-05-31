@@ -4,24 +4,26 @@
 <div class="card card-custom">
   <div class="card-header">
     <h3 class="card-title">
-      Tahun Lulusan Tracer Study USK
+      Tahun Sasaran {{ getTitleSasaran(get_sasaran.tahun) }}
     </h3>
 
   </div>
   <!--begin::Form-->
-  <form>
+  <form method="POST" id="form">
+    {{ csrfField() }}
+
     <div class="card-body">
 
       @!component('components/dropdown-range',{
-      'name':'tahun_sasaran',
+      'name':'tahun',
       'label':'Tahun Sasaran',
       'required':true,
       'start':2020,
-      'end':1999
+      'end':2008
       })
 
       @!component('components/dropdown',{
-      'name':'periode_sasaran',
+      'name':'periode',
       'label':'Periode Sasaran',
       'validasi':[true,false,false],
       'choice':[
@@ -33,11 +35,170 @@
       ]
       })
       <div class="text-right mt-5">
-        <div class="btn btn-danger"><i class="fa fa-edit icon-sm"></i> Ubah</div>
+        <button class="btn btn-danger" id="ubah_sasaran"><i class="fa fa-edit icon-sm"></i> Ubah</button>
       </div>
     </div>
   </form>
+  <div class="modal fade" id="modal_tambah_populasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tambah Populasi </h5>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i aria-hidden="true" class="ki ki-close"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="alert alert-custom alert-outline-info" role="alert">
+            <div class="alert-text text-justify">
+              <div><i class="fas fa-info-circle icon-sm text-info"></i> PERHATIAN</div>
+              <p>
+                Data populasi untuk tahun sasaran yang dituju belum tersedia. apakah anda ingin menambahkan data
+                populasi yang terbaru ?
+              </p>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
+          <button type="submit" id="tambah_populasi" class="btn btn-primary font-weight-bold"><i
+              class="fa fa-user-plus icon-sm"></i>
+            Tambahkan </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!--end::Form-->
 </div>
+
+@endsection
+
+@section('script')
+<script>
+  const sasaran = document.querySelector('#form')
+  const sasaranBtn = document.querySelector('#ubah_sasaran')
+  const csrfToken = document.querySelector('[name="_csrf"]').value
+  const cekPopulasiRoute = '{{ cekPopulasiRoute }}'
+  const getPopulasiRoute = '{{ getPopulasiRoute }}'
+  const ubahSasaranRoute = '{{ ubahSasaranRoute }}'
+  const tambahPopulasi = document.querySelector('#tambah_populasi')
+  let loading = ['spinner', 'spinner-left', 'spinner-light', 'disabled'];
+
+  let alert = (tipe, pesan) => {
+    return `<div
+    class="m-alert m-alert--outline alert alert-${tipe} alert-dismissible animated fadeIn"
+    role="alert">
+    <span>${pesan}</span>
+    </div>`
+  }
+
+  let ubahSasaran = (data) => {
+    console.log(data)
+    fetch(ubahSasaranRoute, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // console.log('berhasil')
+        // console.log(location)
+        if (data.isSuccess)
+          location.reload()
+        else
+          sasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Gagal mengubah sasaran Tracer Study'))
+
+      })
+  }
+  sasaran.addEventListener('submit', (e) => {
+    // console.log(loading)
+    e.preventDefault()
+
+    sasaranBtn.classList.add(...loading)
+    const tahun = document.querySelector('[name="tahun"]').value
+    const periode = document.querySelector('[name="periode"]').value
+    let data = {
+      tahun,
+      periode
+    }
+
+    if (!tahun && !periode) {
+      sasaranBtn.classList.remove(...loading)
+
+      return
+    }
+    fetch(cekPopulasiRoute, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.get_populasi) {
+          // console.log('ada data')
+          ubahSasaran({
+            tahun,
+            periode
+          })
+        } else {
+          // sasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Data Populasi tidak ditemukan'))
+          $('#modal_tambah_populasi').modal('show')
+        }
+
+        sasaranBtn.classList.remove(...loading)
+      })
+  })
+
+  tambahPopulasi.addEventListener('click', response => {
+    tambahPopulasi.classList.add(...loading)
+    // console.log('tambah populasi')
+    const tahun = document.querySelector('[name="tahun"]').value
+    const periode = document.querySelector('[name="periode"]').value
+    let data = {
+      tahun,
+      periode
+    }
+    fetch(getPopulasiRoute, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+
+        // console.log(data)
+        if (data.total_inserted) {
+          tambahPopulasi.classList.remove(...loading)
+          sasaran.insertAdjacentHTML("afterbegin", alert('success',
+            `Populasi tahun ${tahun} telah ditambahkan sebanyak ${data.total_inserted} data`))
+          ubahSasaran({
+            tahun,
+            periode
+          })
+        } else
+          sasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Web Service tidak dapat diakses'))
+
+        $('#modal_tambah_populasi').modal('hide')
+
+      })
+  })
+
+</script>
 
 @endsection

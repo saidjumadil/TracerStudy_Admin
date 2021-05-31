@@ -4,13 +4,10 @@ var KTFormControls = (function () {
   var _initDemo1 = function () {
     FormValidation.formValidation(document.getElementById('form'), {
       fields: {
-        nim: {
+        username: {
           validators: {
             notEmpty: {
-              message: 'Masukkan NIM anda',
-            },
-            digits: {
-              message: 'NIM berupa angka',
+              message: 'Masukkan Username anda',
             },
           },
         },

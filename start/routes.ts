@@ -5,7 +5,7 @@ import './hook'
 // authentikasi
 Route.group(() => {
   Route.get('', 'AuthController.index').as('login')
-  Route.post('', 'AuthController.authentication').as('authentication_admin')
+  Route.post('', 'AuthController.authentication').as('authentication')
 
   Route.get('logout', 'AuthController.logout').as('logout')
 }).as('auth')
@@ -48,9 +48,9 @@ Route.group(() => {
     //sasaran
     Route.get('sasaran', 'D3/D3AdminsController.sasaran').as('sasaran')
     Route.post('sasaran', 'D3/D3AdminsController.set_sasaran').as('set_sasaran') //TODO: Pakai route ini untuk action form set jadwal
-    Route.post('ajax-cek-populasi', 'D3/D3AdminsController.cek_populasi').as('cek_populasi') // TODO: ajax cek populasi
-    Route.post('ajax-get-populasi', 'D3/D3AdminsController.insert_populasi').as('get_populasi') // TODO: ajax ambil populasi dari api dan simpan ke db
-    
+    Route.post('ajax-cek-populasi', 'D3/D3AdminsController.cek_populasi').as('cek_populasi')
+    Route.post('ajax-get-populasi', 'D3/D3AdminsController.insert_populasi').as('get_populasi')
+
     //jadwal
     Route.get('jadwal', 'D3/D3AdminsController.jadwal').as('jadwal')
     Route.post('jadwal', 'D3/D3AdminsController.set_jadwal').as('set_jadwal') //TODO: action form set jadwal
@@ -59,8 +59,7 @@ Route.group(() => {
     Route.get('sms', 'D3/D3AdminsController.sms').as('sms')
 
     //ajax get prodi
-    Route.post('ajax-prodi','D3/D3AdminResponsController.ajax_prodi').as('get_prodi') //TODO: ajax get prodi
-
+    Route.post('ajax-prodi', 'D3/D3AdminResponsController.ajax_prodi').as('get_prodi') //TODO: ajax get prodi
   })
     .prefix('d3')
     .as('d3')

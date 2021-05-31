@@ -126,3 +126,11 @@ View.global('range', function (start: number, end: number) {
 View.global('conString', function (value1: string, value2: string) {
   return value1 + value2
 })
+
+View.global('getTitleSasaran', function (sasaran: string) {
+  let tahun = sasaran.toString().substring(0, 4)
+  let periode = sasaran.toString().substring(4, 5)
+
+  if (periode === '0') return tahun
+  return tahun + ' Periode ' + periode
+})

@@ -59,18 +59,18 @@ License: You must have a valid license purchased only from themeforest(the above
             <div class="card-header text-center mb-20">
               <img src="/assets/media/logos/unsyiah.png" class="max-h-100px mb-3" alt="" />
               <h3>Tracer Study USK</h3>
-              <div class="text-muted font-weight-bold">Login</div>
+              <div class="text-muted font-weight-bold">Masuk</div>
             </div>
             <form class="form" method="POST" class="card-body" id="form"
-              action="{{ route('auth.authentication_admin') }}">
+              action="{{ route('auth.authentication') }}">
               {{ csrfField() }}
               @!component('components/input',{
               'form_class':'mb-5',
               'input_class' : 'h-auto py-4 px-8',
-              'placeholder': '1708107010026',
-              'name':'nim',
-              'label':'NPM',
-              'validasi':[true,true,false],
+              'placeholder': 'Username',
+              'name':'username',
+              'label':'Username',
+              'validasi':[true,false,false],
               'type':'text'
               })
               @!component('components/input',{

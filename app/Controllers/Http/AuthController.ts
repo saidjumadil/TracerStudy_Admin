@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import ErrorLog from "App/Models/ErrorLog"
+import ErrorLog from 'App/Models/ErrorLog'
 
 const className: string = 'AuthController'
 
@@ -16,12 +16,12 @@ export default class AuthController {
     return view.render('login')
   }
 
-  public async authentication({ auth, request, response , session}) {
-      try {
+  public async authentication({ auth, request, response, session }) {
+    try {
       const { username, password } = request.all()
       const user = await auth.attempt(username, password)
       if (user) {
-      //TODO: halaman cek midleware 
+        return response.redirect().toRoute('admin.d3.index')
       }
     } catch (error) {
       console.log(error)
