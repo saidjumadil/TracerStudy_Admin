@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
-import Jadwal from './ProfesiJadwal' //FIXME: sesuaikan
-import Sasaran from './ProfesiSasaran' //FIXME: sesuaikan
+import Jadwal from './ProfesiJadwal'
+import Sasaran from './ProfesiSasaran'
 
-const conn: string = 'cdc_tracerstudy_profesi' //FIXME : sesuaikan
+const conn: string = 'cdc_tracerstudy_profesi'
 
 export default class Services extends BaseModel {
   public static async get_fakultas() {
@@ -56,7 +56,7 @@ export default class Services extends BaseModel {
     return await Database.connection(conn).from('jadwal').first()
   }
 
-  public static async set_jadwal(waktu_mulai: string, waktu_berakhir: string) {
+  public static async set_jadwal(waktu_mulai: Date, waktu_berakhir: Date) {
     const SearchId = { id: 1 }
 
     const Updates = {

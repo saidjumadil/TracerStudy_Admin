@@ -4,7 +4,6 @@
 <div class="card card-custom">
   <div class="card-header">
     <div class="card-title">
-
       <h3 class="card-label">
         Jadwal
         <small>Batas Pengisian Kuisoner Tracer Study</small>
@@ -12,9 +11,16 @@
     </div>
   </div>
   <!--begin::Form-->
-  <form method="POST" id="form">
-    {{ csrfField() }}
-    <div class="card-body">
+  <div class="card-body">
+    <div class="alert alert-custom alert-outline-info" role="alert">
+      <div class="alert-text text-justify">
+        <h5>Jadwal saat ini : {{getTimeFormat(get_jadwal.waktu_mulai)}} sampai dengan
+          {{getTimeFormat(get_jadwal.waktu_berakhir)}}</h5>
+      </div>
+
+    </div>
+    <form method="POST" id="form">
+      {{ csrfField() }}
       @!component('components/datetimepicker',{
       validasi:[true,false,false],
       name:['waktu_mulai','waktu_berakhir'],
@@ -25,17 +31,16 @@
 
         <button type="submit" class="btn btn-success"><i class="fa fa-edit icon-sm"></i> Simpan </button>
       </div>
-    </div>
-  </form>
+    </form>
+    <div id="kt_calendar"></div>
+
+  </div>
   <!--end::Form-->
 </div>
 
 @endsection
 
 @section('script')
-<script src="/assets/js/custom/datetimepicker.js"></script>
-<script>
-  // const waktu_mulai = document.querySelector('[name="waktu_mulai"]')
 
-</script>
+<script src="/assets/js/custom/datetimepicker.js"></script>
 @endsection

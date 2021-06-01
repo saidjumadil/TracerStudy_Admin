@@ -4,7 +4,6 @@
 <div class="card card-custom">
   <div class="card-header">
     <div class="card-title">
-
       <h3 class="card-label">
         Jadwal
         <small>Batas Pengisian Kuisoner Tracer Study</small>
@@ -12,32 +11,36 @@
     </div>
   </div>
   <!--begin::Form-->
-  <form>
-    <div class="card-body">
-      <div class="form-group">
-        <label>Set Jadwal <span class="text-danger">*</span></label>
-        <div class="input-group date" id="kt_datetimepicker_1" data-target-input="nearest">
-          <input type="text" class="form-control datetimepicker-input" placeholder="Select date &amp; time"
-            data-target="#kt_datetimepicker_1" />
-          <div class="input-group-append" data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
-            <span class="input-group-text">
-              <i class="ki ki-calendar"></i>
-            </span>
-          </div>
-        </div>
+  <div class="card-body">
+    <div class="alert alert-custom alert-outline-info" role="alert">
+      <div class="alert-text text-justify">
+        <h5>Jadwal saat ini : {{getTimeFormat(get_jadwal.waktu_mulai)}} sampai dengan
+          {{getTimeFormat(get_jadwal.waktu_berakhir)}}</h5>
       </div>
+
+    </div>
+    <form method="POST" id="form">
+      {{ csrfField() }}
+      @!component('components/datetimepicker',{
+      validasi:[true,false,false],
+      name:['waktu_mulai','waktu_berakhir'],
+      label:'Ubah jadwal Tracer Study dilaksanakan',
+      placeholder:['Waktu mulai','Waktu berakhir']
+      })
       <div class="text-right mt-5">
 
-        <div class="btn btn-success"><i class="fa fa-edit icon-sm"></i> Simpan </div>
+        <button type="submit" class="btn btn-success"><i class="fa fa-edit icon-sm"></i> Simpan </button>
       </div>
-    </div>
-  </form>
+    </form>
+    <div id="kt_calendar"></div>
+
+  </div>
   <!--end::Form-->
 </div>
 
 @endsection
 
 @section('script')
-<script src="/assets/js/pages/crud/forms/widgets/custom-bootstrap-datetimepicker.js"></script>
 
+<script src="/assets/js/custom/datetimepicker.js"></script>
 @endsection

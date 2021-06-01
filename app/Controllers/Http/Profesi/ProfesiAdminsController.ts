@@ -63,7 +63,7 @@ export default class ProfesiAdminsController {
       //get mahasiswa dari API
       response.safeHeader('Content-type', 'application/json')
       let total_inserted = 0
-      let alumniD3 = Env.get('WS_ALUMNI_D3')
+      let alumniD3 = Env.get('WS_ALUMNI_PROFESI')
       if (alumniD3) {
         alumniD3 = alumniD3.replace('yyyy', tahun)
         //ambil data alumni
@@ -130,7 +130,6 @@ export default class ProfesiAdminsController {
     }
   }
 
-  //TODO: buat label untuk menampilkan waktu = {get_jadwal} mulai dan berakhir sebelumnya
   public async jadwal({ view, auth }) {
     await auth.authenticate()
 
@@ -142,8 +141,8 @@ export default class ProfesiAdminsController {
     await auth.authenticate()
     try {
       const { waktu_mulai, waktu_berakhir } = request.all()
-      let begin: string = new Date(waktu_mulai).toString()
-      let end: string = new Date(waktu_berakhir).toString()
+      let begin = new Date(waktu_mulai)
+      let end = new Date(waktu_berakhir)
       const update_jadwal = await Services.set_jadwal(begin, end)
       if (update_jadwal) {
         message(session, 'notification_jadwal', 'success', 'Berhasil mengubah jadwal Tracer Study')

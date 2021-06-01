@@ -129,7 +129,6 @@ export default class D3AdminsController {
     }
   }
 
-  //TODO: buat label untuk menampilkan waktu = {get_jadwal} mulai dan berakhir sebelumnya
   public async jadwal({ view, auth }) {
     await auth.authenticate()
 
@@ -141,8 +140,8 @@ export default class D3AdminsController {
     await auth.authenticate()
     try {
       const { waktu_mulai, waktu_berakhir } = request.all()
-      let begin: string = new Date(waktu_mulai).toString()
-      let end: string = new Date(waktu_berakhir).toString()
+      let begin = new Date(waktu_mulai)
+      let end = new Date(waktu_berakhir)
       const update_jadwal = await Services.set_jadwal(begin, end)
       if (update_jadwal) {
         message(session, 'notification_jadwal', 'success', 'Berhasil mengubah jadwal Tracer Study')

@@ -56,7 +56,7 @@ export default class Services extends BaseModel {
     return await Database.connection(conn).from('jadwal').first()
   }
 
-  public static async set_jadwal(waktu_mulai: string, waktu_berakhir: string) {
+  public static async set_jadwal(waktu_mulai: Date, waktu_berakhir: Date) {
     const SearchId = { id: 1 }
 
     const Updates = {

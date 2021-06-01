@@ -47,19 +47,19 @@ Route.group(() => {
 
     //sasaran
     Route.get('sasaran', 'D3/D3AdminsController.sasaran').as('sasaran')
-    Route.post('sasaran', 'D3/D3AdminsController.set_sasaran').as('set_sasaran') //TODO: Pakai route ini untuk action form set jadwal
+    Route.post('sasaran', 'D3/D3AdminsController.set_sasaran').as('set_sasaran')
     Route.post('ajax-cek-populasi', 'D3/D3AdminsController.cek_populasi').as('cek_populasi')
     Route.post('ajax-get-populasi', 'D3/D3AdminsController.insert_populasi').as('get_populasi')
 
     //jadwal
     Route.get('jadwal', 'D3/D3AdminsController.jadwal').as('jadwal')
-    Route.post('jadwal', 'D3/D3AdminsController.set_jadwal').as('set_jadwal') //TODO: action form set jadwal
+    Route.post('jadwal', 'D3/D3AdminsController.set_jadwal').as('set_jadwal')
 
     //sms
     Route.get('sms', 'D3/D3AdminsController.sms').as('sms')
 
     //ajax get prodi
-    Route.post('ajax-prodi', 'D3/D3AdminResponsController.ajax_prodi').as('get_prodi') //TODO: ajax get prodi
+    Route.post('ajax-prodi', 'D3/D3AdminResponsController.ajax_prodi').as('get_prodi')
   })
     .prefix('d3')
     .as('d3')
@@ -108,10 +108,25 @@ Route.group(() => {
         .prefix('managemen')
         .as('managemen')
 
-      // ubah sasaran,ubah jadwal,sms
+      //sasaran
       Route.get('sasaran', 'Pasca/S2/PascaS2AdminsController.sasaran').as('sasaran')
+      Route.post('sasaran', 'Pasca/S2/PascaS2AdminsController.set_sasaran').as('set_sasaran')
+      Route.post('ajax-cek-populasi', 'Pasca/S2/PascaS2AdminsController.cek_populasi').as(
+        'cek_populasi'
+      )
+      Route.post('ajax-get-populasi', 'Pasca/S2/PascaS2AdminsController.insert_populasi').as(
+        'get_populasi'
+      )
+
+      //jadwal
       Route.get('jadwal', 'Pasca/S2/PascaS2AdminsController.jadwal').as('jadwal')
+      Route.post('jadwal', 'Pasca/S2/PascaS2AdminsController.set_jadwal').as('set_jadwal')
+
+      //sms
       Route.get('sms', 'Pasca/S2/PascaS2AdminsController.sms').as('sms')
+
+      //ajax get prodi
+      Route.post('ajax-prodi', 'Pasca/S2/PascaS2AdminResponsController.ajax_prodi').as('get_prodi')
     })
       .prefix('s2')
       .as('s2')
@@ -157,10 +172,25 @@ Route.group(() => {
         .prefix('managemen')
         .as('managemen')
 
-      // ubah sasaran,ubah jadwal,sms
+      //sasaran
       Route.get('sasaran', 'Pasca/S3/PascaS3AdminsController.sasaran').as('sasaran')
+      Route.post('sasaran', 'Pasca/S3/PascaS3AdminsController.set_sasaran').as('set_sasaran')
+      Route.post('ajax-cek-populasi', 'Pasca/S3/PascaS3AdminsController.cek_populasi').as(
+        'cek_populasi'
+      )
+      Route.post('ajax-get-populasi', 'Pasca/S3/PascaS3AdminsController.insert_populasi').as(
+        'get_populasi'
+      )
+
+      //jadwal
       Route.get('jadwal', 'Pasca/S3/PascaS3AdminsController.jadwal').as('jadwal')
+      Route.post('jadwal', 'Pasca/S3/PascaS3AdminsController.set_jadwal').as('set_jadwal')
+
+      //sms
       Route.get('sms', 'Pasca/S3/PascaS3AdminsController.sms').as('sms')
+
+      //ajax get prodi
+      Route.post('ajax-prodi', 'Pasca/S3/PascaS3AdminResponsController.ajax_prodi').as('get_prodi')
     })
       .prefix('s3')
       .as('s3')
@@ -205,10 +235,25 @@ Route.group(() => {
       .prefix('managemen')
       .as('managemen')
 
-    // ubah sasaran,ubah jadwal,sms
+    //sasaran
     Route.get('sasaran', 'Profesi/ProfesiAdminsController.sasaran').as('sasaran')
+    Route.post('sasaran', 'Profesi/ProfesiAdminsController.set_sasaran').as('set_sasaran')
+    Route.post('ajax-cek-populasi', 'Profesi/ProfesiAdminsController.cek_populasi').as(
+      'cek_populasi'
+    )
+    Route.post('ajax-get-populasi', 'Profesi/ProfesiAdminsController.insert_populasi').as(
+      'get_populasi'
+    )
+
+    //jadwal
     Route.get('jadwal', 'Profesi/ProfesiAdminsController.jadwal').as('jadwal')
+    Route.post('jadwal', 'Profesi/ProfesiAdminsController.set_jadwal').as('set_jadwal')
+
+    //sms
     Route.get('sms', 'Profesi/ProfesiAdminsController.sms').as('sms')
+
+    //ajax get prodi
+    Route.post('ajax-prodi', 'Profesi/ProfesiAdminResponsController.ajax_prodi').as('get_prodi')
   })
     .prefix('profesi')
     .as('profesi')
