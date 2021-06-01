@@ -40,6 +40,7 @@ export default class AuthController {
   public async logout({ auth, response }) {
     try {
       await auth.logout()
+      console.log('tes')
       return response.redirect().toRoute('auth.login')
     } catch (e) {
       console.log(e)

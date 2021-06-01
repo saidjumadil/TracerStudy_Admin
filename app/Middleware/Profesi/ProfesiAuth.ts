@@ -1,11 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class D3SuperAdmin {
+const routeName: string = 'd3.'
+export default class ProfesiAuth {
   public async handle({ request, response, auth }: HttpContextContract, next: () => Promise<void>) {
     await auth.authenticate()
-    console.log(auth)
-    if (auth.user?.permission_d3 !== 1) {
-      return response.redirect().toRoute('admin.pasca.s2.index')
+    // console.log(auth)
+    if (auth.user?.permission_profesi === 0) {
+      return response.redirect().toRoute('admin.' + routeName + 'index')
     }
 
     await next()

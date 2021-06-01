@@ -28,56 +28,56 @@ html.theme-d3 {
 
 /* Theme Profesi */
 html.theme-profesi {
-  --primary-bg: #2773a5;
-  --primary: #6993ff;
-  --primary-border: #698ff0;
-  --primary-hover: #6972f0;
-  --primary-state-hover: #7269f0;
+  --primary-bg: #576490;
+  --primary: #576490;
+  --primary-border: #576490;
+  --primary-hover: #4f5b83;
+  --primary-state-hover: #4f5b83;
+  --color-form: #4f5b83;
   --secondary: #e4e6ef;
   --secondary-border: #c4c8dc;
   --secondary-hover: #ccd0e1;
   --secondary-state-hover: #d7dae7;
-  --color-form: #6972f0;
-}
-
-/* Theme pasca s2 */
-html.theme-pasca-s2 {
-  --primary-bg: #56077e;
-  --primary: #8950fc;
-  --primary-border: #671efb;
-  --primary-hover: #702afb;
-  --primary-state-hover: #7337ee;
-  --secondary: #e4e6ef;
-  --secondary-border: #c4c8dc;
-  --secondary-hover: #ccd0e1;
-  --secondary-state-hover: #d7dae7;
-  --color-form: #ab82fd;
-}
-
-/* Theme pasca admin */
-html.theme-pasca-s3 {
-  --primary-bg: #56077e;
-  --primary: #8950fc;
-  --primary-border: #671efb;
-  --primary-hover: #702afb;
-  --primary-state-hover: #7337ee;
-  --secondary: #e4e6ef;
-  --secondary-border: #c4c8dc;
-  --secondary-hover: #ccd0e1;
-  --secondary-state-hover: #d7dae7;
-  --color-form: #ab82fd;
 }
 
 /* Theme admin */
 html.theme-admin {
-  --primary-bg: #c5af30;
-  --primary: #c5af30;
-  --primary-border: #c5af30;
-  --primary-hover: #d6c14a;
-  --primary-state-hover: #d6c14a;
+  --primary-bg: #5a86dc;
+  --primary: #5a86dc;
+  --primary-border: #5a86dc;
+  --primary-hover: #4c7bda;
+  --primary-state-hover: #4c7bda;
+  --color-form: #4c7bda;
   --secondary: #e4e6ef;
   --secondary-border: #c4c8dc;
   --secondary-hover: #ccd0e1;
   --secondary-state-hover: #d7dae7;
-  --color-form: #c5af30;
+}
+
+/* Theme pasca admin */
+html.theme-pasca-s3 {
+  --primary-bg: #83c9f4;
+  --primary: #83c9f4;
+  --primary-border: #83c9f4;
+  --primary-hover: #62b0e0;
+  --primary-state-hover: #62b0e0;
+  --color-form: #62b0e0;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
+}
+
+/* Theme pasca s2 */
+html.theme-pasca-s2 {
+  --primary-bg: #b9e28c;
+  --primary: #b9e28c;
+  --primary-border: #b9e28c;
+  --primary-hover: #a7d17b;
+  --primary-state-hover: #a7d17b;
+  --color-form: #a7d17b;
+  --secondary: #e4e6ef;
+  --secondary-border: #c4c8dc;
+  --secondary-hover: #ccd0e1;
+  --secondary-state-hover: #d7dae7;
 }

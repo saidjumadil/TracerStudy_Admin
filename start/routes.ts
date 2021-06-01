@@ -4,8 +4,10 @@ import './hook'
 
 // authentikasi
 Route.group(() => {
-  Route.get('', 'AuthController.index').as('login')
-  Route.post('', 'AuthController.authentication').as('authentication')
+  Route.group(() => {
+    Route.get('', 'AuthController.index').as('login')
+    Route.post('', 'AuthController.authentication').as('authentication')
+  }).middleware(['guest'])
 
   Route.get('logout', 'AuthController.logout').as('logout')
 }).as('auth')
@@ -63,7 +65,7 @@ Route.group(() => {
   })
     .prefix('d3')
     .as('d3')
-    .middleware('d3superadmin')
+    .middleware(['d3Auth'])
 
   // pasca
   Route.group(() => {
@@ -130,6 +132,7 @@ Route.group(() => {
     })
       .prefix('s2')
       .as('s2')
+      .middleware(['pascaS2Auth'])
 
     // s3
     Route.group(() => {
@@ -194,6 +197,7 @@ Route.group(() => {
     })
       .prefix('s3')
       .as('s3')
+      .middleware(['pascaS3Auth'])
   })
     .prefix('pasca')
     .as('pasca')
@@ -257,6 +261,8 @@ Route.group(() => {
   })
     .prefix('profesi')
     .as('profesi')
+    .middleware(['profesiAuth'])
 })
   .prefix('admin')
   .as('admin')
+  .middleware(['user'])
