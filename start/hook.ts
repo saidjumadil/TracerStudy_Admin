@@ -131,7 +131,7 @@ View.global('getTitleSasaran', function (sasaran: string) {
   let tahun = sasaran.toString().substring(0, 4)
   let periode = sasaran.toString().substring(4, 5)
 
-  if (periode === '0') return tahun
+  if (periode === '0') return tahun + ' Semua Periode'
   return tahun + ' Periode ' + periode
 })
 
@@ -158,4 +158,12 @@ View.global('getTimeFormat', function (value: string) {
   const jam = waktu.getHours()
   const menit = waktu.getMinutes()
   return `Jam ${jam}.${menit}, ${hari} ${months[bulan]} ${tahun}`
+})
+
+View.global('getSubTitle', function (value: string) {
+  if (value.search('/d3') !== -1) return 'D3'
+  if (value.search('/pasca/s2') !== -1) return 'Pasca S2'
+  if (value.search('/pasca/s3') !== -1) return 'Pasca S3'
+  if (value.search('/profesi') !== -1) return 'Profesi'
+  return ''
 })
