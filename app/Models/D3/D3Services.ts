@@ -1,11 +1,10 @@
 /* eslint-disable prettier/prettier */
 import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
-import { DateTime } from 'luxon'
-import Jadwal from './D3Jadwal'
-import Sasaran from './D3Sasaran'
+import Jadwal from './D3Jadwal' //FIXME: sesuaikan
+import Sasaran from './D3Sasaran' //FIXME: sesuaikan
 
-const conn: string = 'cdc_tracerstudy_d3'
+const conn: string = 'cdc_tracerstudy_d3' //FIXME : sesuaikan
 
 export default class Services extends BaseModel {
   public static async get_fakultas() {
@@ -45,13 +44,6 @@ export default class Services extends BaseModel {
     }
   }
 
-  // public static async delete_populasi(tahun){
-  //   return await Database.connection(conn)
-  //   .from('populasi')
-  //   .whereRaw("periode like '"+tahun+"%' ")
-  //   .delete()
-  // }
-
   public static async set_sasaran(tahun_periode: string) {
     const SearchId = { id: 1 }
     const Update = {
@@ -66,7 +58,7 @@ export default class Services extends BaseModel {
 
   public static async set_jadwal(waktu_mulai: string, waktu_berakhir: string) {
     const SearchId = { id: 1 }
-    // FIXME: ubah datanya menjadi timestamp
+
     const Updates = {
       waktu_mulai: waktu_mulai,
       waktu_berakhir: waktu_berakhir,

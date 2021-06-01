@@ -16,6 +16,7 @@ export default class AuthController {
     return view.render('login')
   }
 
+  //TODO: tolong push notif ke form login
   public async authentication({ auth, request, response, session }) {
     try {
       const { username, password } = request.all()

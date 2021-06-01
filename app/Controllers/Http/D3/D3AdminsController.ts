@@ -1,7 +1,5 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable prettier/prettier */
-import Services from 'App/Models/D3/D3Services'
+import Services from 'App/Models/D3/D3Services' //FIXME : sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
 import axios from 'axios'
@@ -15,8 +13,8 @@ function message(session, nama_notif, type, message) {
   })
 }
 
-const className: string = 'D3AuthController'
-const renderName: string = 'd3'
+const className: string = 'D3AuthController' //FIXME : sesuaikan
+const renderName: string = 'd3' //FIXME : sesuaikan
 export default class D3AdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
@@ -24,7 +22,6 @@ export default class D3AdminsController {
     return view.render(renderName + '/index')
   }
 
-  //TODO: buat label untuk menampilkan sasaran = {get_sasaran} sebelumnya
   public async sasaran({ view, auth }) {
     await auth.authenticate()
     const get_sasaran = await Services.get_sasaran()
@@ -40,15 +37,9 @@ export default class D3AdminsController {
     })
   }
 
-  //TODO : Tambahkan link ajax untuk cek populasi pada edge.
-  //jadikan urutan flow pada javacript di edge:
-  //if button submit clicked lempar parameter tahun ke link ajax
-  //if(cek_pupulasi===true){ langsung kasih action post ke routes set_jadwal}
-  //else{tampilkan modal dialog : update tabel populasi, if ok = direct ke ajax insert_populasi }
   public async cek_populasi({ request, session, response }) {
     try {
       let { tahun } = request.all()
-      console.log(request.all())
       let get_populasi = await Services.get_populasi(tahun)
 
       return { get_populasi }
@@ -104,10 +95,6 @@ export default class D3AdminsController {
           //tambahkan total_inserted dengan jumlah data yang didapat
           total_inserted += populasiD3.length
         }
-        //else{
-        //jika gagal hapus data yg sudah di insert tadi
-        // await Services.delete_populasi(tahun);
-        // }
 
         //return jumlah data yang berhasil ditambahkan
         return { total_inserted }
@@ -120,7 +107,7 @@ export default class D3AdminsController {
     }
   }
 
-  public async set_sasaran({ request, response, session }) {
+  public async set_sasaran({ request, session }) {
     try {
       let { tahun, periode } = request.all()
       var tahun_periode = tahun.toString().concat(periode.toString())
@@ -150,15 +137,13 @@ export default class D3AdminsController {
     return view.render(renderName + '/jadwal', { get_jadwal })
   }
 
-  //TODO: buat form untuk menampung data waktu mulai dan berakhir
   public async set_jadwal({ request, session, response, auth }) {
     await auth.authenticate()
     try {
       const { waktu_mulai, waktu_berakhir } = request.all()
-      const update_jadwal = await Services.set_jadwal(
-        new Date(waktu_mulai),
-        new Date(waktu_berakhir)
-      )
+      let begin: string = new Date(waktu_mulai).toString()
+      let end: string = new Date(waktu_berakhir).toString()
+      const update_jadwal = await Services.set_jadwal(begin, end)
       if (update_jadwal) {
         message(session, 'notification_jadwal', 'success', 'Berhasil mengubah jadwal Tracer Study')
         return response.redirect('back')
@@ -169,11 +154,5 @@ export default class D3AdminsController {
       message(session, 'notification_jadwal', 'danger', 'Gagal mengubah jadwal Tracer Study')
       return response.redirect('back')
     }
-  }
-
-  public async sms({ view, auth }) {
-    await auth.authenticate()
-
-    return view.render(renderName + '/sms')
   }
 }

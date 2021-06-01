@@ -61,7 +61,7 @@ export default class D3User extends BaseModel {
 
   public static async reset_password(username: string, hashPassword: string) {
     return await Database.from('users').where('username', username).update({
-      password: hashPassword
+      password: hashPassword,
     })
   }
 }

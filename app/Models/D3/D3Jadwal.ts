@@ -2,8 +2,8 @@
 import { column, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Jadwal extends BaseModel {
-  public static table = 'jadwal'
-  public static connection = 'cdc_tracerstudy_d3'
+  public static table = 'jadwal' 
+  public static connection = 'cdc_tracerstudy_d3' //FIXME: sesuaikan
   public static primaryKey = 'id'
 
   @column({ isPrimary: true })

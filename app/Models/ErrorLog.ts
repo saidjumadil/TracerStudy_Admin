@@ -3,7 +3,6 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
 
 export default class ErrorLog extends BaseModel {
-
   public static async error_log(
     nama_class: string,
     nama_function: string,
@@ -17,6 +16,4 @@ export default class ErrorLog extends BaseModel {
       ip_address: ip_address,
     })
   }
-
 }
-
