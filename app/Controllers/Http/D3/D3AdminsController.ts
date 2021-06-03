@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/naming-convention */
 import Services from 'App/Models/D3/D3Services' //FIXME : sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
@@ -62,14 +63,14 @@ export default class D3AdminsController {
       //get mahasiswa dari API
       response.safeHeader('Content-type', 'application/json')
       let total_inserted = 0
-      let alumniD3 = Env.get('WS_ALUMNI_D3')
-      if (alumniD3) {
-        alumniD3 = alumniD3.replace('yyyy', tahun)
+      let alumni = Env.get('WS_ALUMNI_D3')
+      if (alumni) {
+        alumni = alumni.replace('yyyy', tahun)
         //ambil data alumni
-        const data = await axios.get(alumniD3)
-        const populasiD3 = data.data[0]
+        const data = await axios.get(alumni)
+        const populasi = data.data[0]
         //disini kita akan modifikasi setiap objek yang ada di array dataMappingProdi menggunakan fungsi map
-        populasiD3.map((obj) => {
+        populasi.map((obj) => {
           if (obj.hasOwnProperty('npm')) {
             //ambil value dari key yang salah
             const val = obj.npm
@@ -89,11 +90,11 @@ export default class D3AdminsController {
           }
         })
         //insert data baru
-        const status = await Services.insert_populasi(populasiD3)
+        const status = await Services.insert_populasi(populasi)
         // cek kalo statusnya tidak 0
         if (status) {
           //tambahkan total_inserted dengan jumlah data yang didapat
-          total_inserted += populasiD3.length
+          total_inserted += populasi.length
         }
 
         //return jumlah data yang berhasil ditambahkan

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/naming-convention */
 import Services from 'App/Models/Pasca/S3/PascaS3Services' //FIXME: sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'

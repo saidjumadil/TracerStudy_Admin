@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/naming-convention */
 import Services from 'App/Models/Pasca/S2/PascaS2Services' //FIXME: sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
