@@ -31,6 +31,11 @@ Route.group(() => {
     // beranda
     Route.get('', 'D3/D3AdminsController.index').as('index')
 
+    Route.group(() => {
+      Route.get('', 'D3/D3AdminsController.pengumuman').as('pengumuman')
+      Route.post('', 'D3/D3AdminsController.ubah_pengumuman').as('ubah_pengumuman')
+    }).prefix('pengumuman')
+
     // data
     Route.group(() => {
       Route.get('pengisi', 'D3/D3AdminResponsController.pengisi').as('pengisi')
@@ -84,6 +89,11 @@ Route.group(() => {
       // beranda
       Route.get('', 'Pasca/S2/PascaS2AdminsController.index').as('index')
 
+      // pengumuman
+      Route.group(() => {
+        Route.get('', 'Pasca/S2/PascaS2AdminsController.pengumuman').as('pengumuman')
+        Route.post('', 'Pasca/S2/PascaS2AdminsController.ubah_pengumuman').as('ubah_pengumuman')
+      }).prefix('pengumuman')
       // data
       Route.group(() => {
         Route.get('pengisi', 'Pasca/S2/PascaS2AdminResponsController.pengisi').as('pengisi')
@@ -143,6 +153,11 @@ Route.group(() => {
       // beranda
       Route.get('', 'Pasca/S3/PascaS3AdminsController.index').as('index')
 
+      // pengumuman
+      Route.group(() => {
+        Route.get('', 'Pasca/S3/PascaS3AdminsController.pengumuman').as('pengumuman')
+        Route.post('', 'Pasca/S3/PascaS3AdminsController.ubah_pengumuman').as('ubah_pengumuman')
+      }).prefix('pengumuman')
       // data
       Route.group(() => {
         Route.get('pengisi', 'Pasca/S3/PascaS3AdminResponsController.pengisi').as('pengisi')
@@ -204,7 +219,11 @@ Route.group(() => {
   Route.group(() => {
     // beranda
     Route.get('', 'Profesi/ProfesiAdminsController.index').as('index')
-
+    // pengumuman
+    Route.group(() => {
+      Route.get('', 'Profesi/ProfesiAdminsController.pengumuman').as('pengumuman')
+      Route.post('', 'Profesi/ProfesiAdminsController.ubah_pengumuman').as('ubah_pengumuman')
+    }).prefix('pengumuman')
     // data
     Route.group(() => {
       Route.get('pengisi', 'Profesi/ProfesiAdminResponsController.pengisi').as('pengisi')
