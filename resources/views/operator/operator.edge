@@ -1,0 +1,183 @@
+@layout('layout.layout')
+@section('style')
+<link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+@endsection
+
+@section('content')
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">
+      Data Enumerator
+    </h3>
+
+  </div>
+  <!--begin::Form-->
+  <form method="POST" id="form" action="{{route('admin.store_operator')}}">
+    <div class="card-body">
+      <!-- Button trigger modal-->
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-user-plus icon-sm"></i> Tambah Enum
+      </button>
+
+      <!-- Modal-->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Tambah Enumerator </h5>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i aria-hidden="true" class="ki ki-close"></i>
+              </button>
+            </div>
+            <form method="POST" id="form">
+              {{ csrfField() }}
+              <div class="modal-body">
+
+                @!component('components/input',{
+                'placeholder': 'Contoh: Aqil Fiqran DziUl Haq',
+                'name':'nama',
+                'label':'Nama',
+                'validasi':[true,false,false],
+                'type':'text'
+                })
+                @!component('components/input',{
+                'placeholder': 'Contoh: aqilfiqran',
+                'name':'username',
+                'label':'Username',
+                'validasi':[true,false,false],
+                'type':'text'
+                })
+                @!component('components/input',{
+                'placeholder': 'Contoh: aqilfiqran@mhs.unsyiah.ac.id',
+                'name':'email',
+                'label':'Email',
+                'validasi':[true,false,false],
+                'type':'text'
+                })
+                @!component('components/dropdown',{
+                label:'Jabatan',
+                name:'jabatan',
+                validasi:[true,false,false],
+                choice:[
+                { id:2, nama:'Admin' },
+                { id:3, nama:'Kajur/Kaprodi' },
+                { id:4, nama:'Enum' },
+                ] })
+
+                <div class="text-info"><i class="fas fa-info-circle icon-sm text-info"></i> Password akun
+                  enumerator
+                  akan
+                  dikirim ke email mereka</div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary font-weight-bold"><i class="fa fa-user-plus icon-sm"></i>
+                  Tambahkan </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--end::Form-->
+
+  <!--begin::Card-->
+  <div class="card-body">
+    <form method="POST">
+      {{ csrfField() }}
+      <!--begin: Datatable-->
+      <table class="table table-separate table-head-custom table-checkable w100" id="kt_datatable2">
+        <thead>
+          <tr>
+            <th rowspan="2">Nama</th>
+            <th rowspan="2">Username</th>
+            <th rowspan="2">Jabatan</th>
+            <th rowspan="2">Email</th>
+            <th colspan="4" class="text-center">Status</th>
+            <th colspan="1" class="text-center">Opsi</th>
+          </tr>
+          <tr>
+            <th>D3</th>
+            <th>S2</th>
+            <th>S3</th>
+            <th>Profesi</th>
+            <th>Reset Password</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each((item,index) in [ '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+          '1', '1',
+          '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+          '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', ])
+
+          <tr>
+            <td>AqilFiqranDzi'UlHaq</td>
+            <td>aqilfiqran</td>
+            <td>Enum</td>
+            <td>aqilfiqran@mhs.unsyiah.ac.id</td>
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+              </label>
+            </td>
+
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+              </label>
+            </td>
+
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+              </label>
+            </td>
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+              </label>
+            </td>
+
+
+            <td>
+              <button class="btn btn-success">Reset</button>
+            </td>
+          </tr>
+
+
+
+          @endeach
+        </tbody>
+      </table>
+      <!--end::Card-->
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-md-10 text-muted" style="font-size: .8em;">
+
+            Catatan : Menekan tombol Simpan akan memuat ulang halaman. Pastikan Anda hanya menekan tombol Simpan ketika
+            telah
+            selesai melakukan perubahan
+          </div>
+          <div class="col-md-2 text-right">
+            <div class="btn btn-danger">Simpan</div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!--end: Datatable-->
+  </div>
+
+  <!--end::Card-->
+
+</div>
+@endsection
+@section('script')
+<script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+
+<script src="/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
+
+@endsection

@@ -34,6 +34,23 @@
       role_permission:'permission_profesi',
       header:'Profesi'
       })
+
+      @if([1,2].includes(auth.user.permission_d3) || [1,2].includes(auth.user.permission_pasca_s2) ||
+      [1,2].includes(auth.user.permission_pasca_s3) || [1,2].includes(auth.user.permission_profesi))
+      <ul class="menu-nav">
+        {{-- for admin  --}}
+        <li
+          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/admin/operator')?' menu-item-open menu-item-here':''}}">
+          <a href="{{route('admin.operator')}}" class="menu-link">
+            <span class="menu-text">Operator</span>
+          </a>
+        </li>
+
+      </ul>
+      {{--  </div>  --}}
+      {{--  </li>  --}}
+      </ul>
+      @endif
     </div>
 
     <!--end::Header Menu-->
