@@ -36,6 +36,7 @@
     "lint": "^0.7.0",
     "luxon": "^1.27.0",
     "mysql": "^2.18.1",
+    "pem": "^1.14.4",
     "phc-bcrypt": "^1.0.7",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",

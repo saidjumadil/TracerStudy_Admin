@@ -1,3 +1,5 @@
+@if(permission !==0)
+
 <!--begin::Header Nav-->
 <ul class="menu-nav">
   {{-- for admin  --}}
@@ -11,6 +13,7 @@
     </a>
     <div class="menu-submenu menu-submenu-classic menu-submenu-left">
       <ul class="menu-subnav">
+        @if([1,2,3,4].includes(permission))
         <li class="menu-item" aria-haspopup="true">
           <a href="{{route(conString(routeUrl,'index'))}}" class="menu-link">
             <span class="svg-icon menu-icon">
@@ -32,6 +35,10 @@
             <span class="menu-text">Beranda {{header}}</span>
           </a>
         </li>
+        @endif
+
+        @if([1,2,3,4].includes(permission))
+
         <li class="menu-item menu-item-submenu" data-menu-toggle="hover" aria-haspopup="true">
           <a href="javascript:;" class="menu-link menu-toggle">
             <span class="svg-icon menu-icon">
@@ -54,6 +61,7 @@
           </a>
           <div class="menu-submenu menu-submenu-classic menu-submenu-right">
             <ul class="menu-subnav">
+              @if([1,2,3,4].includes(permission))
               <li class="menu-item" aria-haspopup="true">
                 <a href="{{ route(conString(routeUrl,'data.pengisi')) }}" class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
@@ -62,6 +70,9 @@
                   <span class="menu-text">Data Pengisi {{header}}</span>
                 </a>
               </li>
+              @endif
+              @if([1,2].includes(permission))
+
               <li class="menu-item" aria-haspopup="true">
                 <a href="{{ route(conString(routeUrl,'data.hasil')) }}" class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
@@ -70,6 +81,9 @@
                   <span class="menu-text">Data Hasil {{header}}</span>
                 </a>
               </li>
+              @endif
+              @if([1,2].includes(permission))
+
               <li class="menu-item" aria-haspopup="true">
                 <a href="{{ route(conString(routeUrl,'data.importuser')) }}" class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
@@ -78,10 +92,15 @@
                   <span class="menu-text">Import Users Monitoring {{header}}</span>
                 </a>
               </li>
+              @endif
 
             </ul>
           </div>
         </li>
+        @endif
+
+        @if([1,2,4].includes(permission))
+
         <li class="menu-item menu-item-submenu" data-menu-toggle="hover" aria-haspopup="true">
           <a href="javascript:;" class="menu-link menu-toggle">
             <span class="svg-icon menu-icon">
@@ -105,6 +124,7 @@
           </a>
           <div class="menu-submenu menu-submenu-classic menu-submenu-right">
             <ul class="menu-subnav">
+              @if([1,2].includes(permission))
 
               <li class="menu-item" aria-haspopup="true">
                 <a href="{{route(conString(routeUrl,'managemen.tambah.admin'))}}" class="menu-link">
@@ -127,6 +147,9 @@
                   <span class="menu-text">Tambah Admin {{header}}</span>
                 </a>
               </li>
+              @endif
+              @if([1,2].includes(permission))
+
               <li class="menu-item" aria-haspopup="true">
                 <a href="{{route(conString(routeUrl,'managemen.tambah.operator'))}}" class="menu-link">
                   <span class="svg-icon menu-icon">
@@ -148,6 +171,9 @@
                   <span class="menu-text">Tambah Operator {{header}}</span>
                 </a>
               </li>
+              @endif
+              @if([1,2,4].includes(permission))
+
               <li class="menu-item" aria-haspopup="true">
                 <a href="{{route(conString(routeUrl,'managemen.tambah.akunresponden'))}}" class="menu-link">
                   <span class="svg-icon menu-icon">
@@ -169,6 +195,9 @@
                   <span class="menu-text">Tambah Akun Responden {{header}}</span>
                 </a>
               </li>
+              @endif
+              @if([1,2,4].includes(permission))
+
               <li class="menu-item" aria-haspopup="true">
                 <a href="{{route(conString(routeUrl,'managemen.edit.dataresponden'))}}" class="menu-link">
                   <span class="svg-icon menu-icon">
@@ -188,9 +217,14 @@
                   <span class="menu-text">Edit Data Responden {{header}}</span>
                 </a>
               </li>
+              @endif
+
             </ul>
           </div>
         </li>
+        @endif
+        @if([1,2].includes(permission))
+
         <li class="menu-item menu-item-submenu menu-item-rel">
           <a href="{{route(conString(routeUrl,'sasaran'))}}" class="menu-link">
             <span class="svg-icon menu-icon">
@@ -210,6 +244,9 @@
             <span class="menu-text">Ubah Sasaran {{header}}</span>
           </a>
         </li>
+        @endif
+        @if([1,2].includes(permission))
+
         <li class="menu-item menu-item-submenu menu-item-rel">
           <a href="{{route(conString(routeUrl,'jadwal'))}}" class="menu-link">
             <span class="svg-icon menu-icon">
@@ -236,6 +273,8 @@
             <span class="menu-text">Ubah Jadwal {{header}}</span>
           </a>
         </li>
+        @endif
+
         {{--  <li class="menu-item menu-item-submenu menu-item-rel">
           <a href="{{route(conString(routeUrl,'sms'))}}" class="menu-link">
         <span class="svg-icon menu-icon">
@@ -258,14 +297,15 @@
         </a>
   </li> --}}
 </ul>
-</div>
-</li>
-
-
-
-
-
-
-
+{{--  </div>  --}}
+{{--  </li>  --}}
 </ul>
+
+@endif
+
+
+
+
+
+
 <!--end::Header Nav-->
