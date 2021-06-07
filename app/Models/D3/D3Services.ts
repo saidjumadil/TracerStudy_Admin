@@ -18,31 +18,47 @@ export default class Services extends BaseModel {
       .where('kd_fakultas2', id_fakultas)
   }
 
-  //inserr data monitoring
+  //insert data monitoring
   public static async insert_monitoring(tahun : string){
-  if(tahun.substring(4,5)==="0"){
-    let thn = tahun.substring(0,4)
-    return await Database.connection(conn_exsurvey)
-    .query()
-    .select("nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2")
-    .whereRaw("periode_wisuda like '" + thn + "%'")
-    .whereRaw("substr(nim,4,5)= '1'")
-  }else{
-    return await Database.connection(conn_exsurvey)
-    .query()
-    .select("nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2")
-    .where("periode_wisuda",tahun)
-    .whereRaw("substr(nim,4,5)= '1'")
-  }
-
+    if(tahun.substring(4,5)==="0"){
+      let thn = tahun.substring(0,4)
+      return await Database.connection(conn_exsurvey)
+      .query()
+      .select("nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2")
+      .whereRaw("periode_wisuda like '" + thn + "%'")
+      .whereRaw("substr(nim,4,5)= '1'")
+    }else{
+      return await Database.connection(conn_exsurvey)
+      .query()
+      .select("nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2")
+      .where("periode_wisuda", tahun)
+      .whereRaw("substr(nim,4,5)= '1'")
+    }
       //"select nim as nim, nama_lengkap as nama, periode_wisuda as periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2
     //FROM alumni WHERE SUBSTR(periode_wisuda,1,4) = '$thn_import'"
-}
-
-
+  }
 
   public static async get_sasaran() {
-    return await Database.connection(conn).from('sasaran').first()
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
+  }
+
+  public static async cek_sasaran(new_sasaran: string){
+    //return true = sasaran sudah pernah dibuat maka tidak diizinkan ubah sasaran
+    let sasaran: string = new_sasaran.substring(0,4)
+    if(new_sasaran.substring(4,5)==="0"){
+      return await Database.connection(conn).from('sasaran').whereRaw("tahun like '" + sasaran + "%'").first()
+      
+    }else{
+      //cek sudah pernah di tracer secara semua periode
+      let cek_semua_periode: string = sasaran.concat("0")
+      let cek = await Database.connection(conn).from('sasaran').where('tahun', cek_semua_periode).first()
+      //jika sudah pernah diset sasaran semua periode maka opsi set perperiode tidak boleh lagi
+      if(cek){
+        return true
+      }
+
+      return await Database.connection(conn).from('sasaran').where('tahun', new_sasaran).first()
+    }
   }
 
   public static async get_populasi(tahun) {

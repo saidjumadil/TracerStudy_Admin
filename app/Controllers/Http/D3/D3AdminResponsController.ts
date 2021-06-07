@@ -2,24 +2,19 @@
 import Services from 'App/Models/D3/D3Services'
 
 export default class D3AdminResponsController {
-  // TODO: data pengisi
   public async pengisi({ view, auth }) {
     await auth.authenticate()
-
-    //TODO : untuk lemparkan langsung fakultas ke edge
     const GetFakultas = await Services.get_fakultas()
 
     return view.render('d3/data/pengisi', { GetFakultas })
   }
 
-  // TODO: data hasil
   public async hasil({ view, auth }) {
     await auth.authenticate()
 
     return view.render('d3/data/hasil')
   }
 
-  // TODO: import user monitoring
   public async importuser({ view, auth }) {
     await auth.authenticate()
 

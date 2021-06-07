@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/naming-convention *//* eslint-disable prettier/prettier */
 import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import Sasaran from './PascaS3Sasaran'
@@ -18,7 +18,26 @@ export default class Services extends BaseModel {
   }
 
   public static async get_sasaran() {
-    return await Database.connection(conn).from('sasaran').first()
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
+  }
+
+  public static async cek_sasaran(new_sasaran: string){
+    //return true = sasaran sudah pernah dibuat maka tidak diizinkan ubah sasaran
+    let sasaran: string = new_sasaran.substring(0,4)
+    if(new_sasaran.substring(4,5)==="0"){
+      return await Database.connection(conn).from('sasaran').whereRaw("tahun like '" + sasaran + "%'").first()
+      
+    }else{
+      //cek sudah pernah di tracer secara semua periode
+      let cek_semua_periode: string = sasaran.concat("0")
+      let cek = await Database.connection(conn).from('sasaran').where('tahun', cek_semua_periode).first()
+      //jika sudah pernah diset sasaran semua periode maka opsi set perperiode tidak boleh lagi
+      if(cek){
+        return true
+      }
+
+      return await Database.connection(conn).from('sasaran').where('tahun', new_sasaran).first()
+    }
   }
 
   public static async get_populasi(tahun) {

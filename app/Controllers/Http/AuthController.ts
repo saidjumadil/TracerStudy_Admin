@@ -1,5 +1,7 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/naming-convention *//* eslint-disable prettier/prettier */
 import ErrorLog from 'App/Models/ErrorLog'
+import Hash from '@ioc:Adonis/Core/Hash'
+import User from 'App/Models/User'
 
 const className: string = 'AuthController'
 
@@ -16,7 +18,6 @@ export default class AuthController {
     return view.render('login')
   }
 
-  //TODO: tolong push notif ke form login
   public async authentication({ auth, request, response, session }) {
     try {
       const { username, password } = request.all()
@@ -36,6 +37,52 @@ export default class AuthController {
       return response.redirect('back')
     }
   }
+
+  //TODO: hubungkan route dengan edge ubah password
+  public async FormUbahPassword({ view }) {
+    return view.render("");
+  }
+
+  //TODO: hubungkan route dengan action form
+  public async ActionUbahPassword({ request, session, auth, response }) {
+    try {
+      const user = await auth.authenticate()
+      const { password_lama, password_baru, konfirmasi_password } = request.all();
+      const verify = await Hash.verify(password_lama, user.password);
+      const hash_password = await Hash.make(password_baru)
+      if (verify && password_baru === konfirmasi_password) {
+        await User.ubah_password(user.username, hash_password)
+
+        message(
+          session,
+          'notification',
+          'danger',
+          'Password berhasil diubah'
+        )
+        return response.redirect('back')
+      } else if (password_baru !== konfirmasi_password) {
+        message(
+          session,
+          'notification',
+          'danger',
+          'Kata sandi konfirmasi tidak sama'
+        )
+        return response.redirect('back')
+      } 
+    } catch (error) {
+      console.log(error);
+      await ErrorLog.error_log(className, 'ActionUbahPassword', error.toString(), request.ip())
+      message(
+        session,
+        'notification',
+        'danger',
+        'Gagal Mengubah Kata Sandi'
+      )
+      return response.redirect('back')
+    }
+  }
+
+  
 
   public async logout({ auth, response }) {
     try {

@@ -112,15 +112,34 @@ export default class D3AdminsController {
     try {
       let { tahun, periode } = request.all()
       var tahun_periode = tahun.toString().concat(periode.toString())
-      let update = await Services.set_sasaran(tahun_periode)
-      if (update) {
+      let current_sasaran = await Services.get_sasaran()      
+      //covert sasaran ke number
+      let num_current: number = Number(current_sasaran.tahun)
+      let num_new_sasaran : number = Number(tahun_periode)
+      //cek sasaran sesuai aturan atau tidak
+      let cek_sasaran = await Services.cek_sasaran(tahun_periode)
+      // jika cek sasaran false dan tahun sasaran baru > tahun sasaran sekarang maka izinkan untuk update tahun sasaran
+      if(!cek_sasaran && num_new_sasaran > num_current){
+        //update sasaran
+        let update = await Services.set_sasaran(tahun_periode)
+        if (update) {
+          message(
+            session,
+            'notification_sasaran',
+            'success',
+            'Berhasil mengubah sasaran Tracer Study'
+          )
+          return { isSuccess: true }
+          //TODO: notif berhasil belum muncul
+        }
+      }else{
         message(
           session,
           'notification_sasaran',
-          'success',
-          'Berhasil mengubah sasaran Tracer Study'
+          'danger',
+          'Gagal mengubah karena sasaran sudah pernah dibuat!'
         )
-        return { isSuccess: true }
+        return { isSuccess: false }
       }
     } catch (error) {
       console.log(error)

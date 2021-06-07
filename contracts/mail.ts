@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
  * Contract source: https://git.io/JvgAT
  *
@@ -5,10 +6,13 @@
  * file.
  */
 
-declare module '@ioc:Adonis/Addons/Mail' {
+ declare module '@ioc:Adonis/Addons/Mail' {
   import { MailDrivers } from '@ioc:Adonis/Addons/Mail'
 
   interface MailersList {
+    ses: MailDrivers['ses']
+    mailgun: MailDrivers['mailgun']
+    sparkpost: MailDrivers['sparkpost']
     smtp: MailDrivers['smtp']
   }
 }
