@@ -11,4 +11,13 @@ export default class Sasaran extends BaseModel {
 
   @column()
   public tahun: string
+
+  @column()
+  public status_aktif: number
+  
+  @column()
+  public waktu_mulai: Date
+
+  @column()
+  public waktu_berakhir: Date
 }

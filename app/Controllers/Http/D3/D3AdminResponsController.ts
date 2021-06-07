@@ -26,6 +26,22 @@ export default class D3AdminResponsController {
     return view.render('d3/data/import_user')
   }
 
+  //import user store
+  public async store_monitoring({request}){
+    try {
+      const {tahun} = request.all()
+      //function store
+      const store_monitoring = await Services.insert_monitoring(tahun) 
+      if(store_monitoring){
+        return true
+
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
   public async ajax_prodi({ request }) {
     try {
       const { id_fakultas } = request.all()
