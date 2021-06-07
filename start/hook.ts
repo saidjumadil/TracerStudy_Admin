@@ -62,6 +62,7 @@ View.global('getAscii', (value) => {
 
   return ascii[value]
 })
+
 View.global('haris', {
   0: 'Minggu',
   1: 'Senin',
@@ -150,14 +151,26 @@ View.global('getTimeFormat', function (value: string) {
     10: 'November',
     11: 'December',
   }
+  const days = {
+    0: 'Minggu',
+    1: 'Senin',
+    2: 'Selasa',
+    3: 'Rabu',
+    4: 'Kamis',
+    5: "Jum'at",
+    6: 'Sabtu',
+  }
   console.log(value)
   const waktu = new Date(value)
   const bulan = waktu.getMonth()
   const tahun = waktu.getFullYear()
-  const hari = waktu.getDate()
+  const hari = waktu.getDay()
+  const date = waktu.getDate()
   const jam = waktu.getHours()
   const menit = waktu.getMinutes()
-  return `Jam ${jam}.${menit}, ${hari} ${months[bulan]} ${tahun}`
+  return ` ${
+    days[hari]
+  }, ${String(date).padStart(2, '0')} ${months[bulan]} ${tahun}. Pukul ${String(jam).padStart(2, '0')}:${String(menit).padStart(2, '0')} WIB`
 })
 
 View.global('getSubTitle', function (value: string) {
@@ -166,4 +179,9 @@ View.global('getSubTitle', function (value: string) {
   if (value.search('/pasca/s3') !== -1) return 'Pasca S3'
   if (value.search('/profesi') !== -1) return 'Profesi'
   return ''
+})
+
+View.global('getCurrentYear', function () {
+  const waktu = new Date()
+  return waktu.getFullYear() - 1
 })

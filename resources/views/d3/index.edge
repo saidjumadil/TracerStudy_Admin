@@ -4,12 +4,31 @@
 <div class="card card-custom">
   <div class="card-header">
     <h3 class="card-title">
-      Beranda
+      Rekap Pengisian Tracer Study
     </h3>
 
   </div>
-  <div class="card-body text-center text-bold " style="font-size:24px;padding:5em 2em">
-    Rekap Pengisian Tracer Study 2021
+  <div class="card-body text-bold ">
+    @!component('components/dropdown-range',{
+    'name':'tahun',
+    'label':'Tahun Tracer',
+    'required':true,
+    'start': getCurrentYear(),
+    'end':getCurrentYear()-5
+    })
+
+    @!component('components/dropdown',{
+    label:'Periode Wisuda',
+    name:'periode',
+    validasi:[true,false,false],
+    choice:[
+    { id:0, nama:'Semua Periode' },
+    { id:1, nama:'Periode 1' },
+    { id:2, nama:'Periode 2' },
+    { id:3, nama:'Periode 3' },
+    { id:4, nama:'Periode 4' },
+    ]
+    })
   </div>
 </div>
 

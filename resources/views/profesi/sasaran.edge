@@ -4,22 +4,28 @@
 <div class="card card-custom">
   <div class="card-header">
     <h3 class="card-title">
-      Tahun Sasaran {{ getTitleSasaran(get_sasaran.tahun) }}
+      Ubah Tahun Sasaran
     </h3>
 
   </div>
   <!--begin::Form-->
-  <form method="POST" id="form">
-    {{ csrfField() }}
+  <div class="card-body">
+    <div class="alert alert-custom alert-outline-info" role="alert">
+      <div class="alert-text text-justify">
+        <h5>Sasaran : Tahun {{getTitleSasaran(get_sasaran.tahun)}}</h5>
+      </div>
 
-    <div class="card-body">
+    </div>
+    <form method="POST" id="form">
+      {{ csrfField() }}
+
 
       @!component('components/dropdown-range',{
       'name':'tahun',
       'label':'Tahun Sasaran',
       'required':true,
-      'start':2020,
-      'end':2008
+      'start': getCurrentYear(),
+      'end':getCurrentYear()-20
       })
 
       @!component('components/dropdown',{
@@ -35,10 +41,44 @@
       ]
       })
       <div class="text-right mt-5">
-        <button class="btn btn-danger" id="ubah_sasaran"><i class="fa fa-edit icon-sm"></i> Ubah</button>
+        <div class="btn btn-primary" data-toggle="modal" data-target="#modal_ubah_sasaran"><i
+            class="fa fa-edit icon-sm"></i> Ubah</div>
       </div>
-    </div>
-  </form>
+      <div class="modal fade" id="modal_ubah_sasaran" tabindex="-1" role="dialog"
+        aria-labelledby="modal_label_ubah_sasaran" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal_label_ubah_sasaran">Konfirmasi Sasaran </h5>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i aria-hidden="true" class="ki ki-close"></i>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <div class="alert alert-custom alert-outline-info" role="alert">
+                <div class="alert-text text-justify">
+                  <div><i class="fas fa-info-circle icon-sm text-info"></i> PERHATIAN</div>
+                  <p>
+                    Tahun Sasaran yang telah diubah tidak dapat diubah mundur kembali. Hanya mampu mengubah ke suatu
+                    tahun sasaran yang sama sekali
+                  </p>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
+              <button id="ubah_sasaran" type="submit" class="btn btn-primary font-weight-bold"><i
+                  class="fa fa-edit icon-sm"></i>
+                Ubah </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
   <div class="modal fade" id="modal_tambah_populasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -98,7 +138,7 @@
   }
 
   let ubahSasaran = (data) => {
-    console.log(data)
+    // console.log(data)
     fetch(ubahSasaranRoute, {
         method: 'POST',
         headers: {
@@ -119,7 +159,8 @@
 
       })
   }
-  sasaran.addEventListener('submit', (e) => {
+
+  sasaranBtn.addEventListener('click', (e) => {
     // console.log(loading)
     e.preventDefault()
 

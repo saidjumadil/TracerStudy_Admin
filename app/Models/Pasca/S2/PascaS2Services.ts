@@ -18,7 +18,7 @@ export default class Services extends BaseModel {
   }
 
   public static async get_sasaran() {
-    return await Database.connection(conn).from('sasaran').first()
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
   }
 
   public static async get_populasi(tahun) {
@@ -44,24 +44,19 @@ export default class Services extends BaseModel {
   }
 
   public static async set_sasaran(tahun_periode: string) {
-
     //set semua status_aktif jadi 0\
-    await Database.connection(conn).from("sasaran").update({status_aktif: 0})
+    await Database.connection(conn).from('sasaran').update({ status_aktif: 0 })
     // await Sasaran.fill({ status_aktif: 0 }).save()
 
-    return await Database.connection(conn)
-    .table("sasaran")
-    .insert({
+    return await Database.connection(conn).table('sasaran').insert({
       tahun: tahun_periode,
       status_aktif: 1,
     })
-    
   }
 
   public static async get_jadwal() {
-    return await Database.connection(conn).from('sasaran').where("status_aktif",1).first()
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
   }
-
 
   public static async set_jadwal(waktu_mulai: Date, waktu_berakhir: Date) {
     const SearchId = { status_aktif: 1 }

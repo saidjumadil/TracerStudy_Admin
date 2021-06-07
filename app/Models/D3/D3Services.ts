@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention *//* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import Sasaran from './D3Sasaran' //FIXME: sesuaikan
@@ -19,30 +19,28 @@ export default class Services extends BaseModel {
   }
 
   //inserr data monitoring
-  public static async insert_monitoring(tahun : string){
-  if(tahun.substring(4,5)==="0"){
-    let thn = tahun.substring(0,4)
-    return await Database.connection(conn_exsurvey)
-    .query()
-    .select("nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2")
-    .whereRaw("periode_wisuda like '" + thn + "%'")
-    .whereRaw("substr(nim,4,5)= '1'")
-  }else{
-    return await Database.connection(conn_exsurvey)
-    .query()
-    .select("nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2")
-    .where("periode_wisuda",tahun)
-    .whereRaw("substr(nim,4,5)= '1'")
+  public static async insert_monitoring(tahun: string) {
+    if (tahun.substring(4, 5) === '0') {
+      let thn = tahun.substring(0, 4)
+      return await Database.connection(conn_exsurvey)
+        .query()
+        .select('nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2')
+        .whereRaw("periode_wisuda like '" + thn + "%'")
+        .whereRaw("substr(nim,4,5)= '1'")
+    } else {
+      return await Database.connection(conn_exsurvey)
+        .query()
+        .select('nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2')
+        .where('periode_wisuda', tahun)
+        .whereRaw("substr(nim,4,5)= '1'")
+    }
+
+    //"select nim as nim, nama_lengkap as nama, periode_wisuda as periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2
+    //FROM alumni WHERE SUBSTR(periode_wisuda,1,4) = '$thn_import'"
   }
 
-      //"select nim as nim, nama_lengkap as nama, periode_wisuda as periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2
-    //FROM alumni WHERE SUBSTR(periode_wisuda,1,4) = '$thn_import'"
-}
-
-
-
   public static async get_sasaran() {
-    return await Database.connection(conn).from('sasaran').first()
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
   }
 
   public static async get_populasi(tahun) {
@@ -68,22 +66,18 @@ export default class Services extends BaseModel {
   }
 
   public static async set_sasaran(tahun_periode: string) {
-
     //set semua status_aktif jadi 0\
-    await Database.connection(conn).from("sasaran").update({status_aktif: 0})
+    await Database.connection(conn).from('sasaran').update({ status_aktif: 0 })
     // await Sasaran.fill({ status_aktif: 0 }).save()
 
-    return await Database.connection(conn)
-    .table("sasaran")
-    .insert({
+    return await Database.connection(conn).table('sasaran').insert({
       tahun: tahun_periode,
-      status_aktif: 1
+      status_aktif: 1,
     })
-    
   }
 
   public static async get_jadwal() {
-    return await Database.connection(conn).from('sasaran').where("status_aktif",1).first()
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
   }
 
   public static async set_jadwal(waktu_mulai: Date, waktu_berakhir: Date) {
