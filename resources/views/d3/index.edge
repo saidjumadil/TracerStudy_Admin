@@ -9,26 +9,29 @@
 
   </div>
   <div class="card-body text-bold ">
-    @!component('components/dropdown-range',{
-    'name':'tahun',
-    'label':'Tahun Tracer',
-    'required':true,
-    'start': getCurrentYear(),
-    'end':getCurrentYear()-5
-    })
+    <form method="POST" id="form">
+      {{ csrfField() }}
+      @!component('components/dropdown-range',{
+      'name':'tahun',
+      'label':'Tahun Tracer',
+      'required':true,
+      'start': getCurrentYear(),
+      'end':getCurrentYear()-5
+      })
 
-    @!component('components/dropdown',{
-    label:'Periode Wisuda',
-    name:'periode',
-    validasi:[true,false,false],
-    choice:[
-    { id:0, nama:'Semua Periode' },
-    { id:1, nama:'Periode 1' },
-    { id:2, nama:'Periode 2' },
-    { id:3, nama:'Periode 3' },
-    { id:4, nama:'Periode 4' },
-    ]
-    })
+      @!component('components/dropdown',{
+      label:'Periode Wisuda',
+      name:'periode',
+      validasi:[true,false,false],
+      choice:[
+      { id:0, nama:'Semua Periode' },
+      { id:1, nama:'Periode 1' },
+      { id:2, nama:'Periode 2' },
+      { id:3, nama:'Periode 3' },
+      { id:4, nama:'Periode 4' },
+      ]
+      })
+    </form>
   </div>
 </div>
 

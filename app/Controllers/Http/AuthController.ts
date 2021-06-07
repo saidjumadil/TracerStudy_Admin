@@ -46,4 +46,20 @@ export default class AuthController {
       console.log(e)
     }
   }
+
+  public async ubah_password({ auth, view }) {
+    await auth.authenticate()
+
+    return view.render('ubah_password')
+  }
+
+  public async post_ubah_password({ auth, response, request }) {
+    await auth.authenticate()
+    const { password_lama, password_baru, password_baru1 } = request.all()
+    // console.log(password_lama)
+    // console.log(password_baru)
+    // console.log(password_baru1)
+    // TODO: store ubah password
+    return response.redirect().toRoute('auth.ubah_password')
+  }
 }
