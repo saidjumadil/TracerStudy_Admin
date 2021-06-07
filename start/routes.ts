@@ -43,8 +43,6 @@ Route.group(() => {
     // user managemen
     Route.group(() => {
       Route.group(() => {
-        Route.get('admin', 'D3/D3AdminUserManagemenController.tambah_admin').as('admin')
-        Route.get('operator', 'D3/D3AdminUserManagemenController.tambah_operator').as('operator')
         Route.get('akunresponden', 'D3/D3AdminUserManagemenController.tambah_akunresponden').as(
           'akunresponden'
         )
@@ -100,12 +98,6 @@ Route.group(() => {
       // user managemen
       Route.group(() => {
         Route.group(() => {
-          Route.get('admin', 'Pasca/S2/PascaS2AdminUserManagemenController.tambah_admin').as(
-            'admin'
-          )
-          Route.get('operator', 'Pasca/S2/PascaS2AdminUserManagemenController.tambah_operator').as(
-            'operator'
-          )
           Route.get(
             'akunresponden',
             'Pasca/S2/PascaS2AdminUserManagemenController.tambah_akunresponden'
@@ -165,12 +157,6 @@ Route.group(() => {
       // user managemen
       Route.group(() => {
         Route.group(() => {
-          Route.get('admin', 'Pasca/S3/PascaS3AdminUserManagemenController.tambah_admin').as(
-            'admin'
-          )
-          Route.get('operator', 'Pasca/S3/PascaS3AdminUserManagemenController.tambah_operator').as(
-            'operator'
-          )
           Route.get(
             'akunresponden',
             'Pasca/S3/PascaS3AdminUserManagemenController.tambah_akunresponden'
@@ -231,10 +217,6 @@ Route.group(() => {
     // user managemen
     Route.group(() => {
       Route.group(() => {
-        Route.get('admin', 'Profesi/ProfesiAdminUserManagemenController.tambah_admin').as('admin')
-        Route.get('operator', 'Profesi/ProfesiAdminUserManagemenController.tambah_operator').as(
-          'operator'
-        )
         Route.get(
           'akunresponden',
           'Profesi/ProfesiAdminUserManagemenController.tambah_akunresponden'

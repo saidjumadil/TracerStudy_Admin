@@ -26,7 +26,8 @@ export default class OperatorController {
   // TODO: backend tambah operator
   public async store_operator({ auth, response, request }) {
     await auth.authenticate()
-
+    const { nama, username, email, jabatan, permission } = request.all()
+    console.log(request.all())
     return response.redirect().toRoute('admin.operator')
   }
 }
