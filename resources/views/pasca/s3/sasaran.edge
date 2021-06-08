@@ -153,9 +153,15 @@
       .then(data => {
         // console.log('berhasil')
         // console.log(location)
-        if (data.isSuccess)
-          location.reload()
-        else {
+        if (data.isSuccess) {
+          alertSasaran.removeChild(alertSasaran.childNodes[0]);
+          alertSasaran.insertAdjacentHTML("afterbegin", alert('success',
+            data.message))
+          setTimeout(() => {
+
+            location.reload()
+          }, 2000);
+        } else {
           alertSasaran.removeChild(alertSasaran.childNodes[0]);
           alertSasaran.insertAdjacentHTML("afterbegin", alert('danger',
             'Gagal mengubah karena sasaran sudah pernah dibuat!'))
