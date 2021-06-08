@@ -84,14 +84,14 @@ export default class ProfesiAdminsController {
       //get mahasiswa dari API
       response.safeHeader('Content-type', 'application/json')
       let total_inserted = 0
-      let alumniD3 = Env.get('WS_ALUMNI_PROFESI')
-      if (alumniD3) {
-        alumniD3 = alumniD3.replace('yyyy', tahun)
+      let alumni = Env.get('WS_ALUMNI_PROFESI')
+      if (alumni) {
+        alumni = alumni.replace('yyyy', tahun)
         //ambil data alumni
-        const data = await axios.get(alumniD3)
-        const populasiD3 = data.data[0]
+        const data = await axios.get(alumni)
+        const populasi = data.data[0]
         //disini kita akan modifikasi setiap objek yang ada di array dataMappingProdi menggunakan fungsi map
-        populasiD3.map((obj) => {
+        populasi.map((obj) => {
           if (obj.hasOwnProperty('npm')) {
             //ambil value dari key yang salah
             const val = obj.npm
@@ -111,11 +111,11 @@ export default class ProfesiAdminsController {
           }
         })
         //insert data baru
-        const status = await Services.insert_populasi(populasiD3)
+        const status = await Services.insert_populasi(populasi)
         // cek kalo statusnya tidak 0
         if (status) {
           //tambahkan total_inserted dengan jumlah data yang didapat
-          total_inserted += populasiD3.length
+          total_inserted += populasi.length
         }
 
         //return jumlah data yang berhasil ditambahkan
@@ -133,15 +133,33 @@ export default class ProfesiAdminsController {
     try {
       let { tahun, periode } = request.all()
       var tahun_periode = tahun.toString().concat(periode.toString())
-      let update = await Services.set_sasaran(tahun_periode)
-      if (update) {
+      let current_sasaran = await Services.get_sasaran()      
+      //covert sasaran ke number
+      let num_current: number = Number(current_sasaran.tahun)
+      let num_new_sasaran : number = Number(tahun_periode)
+      //cek sasaran sesuai aturan atau tidak
+      let cek_sasaran = await Services.cek_sasaran(tahun_periode)
+      // jika cek sasaran false dan tahun sasaran baru > tahun sasaran sekarang maka izinkan untuk update tahun sasaran
+      if(!cek_sasaran && num_new_sasaran > num_current){
+        //update sasaran
+        let update = await Services.set_sasaran(tahun_periode)
+        if (update) {
+          message(
+            session,
+            'notification_sasaran',
+            'success',
+            'Berhasil mengubah sasaran Tracer Study'
+          )
+          return { isSuccess: true }
+        }
+      }else{
         message(
           session,
           'notification_sasaran',
-          'success',
-          'Berhasil mengubah sasaran Tracer Study'
+          'danger',
+          'Gagal mengubah karena sasaran sudah pernah dibuat!'
         )
-        return { isSuccess: true }
+        return { isSuccess: false }
       }
     } catch (error) {
       console.log(error)
