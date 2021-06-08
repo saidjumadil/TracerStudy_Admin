@@ -5,7 +5,7 @@
     <span class="text-danger">*</span>
     @endif
   </label>
-  <input type="{{ type }}" name="{{ name }}" id="{{ name }}" value="{{value}}" autocomplete="off"
+  <input type="{{ type }}" name="{{ name }}" id="{{ name }}" value="" autocomplete="off"
     class="form-control {{ input_class  }}" placeholder="{{placeholder}}"
     data-fv-not-empty='{{ (target) ? false : validasi[0] }}' data-fv-not-empty___message='Pertanyaan ini wajib diisi'
     not-empty='{{validasi[0]}}' data-fv-string-length="{{ (target) ? false : (validasi[1] != null) }}"

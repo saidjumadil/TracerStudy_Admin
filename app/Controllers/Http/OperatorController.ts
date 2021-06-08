@@ -18,8 +18,8 @@ function message(session, nama_notif, type, message) {
 }
 export default class OperatorController {
   public async get_operator({ view, auth }) {
-    await auth.authenticate()
-    const users = await User.get_users()
+    const current_user = await auth.authenticate()
+    const users = await User.get_users(current_user)
     return view.render('operator/operator', { users })
   }
 

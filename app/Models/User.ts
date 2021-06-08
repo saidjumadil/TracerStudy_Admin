@@ -42,8 +42,20 @@ export default class D3User extends BaseModel {
     }
   }
 
-  public static async get_users(){
-    return await Database.connection(this.conn).query().from('users').select('*')
+  public static async get_users(current_user){
+    if(current_user.username==="root"){
+      return await Database.connection(this.conn).query().from('users').select('*').whereNot("username","root")
+    }else{
+      return await Database.connection(this.conn)
+      .query()
+      .from('users')
+      .select('*')
+      .whereNot("username","root")
+      .whereNot("permission_d3",2)
+      .whereNot("permission_pasca_s2",2)
+      .whereNot("permission_pasca_s3",2)
+      .whereNot("permission_profesi",2)
+    }
   }
 
   //get akun ini untuk validasi sesuia dengan username untuk reset password akun
