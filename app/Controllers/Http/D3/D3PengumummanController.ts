@@ -26,11 +26,11 @@ export default class D3PengumummanController {
     }
 
     //TODO: BUAT form untuk update pengumuman
-    public async store_pengumuman({request, session, response}){
+    public async update_pengumuman({request, session, response}){
         try {
             const {path_banner, pengumuman, laporan_online , tujuan, target_responden, jadwal, hubungi_kami} = request.all()
-            
-            const store = await Services.insert_pengumuman(path_banner, 
+            const store = await Services.update_pengumuman(
+                path_banner, 
                 pengumuman, 
                 laporan_online , 
                 tujuan, 
