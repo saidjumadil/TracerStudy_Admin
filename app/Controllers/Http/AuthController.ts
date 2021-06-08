@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention *//* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import ErrorLog from 'App/Models/ErrorLog'
 import Hash from '@ioc:Adonis/Core/Hash'
 import User from 'App/Models/User'
@@ -38,51 +38,37 @@ export default class AuthController {
     }
   }
 
-  //TODO: hubungkan route dengan edge ubah password
-  public async FormUbahPassword({ view }) {
-    return view.render("");
+  public async FormUbahPassword({ auth, view }) {
+    await auth.authenticate()
+
+    return view.render('ubah_password')
   }
 
-  //TODO: hubungkan route dengan action form
   public async ActionUbahPassword({ request, session, auth, response }) {
     try {
       const user = await auth.authenticate()
-      const { password_lama, password_baru, konfirmasi_password } = request.all();
-      const verify = await Hash.verify(password_lama, user.password);
+      const { password_lama, password_baru, konfirmasi_password } = request.all()
+      const verify = await Hash.verify(user.password, password_lama)
       const hash_password = await Hash.make(password_baru)
       if (verify && password_baru === konfirmasi_password) {
         await User.ubah_password(user.username, hash_password)
 
-        message(
-          session,
-          'notification',
-          'danger',
-          'Password berhasil diubah'
-        )
+        message(session, 'notification', 'success', 'Password berhasil diubah')
         return response.redirect('back')
       } else if (password_baru !== konfirmasi_password) {
-        message(
-          session,
-          'notification',
-          'danger',
-          'Kata sandi konfirmasi tidak sama'
-        )
+        message(session, 'notification', 'danger', 'Kata sandi konfirmasi tidak sama')
         return response.redirect('back')
-      } 
+      } else if (!verify) {
+        message(session, 'notification', 'danger', 'Kata sandi lama salah')
+        return response.redirect('back')
+      }
     } catch (error) {
-      console.log(error);
+      console.log(error)
       await ErrorLog.error_log(className, 'ActionUbahPassword', error.toString(), request.ip())
-      message(
-        session,
-        'notification',
-        'danger',
-        'Gagal Mengubah Kata Sandi'
-      )
+      message(session, 'notification', 'danger', 'Gagal Mengubah Kata Sandi')
       return response.redirect('back')
     }
   }
-
-  
 
   public async logout({ auth, response }) {
     try {
@@ -92,21 +78,5 @@ export default class AuthController {
     } catch (e) {
       console.log(e)
     }
-  }
-
-  public async ubah_password({ auth, view }) {
-    await auth.authenticate()
-
-    return view.render('ubah_password')
-  }
-
-  public async post_ubah_password({ auth, response, request }) {
-    await auth.authenticate()
-    const { password_lama, password_baru, password_baru1 } = request.all()
-    // console.log(password_lama)
-    // console.log(password_baru)
-    // console.log(password_baru1)
-    // TODO: store ubah password
-    return response.redirect().toRoute('auth.ubah_password')
   }
 }

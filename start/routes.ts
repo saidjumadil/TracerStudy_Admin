@@ -12,8 +12,8 @@ Route.group(() => {
   Route.group(() => {
     Route.get('logout', 'AuthController.logout').as('logout')
     Route.group(() => {
-      Route.get('', 'AuthController.ubah_password').as('ubah_password')
-      Route.post('', 'AuthController.post_ubah_password').as('post_ubah_password')
+      Route.get('', 'AuthController.FormUbahPassword').as('ubah_password')
+      Route.post('', 'AuthController.ActionUbahPassword').as('post_ubah_password')
     }).prefix('ubah_password')
   }).middleware(['user'])
 }).as('auth')
