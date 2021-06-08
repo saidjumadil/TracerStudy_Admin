@@ -111,4 +111,8 @@ export default class Services extends BaseModel {
     }
     return await Sasaran.updateOrCreate(SearchId, Updates)
   }
+
+  public static async get_pengumumman(){
+    return await Database.connection(conn).table("ss").first()
+  }
 }
