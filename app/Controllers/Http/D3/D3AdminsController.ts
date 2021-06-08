@@ -22,27 +22,6 @@ export default class D3AdminsController {
 
     return view.render(renderName + '/index')
   }
-  public async pengumuman({ view, auth }) {
-    await auth.authenticate()
-
-    return view.render(renderName + '/pengumuman')
-  }
-
-  // TODO: backend ubah pengumuman
-  public async ubah_pengumuman({ response, request, auth }) {
-    await auth.authenticate()
-    // const {
-    //   path_banner,
-    //   pengumuman,
-    //   laporan_online,
-    //   tujuan,
-    //   target_responden,
-    //   jadwal,
-    //   hubungi_kami,
-    // } = request.all()
-    console.log(request.all())
-    return response.redirect('back')
-  }
 
   public async sasaran({ view, auth }) {
     await auth.authenticate()

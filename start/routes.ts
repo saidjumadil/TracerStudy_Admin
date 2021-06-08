@@ -33,8 +33,8 @@ Route.group(() => {
     Route.get('', 'D3/D3AdminsController.index').as('index')
 
     Route.group(() => {
-      Route.get('', 'D3/D3AdminsController.pengumuman').as('pengumuman')
-      Route.post('', 'D3/D3AdminsController.ubah_pengumuman').as('ubah_pengumuman')
+      Route.get('', 'D3/D3PengumummanController.get_pengumuman').as('pengumuman')
+      Route.post('', 'D3/D3PengumummanController.update_pengumuman').as('ubah_pengumuman')
     }).prefix('pengumuman')
 
     // data
