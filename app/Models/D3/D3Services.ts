@@ -2,6 +2,7 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import Sasaran from './D3Sasaran' //FIXME: sesuaikan
+import Pengumuman from './D3Pengumuman'
 
 const conn: string = 'cdc_tracerstudy_d3' //FIXME : sesuaikan
 const conn_exsurvey: string = 'cdc_exsurvey' //FIXME : sesuaikan
@@ -111,5 +112,31 @@ export default class Services extends BaseModel {
       waktu_berakhir: waktu_berakhir,
     }
     return await Sasaran.updateOrCreate(SearchId, Updates)
+  }
+
+  public static async get_pengumuman(){
+    return await Database.connection(conn).from("pengumuman").first()
+  }
+
+  public static async update_pengumuman(
+    path_banner: string, 
+    pengumuman: string, 
+    laporan_online: string , 
+    tujuan: string, 
+    target_responden: string, 
+    jadwal: string, 
+    hubungi_kami: string
+    ){
+      const SearchId = { id: 1 }
+      const Updates = {
+        path_banner: path_banner, 
+        pengumuman: pengumuman, 
+        laporan_online: laporan_online , 
+        tujuan: tujuan, 
+        target_responden: target_responden, 
+        jadwal: jadwal, 
+        hubungi_kami: hubungi_kami
+      }
+      return await Pengumuman.updateOrCreate(SearchId, Updates)
   }
 }
