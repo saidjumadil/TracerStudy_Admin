@@ -15,25 +15,32 @@
   <form method="POST" id="form" action="{{route('admin.store_operator')}}">
     <div class="card-body">
       <!-- Button trigger modal-->
-      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_tambah">
         <i class="fas fa-user-plus icon-sm"></i> Tambah Enum
       </button>
 
       <!-- Modal-->
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      <div class="modal fade" id="modal_tambah" tabindex="-1" role="dialog" aria-labelledby="modal_tambahLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Tambah Enumerator </h5>
+              <h5 class="modal-title" id="modal_tambahLabel">Tambah Enumerator </h5>
 
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <i aria-hidden="true" class="ki ki-close"></i>
               </button>
             </div>
             <form method="POST" id="form">
-              {{ csrfField() }}
               <div class="modal-body">
+                @if(flashMessages.get('notification_user'))
+                <div
+                  class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification_user.type') }} alert-dismissible animated fadeIn"
+                  role="alert">
+                  <span>{{ flashMessages.get('notification_user.message') }}</span>
+                </div>
+                @endif
+                {{ csrfField() }}
 
                 @!component('components/input',{
                 'placeholder': 'Contoh: Aqil Fiqran DziUl Haq',
@@ -191,5 +198,10 @@
 <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 
 <script src="/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
+@if(flashMessages.get('notification_user'))
+<script>
+  $('#modal_tambah').modal('show')
 
+</script>
+@endif
 @endsection

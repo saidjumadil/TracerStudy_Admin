@@ -17,48 +17,35 @@ function message(session, nama_notif, type, message) {
   })
 }
 export default class OperatorController {
-  public async operator({ auth, view }) {
-    await auth.authenticate()
-    return view.render('operator/operator')
-  }
-
-  // TODO: backend ubah operator
   public async ubah_operator({ auth, response, request }) {
     await auth.authenticate()
 
     return response.redirect().toRoute('admin.operator')
   }
-  // TODO: backend tambah operator
-  public async store_operator({ auth, response, request }) {
-    await auth.authenticate()
-    const { nama, username, email, jabatan, permission } = request.all()
-    console.log(request.all())
-    return response.redirect().toRoute('admin.operator')
-  }
-  //TODO: PENTING!!! seseuaikan nama notifikasi di edge dan pada conttroller sesuai kebutuhan
+  // public async store_operator({ auth, response, request }) {
+  //   await auth.authenticate()
+  //   const { nama, username, email, jabatan, permission } = request.all()
+  //   console.log(request.all())
+  //   return response.redirect().toRoute('admin.operator')
+  // }
 
   //TODO: hubungkan routes dengan view
   public async get_operator({ view, auth }) {
     await auth.authenticate()
     const users = User.get_users()
-    return view.render('d3/managemen/tambah_operator', { users })
+    return view.render('operator/operator', { users })
     //TODO: buat dulu edge untuk form operator
   }
 
   //TODO: buat routes action form untuk store akun
   public async register_users({ request, session, response }) {
     try {
-      let {
-        username,
-        nama,
-        email,
-        password,
-        permission_d3,
-        permission_pasca_s2,
-        permission_pasca_s3,
-        permission_profesi,
-      } = request.all()
-
+      const { nama, username, email, jabatan, permission } = request.all()
+      const permission_d3 = permission.includes('1') ? jabatan : 0
+      const permission_pasca_s2 = permission.includes('2') ? jabatan : 0
+      const permission_pasca_s3 = permission.includes('3') ? jabatan : 0
+      const permission_profesi = permission.includes('4') ? jabatan : 0
+      const password = this.generate_password()
       const hash_password = await Hash.make(password)
       //insert users
       const insert_users = await User.insert_users(
@@ -73,11 +60,7 @@ export default class OperatorController {
       )
       if (insert_users) {
         // kirim email
-        const emailData = {
-          nama: nama,
-          username: username,
-          password: password,
-        }
+        const emailData = { nama, username, password }
 
         const kirimEmail = await Mail.send((message) => {
           message
@@ -97,7 +80,7 @@ export default class OperatorController {
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'register_users', error.toString(), request.ip())
-      message(session, 'notification_user', 'danger', 'Gagal mengubah jadwal Tracer Study')
+      message(session, 'notification_user', 'danger', 'gagal mengirim email!')
       return response.redirect('back')
     }
   }

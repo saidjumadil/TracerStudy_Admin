@@ -6,6 +6,7 @@ export default class User {
       await auth.authenticate()
       await next()
     } catch (error) {
+      console.log(error)
       return response.redirect().toRoute('auth.login')
     }
   }

@@ -21,10 +21,10 @@ Route.group(() => {
 // admin side
 Route.group(() => {
   Route.group(() => {
-    Route.get('', 'OperatorController.operator').as('operator')
+    Route.get('', 'OperatorController.get_operator').as('operator')
     Route.post('', 'OperatorController.ubah_operator').as('ubah_operator')
 
-    Route.post('tambah', 'OperatorController.store_operator').as('store_operator')
+    Route.post('tambah', 'OperatorController.register_users').as('store_operator')
   }).prefix('operator')
   // d3
   Route.group(() => {
