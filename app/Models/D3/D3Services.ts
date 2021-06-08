@@ -114,7 +114,7 @@ export default class Services extends BaseModel {
   }
 
   public static async get_pengumuman(){
-    return await Database.connection(conn).from("peng").first()
+    return await Database.connection(conn).from("pengumuman").first()
   }
 
   public static async update_pengumuman(
