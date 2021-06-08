@@ -22,9 +22,10 @@ Route.group(() => {
 Route.group(() => {
   Route.group(() => {
     Route.get('', 'OperatorController.get_operator').as('operator')
-    Route.post('', 'OperatorController.ubah_operator').as('ubah_operator')
+    Route.post('', 'OperatorController.update_users').as('ubah_operator')
 
     Route.post('tambah', 'OperatorController.register_users').as('store_operator')
+    Route.post('reset_password', 'OperatorController.reset_password').as('reset_password')
   }).prefix('operator')
   // d3
   Route.group(() => {

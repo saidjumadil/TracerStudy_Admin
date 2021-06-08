@@ -1,5 +1,6 @@
 import View from '@ioc:Adonis/Core/View'
 import Env from '@ioc:Adonis/Core/Env'
+import D3User from 'App/Models/User'
 
 View.global('appUrl', (path) => {
   const APP_URL = Env.get('APP_URL')
@@ -184,4 +185,31 @@ View.global('getSubTitle', function (value: string) {
 View.global('getCurrentYear', function () {
   const waktu = new Date()
   return waktu.getFullYear() - 1
+})
+
+View.global('getJabatan', function (user: D3User) {
+  const jabatan = [
+    user.permission_d3,
+    user.permission_pasca_s2,
+    user.permission_pasca_s3,
+    user.permission_profesi,
+  ]
+  if (jabatan.includes(1)) return 'Super Admin'
+  if (jabatan.includes(2)) return 'Admin'
+  if (jabatan.includes(3)) return 'Kajur/Kaprodi'
+  if (jabatan.includes(4)) return 'Enum'
+  return ''
+})
+View.global('getJabatanRole', function (user: D3User) {
+  const jabatan = [
+    user.permission_d3,
+    user.permission_pasca_s2,
+    user.permission_pasca_s3,
+    user.permission_profesi,
+  ]
+  if (jabatan.includes(1)) return 1
+  if (jabatan.includes(2)) return 2
+  if (jabatan.includes(3)) return 3
+  if (jabatan.includes(4)) return 4
+  return 0
 })

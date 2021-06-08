@@ -17,27 +17,12 @@ function message(session, nama_notif, type, message) {
   })
 }
 export default class OperatorController {
-  public async ubah_operator({ auth, response, request }) {
-    await auth.authenticate()
-
-    return response.redirect().toRoute('admin.operator')
-  }
-  // public async store_operator({ auth, response, request }) {
-  //   await auth.authenticate()
-  //   const { nama, username, email, jabatan, permission } = request.all()
-  //   console.log(request.all())
-  //   return response.redirect().toRoute('admin.operator')
-  // }
-
-  //TODO: hubungkan routes dengan view
   public async get_operator({ view, auth }) {
     await auth.authenticate()
-    const users = User.get_users()
+    const users = await User.get_users()
     return view.render('operator/operator', { users })
-    //TODO: buat dulu edge untuk form operator
   }
 
-  //TODO: buat routes action form untuk store akun
   public async register_users({ request, session, response }) {
     try {
       const { nama, username, email, jabatan, permission } = request.all()
@@ -85,10 +70,9 @@ export default class OperatorController {
     }
   }
 
-  //TODO: buat routes action form untuk edit role dsb
   public async update_users({ request, session, response }) {
     try {
-      const {
+      let {
         username,
         nama,
         permission_d3,
@@ -96,6 +80,12 @@ export default class OperatorController {
         permission_pasca_s3,
         permission_profesi,
       } = request.all()
+
+      permission_d3 = permission_d3 || 0
+      permission_pasca_s2 = permission_pasca_s2 || 0
+      permission_pasca_s3 = permission_pasca_s3 || 0
+      permission_profesi = permission_profesi || 0
+
       const update_akun = await User.update_users(
         username,
         nama,
@@ -116,8 +106,6 @@ export default class OperatorController {
     }
   }
 
-  //TODO: buat routes dan view untuk reset password akun (function ini untuk admin mereset operator atau operator reset password melalui lupa password)
-  //jadi funtion ini dipakai pada 2 halaman berbeda
   public async reset_password({ request, session, response }) {
     try {
       const { username_lupapassword, email_lupapassword } = request.all()

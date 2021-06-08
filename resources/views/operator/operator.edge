@@ -106,87 +106,94 @@
 
   <!--begin::Card-->
   <div class="card-body">
-    <form method="POST">
-      {{ csrfField() }}
-      <!--begin: Datatable-->
-      <table class="table table-separate table-head-custom table-checkable w100" id="kt_datatable2">
-        <thead>
-          <tr>
-            <th rowspan="2">Nama</th>
-            <th rowspan="2">Username</th>
-            <th rowspan="2">Jabatan</th>
-            <th rowspan="2">Email</th>
-            <th colspan="4" class="text-center">Status</th>
-            <th colspan="1" class="text-center">Opsi</th>
-          </tr>
-          <tr>
-            <th>D3</th>
-            <th>S2</th>
-            <th>S3</th>
-            <th>Profesi</th>
-            <th>Reset Password</th>
-          </tr>
-        </thead>
-        <tbody>
-          @each((item,index) in [ '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
-          '1', '1',
-          '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
-          '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', ])
+    @if(flashMessages.get('notification'))
+    <div
+      class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+      role="alert">
+      <span>{{ flashMessages.get('notification.message') }}</span>
+    </div>
+    @endif
+    <!--begin: Datatable-->
+    <table class="table table-separate table-head-custom table-checkable w100" id="kt_datatable2">
+      <thead>
+        <tr>
+          <th rowspan="2">Nama</th>
+          <th rowspan="2">Username</th>
+          <th rowspan="2">Jabatan</th>
+          <th rowspan="2">Email</th>
+          <th colspan="4" class="text-center">Status</th>
+          <th colspan="2" class="text-center">Opsi</th>
+        </tr>
+        <tr>
+          <th>D3</th>
+          <th>S2</th>
+          <th>S3</th>
+          <th>Profesi</th>
+          <th>Ubah Status</th>
+          <th>Reset Password</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each((item,index) in users)
 
-          <tr>
-            <td>AqilFiqranDzi'UlHaq</td>
-            <td>aqilfiqran</td>
-            <td>Enum</td>
-            <td>aqilfiqran@mhs.unsyiah.ac.id</td>
+        <tr>
+          <form method="POST">
+            {{ csrfField() }}
+            <input type="hidden" name="nama" value="{{item.nama}}">
+            <input type="hidden" name="username" value="{{item.username}}">
+            <td>{{ item.nama }}</td>
+            <td>{{ item.username }}</td>
+            <td>{{ getJabatan(item) }}</td>
+            <td>{{ item.email }}</td>
             <td>
               <label class="checkbox justify-content-center">
-                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+                <input type="checkbox" value="{{getJabatanRole(item)}}" {{(item.permission_d3 !== 0)?'checked':''}}
+                  name="permission_d3"><span></span>
               </label>
             </td>
 
             <td>
               <label class="checkbox justify-content-center">
-                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+                <input type="checkbox" value="{{getJabatanRole(item)}}"
+                  {{(item.permission_pasca_s2 !== 0)?'checked':''}} name="permission_pasca_s2"><span></span>
               </label>
             </td>
 
             <td>
               <label class="checkbox justify-content-center">
-                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+                <input type="checkbox" value="{{getJabatanRole(item)}}"
+                  {{(item.permission_pasca_s3 !== 0)?'checked':''}} name="permission_pasca_s3"><span></span>
               </label>
             </td>
             <td>
               <label class="checkbox justify-content-center">
-                <input type="checkbox" name="status_aktif{{index + 1}}[]"><span></span>
+                <input type="checkbox" value="{{getJabatanRole(item)}}" {{(item.permission_profesi !== 0)?'checked':''}}
+                  name="permission_profesi"><span></span>
               </label>
             </td>
 
+
+            <td>
+              <button class="btn btn-primary">Ubah</button>
+            </td>
+          </form>
+          <form method="POST" action="{{route('admin.reset_password')}}">
+            {{ csrfField() }}
+            <input type="hidden" name="username_lupapassword" value="{{item.username}}">
+            <input type="hidden" name="email_lupapassword" value="{{item.email}}">
 
             <td>
               <button class="btn btn-success">Reset</button>
             </td>
-          </tr>
+          </form>
+        </tr>
 
 
 
-          @endeach
-        </tbody>
-      </table>
-      <!--end::Card-->
-      <div class="card-footer">
-        <div class="row">
-          <div class="col-md-10 text-muted" style="font-size: .8em;">
+        @endeach
+      </tbody>
+    </table>
 
-            Catatan : Menekan tombol Simpan akan memuat ulang halaman. Pastikan Anda hanya menekan tombol Simpan ketika
-            telah
-            selesai melakukan perubahan
-          </div>
-          <div class="col-md-2 text-right">
-            <div class="btn btn-danger">Simpan</div>
-          </div>
-        </div>
-      </div>
-    </form>
     <!--end: Datatable-->
   </div>
 
