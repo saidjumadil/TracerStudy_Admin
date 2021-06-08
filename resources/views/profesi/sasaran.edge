@@ -56,7 +56,7 @@
               </button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" id='alert-sasaran'>
               <div class="alert alert-custom alert-outline-info" role="alert">
                 <div class="alert-text text-justify">
                   <div><i class="fas fa-info-circle icon-sm text-info"></i> PERHATIAN</div>
@@ -121,6 +121,7 @@
 
 <script>
   const sasaran = document.querySelector('#form')
+  const alertSasaran = document.querySelector('#alert-sasaran')
   const sasaranBtn = document.querySelector('#ubah_sasaran')
   const csrfToken = document.querySelector('[name="_csrf"]').value
   const cekPopulasiRoute = '{{ cekPopulasiRoute }}'
@@ -154,8 +155,11 @@
         // console.log(location)
         if (data.isSuccess)
           location.reload()
-        else
-          sasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Gagal mengubah sasaran Tracer Study'))
+        else {
+          alertSasaran.removeChild(alertSasaran.childNodes[0]);
+          alertSasaran.insertAdjacentHTML("afterbegin", alert('danger',
+            'Gagal mengubah karena sasaran sudah pernah dibuat!'))
+        }
 
       })
   }
@@ -227,14 +231,14 @@
         // console.log(data)
         if (data.total_inserted) {
           tambahPopulasi.classList.remove(...loading)
-          sasaran.insertAdjacentHTML("afterbegin", alert('success',
+          alertSasaran.insertAdjacentHTML("afterbegin", alert('success',
             `Populasi tahun ${tahun} telah ditambahkan sebanyak ${data.total_inserted} data`))
           ubahSasaran({
             tahun,
             periode
           })
         } else
-          sasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Web Service tidak dapat diakses'))
+          alertSasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Web Service tidak dapat diakses'))
 
         $('#modal_tambah_populasi').modal('hide')
 
