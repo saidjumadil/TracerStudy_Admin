@@ -112,7 +112,26 @@ export default class Services extends BaseModel {
     return await Sasaran.updateOrCreate(SearchId, Updates)
   }
 
-  public static async get_pengumumman(){
-    return await Database.connection(conn).table("ss").first()
+  public static async get_pengumuman(){
+    return await Database.connection(conn).from("peng").first()
+  }
+
+  public static async insert_pengumuman(path_banner, 
+    pengumuman, 
+    laporan_online , 
+    tujuan, 
+    target_responden, 
+    jadwal, 
+    hubungi_kami){
+      return await Database.connection(conn).table("pengumuman").insert({
+        path_banner: path_banner,
+        pengumuman: pengumuman,
+        laporan_online: laporan_online, 
+        tujuan: tujuan, 
+        target_responden: target_responden, 
+        jadwal: jadwal, 
+        hubungi_kami: hubungi_kami
+      })
+
   }
 }
