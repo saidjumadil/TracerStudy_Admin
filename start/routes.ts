@@ -92,8 +92,10 @@ Route.group(() => {
 
       // pengumuman
       Route.group(() => {
-        Route.get('', 'Pasca/S2/PascaS2AdminsController.pengumuman').as('pengumuman')
-        Route.post('', 'Pasca/S2/PascaS2AdminsController.ubah_pengumuman').as('ubah_pengumuman')
+        Route.get('', 'Pasca/S2/PascaS2PengumummanController.get_pengumuman').as('pengumuman')
+        Route.post('', 'Pasca/S2/PascaS2PengumummanController.update_pengumuman').as(
+          'ubah_pengumuman'
+        )
       }).prefix('pengumuman')
       // data
       Route.group(() => {
@@ -156,8 +158,10 @@ Route.group(() => {
 
       // pengumuman
       Route.group(() => {
-        Route.get('', 'Pasca/S3/PascaS3AdminsController.pengumuman').as('pengumuman')
-        Route.post('', 'Pasca/S3/PascaS3AdminsController.ubah_pengumuman').as('ubah_pengumuman')
+        Route.get('', 'Pasca/S3/PascaS3PengumummanController.get_pengumuman').as('pengumuman')
+        Route.post('', 'Pasca/S3/PascaS3PengumummanController.update_pengumuman').as(
+          'ubah_pengumuman'
+        )
       }).prefix('pengumuman')
       // data
       Route.group(() => {
@@ -222,8 +226,8 @@ Route.group(() => {
     Route.get('', 'Profesi/ProfesiAdminsController.index').as('index')
     // pengumuman
     Route.group(() => {
-      Route.get('', 'Profesi/ProfesiAdminsController.pengumuman').as('pengumuman')
-      Route.post('', 'Profesi/ProfesiAdminsController.ubah_pengumuman').as('ubah_pengumuman')
+      Route.get('', 'Profesi/ProfesiPengumummanController.get_pengumuman').as('pengumuman')
+      Route.post('', 'Profesi/ProfesiPengumummanController.update_pengumuman').as('ubah_pengumuman')
     }).prefix('pengumuman')
     // data
     Route.group(() => {
