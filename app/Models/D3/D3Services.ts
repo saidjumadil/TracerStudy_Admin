@@ -40,12 +40,6 @@ export default class Services extends BaseModel {
     }
     //hasil datas ke users_monitoring
     return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
-    
-
-    //masukan ke db monitoring
-
-
-
   }
 
   public static async get_sasaran() {
