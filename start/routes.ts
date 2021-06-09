@@ -2,6 +2,9 @@
 import Route from '@ioc:Adonis/Core/Route'
 import './hook'
 
+//testing
+Route.get('testing-import','D3/D3AdminResponsController.store_monitoring')
+
 // authentikasi
 Route.group(() => {
   Route.group(() => {

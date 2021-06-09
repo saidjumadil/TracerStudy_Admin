@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
-import Services from 'App/Models/D3/D3Services' //FIXME : sesuaikan
+import Services from 'App/Models/Pasca/S3/PascaS3Services' //sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 
-const className: string = 'PascaS3PengumummanController'
+const className: string = 'PascaS3PengumummanController' //sesuaikan
+const renderName: string = 'pasca/s3' // sesuaikan
 
 function message(session, nama_notif, type, message) {
   session.flash({
@@ -12,15 +13,11 @@ function message(session, nama_notif, type, message) {
     },
   })
 }
-const renderName: string = 'pasca/s3'
 
 export default class PascaS3PengumummanController {
   public async get_pengumuman({ view, auth }) {
     await auth.authenticate()
     const get_pengumuman = await Services.get_pengumuman()
-    // if (get_pengumumman) {
-    // return {get_pengumumman}
-    // }
     return view.render(renderName + '/pengumuman', { get_pengumuman })
   }
 

@@ -3,7 +3,7 @@ import { column, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Pengumuman extends BaseModel {
   public static table = 'pengumuman' 
-  public static connection = 'cdc_tracerstudy_d3' //sesuaikan
+  public static connection = 'cdc_tracerstudy_pasca_s3' //FIXME: sesuaikan
   public static primaryKey = 'id'
 
   @column({ isPrimary: true })

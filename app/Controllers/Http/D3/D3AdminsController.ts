@@ -5,6 +5,9 @@ import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
 import axios from 'axios'
 
+const className: string = 'D3AdminsController' //sesuaikan
+const renderName: string = 'd3' //sesuikan
+
 function message(session, nama_notif, type, message) {
   session.flash({
     [nama_notif]: {
@@ -14,12 +17,9 @@ function message(session, nama_notif, type, message) {
   })
 }
 
-const className: string = 'D3AdminsController'
-const renderName: string = 'd3'
 export default class D3AdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
-
     return view.render(renderName + '/index')
   }
 
@@ -79,7 +79,6 @@ export default class D3AdminsController {
             //delete key yang lama
             delete obj.npm
           }
-
           if (obj.hasOwnProperty('kode_prodi')) {
             //ambil value dari key yang salah
             const val = obj.kode_prodi
@@ -96,7 +95,6 @@ export default class D3AdminsController {
           //tambahkan total_inserted dengan jumlah data yang didapat
           total_inserted += populasi.length
         }
-
         //return jumlah data yang berhasil ditambahkan
         return { total_inserted }
       }
@@ -113,7 +111,7 @@ export default class D3AdminsController {
       let { tahun, periode } = request.all()
       var tahun_periode = tahun.toString().concat(periode.toString())
       let current_sasaran = await Services.get_sasaran()
-      //covert sasaran ke number
+      //convert sasaran ke number
       let num_current: number = Number(current_sasaran.tahun)
       let num_new_sasaran: number = Number(tahun_periode)
       //cek sasaran sesuai aturan atau tidak
@@ -150,7 +148,6 @@ export default class D3AdminsController {
 
   public async jadwal({ view, auth }) {
     await auth.authenticate()
-
     const get_jadwal = await Services.get_jadwal()
     return view.render(renderName + '/jadwal', { get_jadwal })
   }

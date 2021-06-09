@@ -2,16 +2,15 @@
 import Services from 'App/Models/D3/D3Services'
 
 export default class D3AdminResponsController {
+//TODO : tambahkan dropdown periode
   public async pengisi({ view, auth }) {
     await auth.authenticate()
     const GetFakultas = await Services.get_fakultas()
-
     return view.render('d3/data/pengisi', { GetFakultas })
   }
 
   public async hasil({ view, auth }) {
     await auth.authenticate()
-
     return view.render('d3/data/hasil')
   }
 
@@ -21,12 +20,15 @@ export default class D3AdminResponsController {
     return view.render('d3/data/import_user')
   }
 
+  //TODO : tambahkan dropdown periode
   //import user store
   public async store_monitoring({request}){
     try {
-      const {tahun} = request.all()
+     // let {tahun, periode} = request.all()
+      // let tahun_monitoring = tahun.concact(periode)
+      let tahun_monitoring= '20150'
       //function store
-      const store_monitoring = await Services.insert_monitoring(tahun) 
+      const store_monitoring = await Services.insert_monitoring(tahun_monitoring) 
       if(store_monitoring){
         return true
 

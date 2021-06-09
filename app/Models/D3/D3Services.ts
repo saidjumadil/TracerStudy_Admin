@@ -21,22 +21,31 @@ export default class Services extends BaseModel {
 
   //insert data monitoring
   public static async insert_monitoring(tahun: string) {
+    let datas
     if (tahun.substring(4, 5) === '0') {
       let thn = tahun.substring(0, 4)
-      return await Database.connection(conn_exsurvey)
+      datas = await Database.connection(conn_exsurvey)
         .query()
-        .select('nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2')
+        .from('alumni')
+        .select('nim', 'nama_lengkap as nama', 'periode_wisuda', 'hape1 as no_hape_1', 'hape2 as no_hape_2')
         .whereRaw("periode_wisuda like '" + thn + "%'")
-        .whereRaw("substr(nim,4,5)= '1'")
+        .whereRaw("SUBSTR(nim,5,1)= '0'") //sesuakan dengan fjjp7
     } else {
-      return await Database.connection(conn_exsurvey)
+      datas = await Database.connection(conn_exsurvey)
         .query()
-        .select('nim, nama_lengkap as nama, periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2')
+        .from('alumni')
+        .select('nim', 'nama_lengkap as nama', 'periode_wisuda', 'hape1 as no_hape_1', 'hape2 as no_hape_2')
         .where('periode_wisuda', tahun)
-        .whereRaw("substr(nim,4,5)= '1'")
+        .whereRaw("substr(nim,5,1)= '0'") //sesuakan dengan fjjp7
     }
-    //"select nim as nim, nama_lengkap as nama, periode_wisuda as periode_wisuda, hape1 as no_hape_1, hape2 as no_hape_2
-    //FROM alumni WHERE SUBSTR(periode_wisuda,1,4) = '$thn_import'"
+    //hasil datas ke users_monitoring
+    return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
+    
+
+    //masukan ke db monitoring
+
+
+
   }
 
   public static async get_sasaran() {

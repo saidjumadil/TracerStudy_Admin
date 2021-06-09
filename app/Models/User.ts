@@ -15,6 +15,9 @@ export default class D3User extends BaseModel {
   public nama: string
 
   @column()
+  public legacy_role: number
+
+  @column()
   public email: string
 
   @column()
@@ -88,16 +91,23 @@ export default class D3User extends BaseModel {
       })
   }
 
+  //menghapus user
+  public static async hapus_user(username: string){
+    return await this.query().where('username', username).delete()
+  }
+
   //memperbaru data akun, seperti nama dan permission
   public static async update_users(
     username: string, 
     nama: string, 
+    legacy_role: number,
     permission_d3: number, 
     permission_pasca_s2: number, 
     permission_pasca_s3: number, 
     permission_profesi: number){
       return await Database.connection(this.conn).from('users').where('username', username).update({
-        nama: nama, 
+        nama: nama,
+        legacy_role: legacy_role, 
         permission_d3: permission_d3, 
         permission_pasca_s2: permission_pasca_s2, 
         permission_pasca_s3: permission_pasca_s3, 

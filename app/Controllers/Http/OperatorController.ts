@@ -23,6 +23,7 @@ export default class OperatorController {
     return view.render('operator/operator', { users })
   }
 
+  //TODO: hilangkan dropdown opsi admin ketika user role = admin
   public async register_users({ request, session, response }) {
     try {
       const { nama, username, email, jabatan, permission } = request.all()
@@ -70,17 +71,39 @@ export default class OperatorController {
     }
   }
 
+  //TODO: buat button hapus
+  public async hapus_user({request,session,response}){
+    try {
+      const{username} = request.all()
+      //hapus user
+      const hapus_user = await User.hapus_user(username)
+      if(hapus_user){
+        message(session, 'notification', 'success', 'Berhasil menghapus user')
+        return response.redirect('back')
+      }
+    } catch (error) {
+      console.log(error)
+      await ErrorLog.error_log(className, 'hapus_user', error.toString(), request.ip())
+      message(session, 'notification', 'danger', 'Gagal menghapus user')
+      return response.redirect('back')
+    }
+  }
+
+  //TOD
   public async update_users({ request, session, response }) {
     try {
+
       let {
         username,
         nama,
+        legacy_role,
         permission_d3,
         permission_pasca_s2,
         permission_pasca_s3,
         permission_profesi,
       } = request.all()
 
+      //untuk fungsi uncentang
       permission_d3 = permission_d3 || 0
       permission_pasca_s2 = permission_pasca_s2 || 0
       permission_pasca_s3 = permission_pasca_s3 || 0
@@ -89,6 +112,7 @@ export default class OperatorController {
       const update_akun = await User.update_users(
         username,
         nama,
+        legacy_role,
         permission_d3,
         permission_pasca_s2,
         permission_pasca_s3,

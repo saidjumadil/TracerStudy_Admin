@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/naming-convention */
-import Services from 'App/Models/Profesi/ProfesiServices' //FIXME: sesuaikan
+import Services from 'App/Models/Profesi/ProfesiServices' //sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
 import axios from 'axios'
@@ -14,36 +14,15 @@ function message(session, nama_notif, type, message) {
   })
 }
 
-const className: string = 'ProfesiAdminsController' //FIXME : sesuaikan
-const renderName: string = 'profesi'
+const className: string = 'ProfesiAdminsController' //sesuaikan
+const renderName: string = 'profesi' //sesuaikan
 
 export default class ProfesiAdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
-
     return view.render(renderName + '/index')
   }
-  public async pengumuman({ view, auth }) {
-    await auth.authenticate()
 
-    return view.render(renderName + '/pengumuman')
-  }
-
-  // TODO: backend ubah pengumuman
-  public async ubah_pengumuman({ response, request, auth }) {
-    await auth.authenticate()
-    // const {
-    //   path_banner,
-    //   pengumuman,
-    //   laporan_online,
-    //   tujuan,
-    //   target_responden,
-    //   jadwal,
-    //   hubungi_kami,
-    // } = request.all()
-    console.log(request.all())
-    return response.redirect('back')
-  }
   public async sasaran({ view, auth }) {
     await auth.authenticate()
     const get_sasaran = await Services.get_sasaran()
@@ -84,7 +63,7 @@ export default class ProfesiAdminsController {
       //get mahasiswa dari API
       response.safeHeader('Content-type', 'application/json')
       let total_inserted = 0
-      let alumni = Env.get('WS_ALUMNI_PROFESI')
+      let alumni = Env.get('WS_ALUMNI_PROFESI') //sesuiakan
       if (alumni) {
         alumni = alumni.replace('yyyy', tahun)
         //ambil data alumni
@@ -100,7 +79,6 @@ export default class ProfesiAdminsController {
             //delete key yang lama
             delete obj.npm
           }
-
           if (obj.hasOwnProperty('kode_prodi')) {
             //ambil value dari key yang salah
             const val = obj.kode_prodi
@@ -117,7 +95,6 @@ export default class ProfesiAdminsController {
           //tambahkan total_inserted dengan jumlah data yang didapat
           total_inserted += populasi.length
         }
-
         //return jumlah data yang berhasil ditambahkan
         return { total_inserted }
       }
@@ -133,14 +110,14 @@ export default class ProfesiAdminsController {
     try {
       let { tahun, periode } = request.all()
       var tahun_periode = tahun.toString().concat(periode.toString())
-      let current_sasaran = await Services.get_sasaran()      
-      //covert sasaran ke number
+      let current_sasaran = await Services.get_sasaran()
+      //convert sasaran ke number
       let num_current: number = Number(current_sasaran.tahun)
-      let num_new_sasaran : number = Number(tahun_periode)
+      let num_new_sasaran: number = Number(tahun_periode)
       //cek sasaran sesuai aturan atau tidak
       let cek_sasaran = await Services.cek_sasaran(tahun_periode)
       // jika cek sasaran false dan tahun sasaran baru > tahun sasaran sekarang maka izinkan untuk update tahun sasaran
-      if(!cek_sasaran && num_new_sasaran > num_current){
+      if (!cek_sasaran && num_new_sasaran > num_current) {
         //update sasaran
         let update = await Services.set_sasaran(tahun_periode)
         if (update) {
@@ -150,9 +127,9 @@ export default class ProfesiAdminsController {
             'success',
             'Berhasil mengubah sasaran Tracer Study'
           )
-          return { isSuccess: true }
+          return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
         }
-      }else{
+      } else {
         message(
           session,
           'notification_sasaran',
@@ -171,7 +148,6 @@ export default class ProfesiAdminsController {
 
   public async jadwal({ view, auth }) {
     await auth.authenticate()
-
     const get_jadwal = await Services.get_jadwal()
     return view.render(renderName + '/jadwal', { get_jadwal })
   }

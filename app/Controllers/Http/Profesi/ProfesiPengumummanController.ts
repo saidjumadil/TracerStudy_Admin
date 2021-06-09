@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
-import Services from 'App/Models/D3/D3Services' //FIXME : sesuaikan
+import Services from 'App/Models/Profesi/ProfesiServices' // sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 
-const className: string = 'ProfesiPengumummanController'
+const className: string = 'ProfesiPengumummanController' //sesuaikan
+const renderName: string = 'profesi' //sesuaikan
 
 function message(session, nama_notif, type, message) {
   session.flash({
@@ -12,15 +13,12 @@ function message(session, nama_notif, type, message) {
     },
   })
 }
-const renderName: string = 'profesi'
+
 
 export default class ProfesiPengumummanController {
   public async get_pengumuman({ view, auth }) {
     await auth.authenticate()
     const get_pengumuman = await Services.get_pengumuman()
-    // if (get_pengumumman) {
-    // return {get_pengumumman}
-    // }
     return view.render(renderName + '/pengumuman', { get_pengumuman })
   }
 

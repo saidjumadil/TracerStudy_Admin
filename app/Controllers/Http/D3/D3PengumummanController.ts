@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
-import Services from 'App/Models/D3/D3Services' //FIXME : sesuaikan
+import Services from 'App/Models/D3/D3Services' //sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
+import { Application } from '@adonisjs/core/build/standalone'
 
-const className: string = 'D3PengumummanController'
+const className: string = 'D3PengumummanController' //sesuaikan
+const renderName: string = 'd3' //sesuiakan
 
 function message(session, nama_notif, type, message) {
   session.flash({
@@ -12,23 +14,20 @@ function message(session, nama_notif, type, message) {
     },
   })
 }
-const renderName: string = 'd3'
 
 export default class D3PengumummanController {
   public async get_pengumuman({ view, auth }) {
     await auth.authenticate()
     const get_pengumuman = await Services.get_pengumuman()
-    // if (get_pengumumman) {
-    // return {get_pengumumman}
-    // }
     return view.render(renderName + '/pengumuman', { get_pengumuman })
   }
 
-  //TODO: BUAT form untuk update pengumuman
   public async update_pengumuman({ request, session, response }) {
     try {
+      //TODO: ubah path_banner menjadi banner
       const {
-        path_banner,
+        banner,
+        status_gambar,
         pengumuman,
         laporan_online,
         tujuan,
@@ -36,8 +35,28 @@ export default class D3PengumummanController {
         jadwal,
         hubungi_kami,
       } = request.all()
+
+      // let folder = Application.publicPath('style.css')
+      //TODO: buat public path
+      let folder = ''
+      const imageUpload = request.file(banner, {
+        types: ['image'],
+        size: '2mb',
+      });
+
+      if(status_gambar===true){
+        await imageUpload.move(folder, {
+        name: 'banner.png',
+        overwrite: true
+        });
+        if (!imageUpload.moved()) {
+          message(session, 'notification', 'danger', 'Gagal mengunggah gambar')
+          return imageUpload.error()
+        }
+      }
+
       const store = await Services.update_pengumuman(
-        path_banner,
+        'banner.png',
         pengumuman,
         laporan_online,
         tujuan,

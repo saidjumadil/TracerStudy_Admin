@@ -117,6 +117,23 @@ const databaseConfig: DatabaseConfig = {
       healthCheck: true,
       debug: true,
     },
+
+    //database exit survey
+    cdc_exsurvey: {
+      client: 'mysql',
+      connection: {
+        host: Env.get('DB_HOST_CDC_EXSURVEY', 'localhost'),
+        port: Env.get('DB_PORT_CDC_EXSURVEY', ''),
+        user: Env.get('DB_USER_CDC_EXSURVEY', 'root'),
+        password: Env.get('DB_PASSWORD_CDC_EXSURVEY', ''),
+        database: Env.get('DB_DATABASE_CDC_EXSURVEY', 'cdc_exsurvey'),
+      },
+      migrations: {
+        naturalSort: true,
+      },
+      healthCheck: true,
+      debug: true,
+    },
   },
 }
 
