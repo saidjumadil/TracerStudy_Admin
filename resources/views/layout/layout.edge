@@ -76,7 +76,6 @@ License: You must have a valid license purchased only from themeforest(the above
 
         <!--[html-partial:include:{"file":"partials/_header.html"}]/-->
         @include('layout/partials/_header')
-        {{--  //TODO:atasi dengan authentikasi check  --}}
 
         <!--[html-partial:include:{"file":"partials/_header-menu.html"}]/-->
         @include('layout/partials/_header-menu')
@@ -90,7 +89,6 @@ License: You must have a valid license purchased only from themeforest(the above
             <!--[html-partial:include:{"file":"partials/_subheader/subheader-v1.html"}]/-->
             @include('layout/partials/_subheader/subheader-v1')
             <div class="content flex-column-fluid" id="kt_content">
-              {{--  //TODO: if halaman berada di kuisoner  --}}
               @if(tahap)
               @include('layout/partials/_extras/stepper')
               @endif

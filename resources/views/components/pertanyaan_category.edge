@@ -35,7 +35,7 @@
 
   @elseif(soal.id_jenis_pertanyaan == 3)
 
-  {{--  // TODO: pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
+  {{--  //  pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
     @!component('components/dropdown',{
       'id':soal.id,
       'label':angka_pertanyaan +'. '+soal.pertanyaan,
@@ -51,7 +51,7 @@
 
   @elseif(soal.id_jenis_pertanyaan == 4)
 
-  {{--  // TODO: pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
+  {{--  //  pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
     @!component('components/dropdown-dependency',{
       'id':soal.id,
       'label':angka_pertanyaan +'. '+soal.pertanyaan,
@@ -66,7 +66,7 @@
 
   @elseif(soal.id_jenis_pertanyaan == 5)
 
-  {{--  // TODO: pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
+  {{--  //  pilihan mengambil dari tabel yang ada di variabel soal.list_pilihan  --}}
 
     @!component('components/radio',{
       'id':soal.id,

@@ -30,7 +30,6 @@ View.global('bulans', {
 })
 
 // mengambil data ascii buat increment 11a,11b dst...
-// FIXME: getAscii() tidak diketahui di edge
 View.global('getAscii', (value) => {
   const ascii = {
     97: 'a',

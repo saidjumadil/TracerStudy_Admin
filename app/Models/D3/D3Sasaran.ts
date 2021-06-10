@@ -2,8 +2,8 @@
 import { column, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Sasaran extends BaseModel {
-  public static table = 'sasaran' 
-  public static connection = 'cdc_tracerstudy_d3' //FIXME: sesuaikan
+  public static table = 'sasaran'
+  public static connection = 'cdc_tracerstudy_d3' //sesuaikan
   public static primaryKey = 'id'
 
   @column({ isPrimary: true })
@@ -14,7 +14,7 @@ export default class Sasaran extends BaseModel {
 
   @column()
   public status_aktif: number
-  
+
   @column()
   public waktu_mulai: Date
 

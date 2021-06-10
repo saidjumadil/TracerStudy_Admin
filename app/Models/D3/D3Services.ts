@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
-import Sasaran from './D3Sasaran' //FIXME: sesuaikan
+import Sasaran from './D3Sasaran' // sesuaikan
 import Pengumuman from './D3Pengumuman'
 
-const conn: string = 'cdc_tracerstudy_d3' //FIXME : sesuaikan
-const conn_exsurvey: string = 'cdc_exsurvey' //FIXME : sesuaikan
+const conn: string = 'cdc_tracerstudy_d3' // sesuaikan
+const conn_exsurvey: string = 'cdc_exsurvey' // sesuaikan
 
 export default class Services extends BaseModel {
   public static async get_fakultas() {
@@ -27,14 +27,26 @@ export default class Services extends BaseModel {
       datas = await Database.connection(conn_exsurvey)
         .query()
         .from('alumni')
-        .select('nim', 'nama_lengkap as nama', 'periode_wisuda', 'hape1 as no_hape_1', 'hape2 as no_hape_2')
+        .select(
+          'nim',
+          'nama_lengkap as nama',
+          'periode_wisuda',
+          'hape1 as no_hape_1',
+          'hape2 as no_hape_2'
+        )
         .whereRaw("periode_wisuda like '" + thn + "%'")
         .whereRaw("SUBSTR(nim,5,1)= '0'") //sesuakan dengan fjjp7
     } else {
       datas = await Database.connection(conn_exsurvey)
         .query()
         .from('alumni')
-        .select('nim', 'nama_lengkap as nama', 'periode_wisuda', 'hape1 as no_hape_1', 'hape2 as no_hape_2')
+        .select(
+          'nim',
+          'nama_lengkap as nama',
+          'periode_wisuda',
+          'hape1 as no_hape_1',
+          'hape2 as no_hape_2'
+        )
         .where('periode_wisuda', tahun)
         .whereRaw("substr(nim,5,1)= '0'") //sesuakan dengan fjjp7
     }
@@ -117,29 +129,29 @@ export default class Services extends BaseModel {
     return await Sasaran.updateOrCreate(SearchId, Updates)
   }
 
-  public static async get_pengumuman(){
-    return await Database.connection(conn).from("pengumuman").first()
+  public static async get_pengumuman() {
+    return await Database.connection(conn).from('pengumuman').first()
   }
 
   public static async update_pengumuman(
-    path_banner: string, 
-    pengumuman: string, 
-    laporan_online: string , 
-    tujuan: string, 
-    target_responden: string, 
-    jadwal: string, 
+    path_banner: string,
+    pengumuman: string,
+    laporan_online: string,
+    tujuan: string,
+    target_responden: string,
+    jadwal: string,
     hubungi_kami: string
-    ){
-      const SearchId = { id: 1 }
-      const Updates = {
-        path_banner: path_banner, 
-        pengumuman: pengumuman, 
-        laporan_online: laporan_online , 
-        tujuan: tujuan, 
-        target_responden: target_responden, 
-        jadwal: jadwal, 
-        hubungi_kami: hubungi_kami
-      }
-      return await Pengumuman.updateOrCreate(SearchId, Updates)
+  ) {
+    const SearchId = { id: 1 }
+    const Updates = {
+      path_banner: path_banner,
+      pengumuman: pengumuman,
+      laporan_online: laporan_online,
+      tujuan: tujuan,
+      target_responden: target_responden,
+      jadwal: jadwal,
+      hubungi_kami: hubungi_kami,
+    }
+    return await Pengumuman.updateOrCreate(SearchId, Updates)
   }
 }
