@@ -2,8 +2,8 @@ import View from '@ioc:Adonis/Core/View'
 import Env from '@ioc:Adonis/Core/Env'
 import D3User from 'App/Models/User'
 
-View.global('appUrl', (path) => {
-  const APP_URL = Env.get('APP_URL')
+View.global('appUrl', (path: string) => {
+  const APP_URL: string = Env.get('APP_URL')
 
   return path ? `${APP_URL}/${path}` : APP_URL
 })

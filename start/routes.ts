@@ -35,6 +35,8 @@ Route.group(() => {
     Route.group(() => {
       Route.get('', 'D3/D3PengumummanController.get_pengumuman').as('pengumuman')
       Route.post('', 'D3/D3PengumummanController.update_pengumuman').as('ubah_pengumuman')
+      // file upload
+      Route.post('upload-image', 'D3/D3PengumummanController.upload_image').as('upload_image')
     }).prefix('pengumuman')
 
     // data

@@ -30,26 +30,27 @@ License: You must have a valid license purchased only from themeforest(the above
   <!--end::Fonts-->
 
   <!--begin::Page Vendors Styles(used by this page)-->
-  <link href="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="{{ appUrl() }}/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet"
+    type="text/css" />
 
   <!--end::Page Vendors Styles-->
 
   <!--begin::Global Theme Styles(used by all pages)-->
-  <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-  <link href="/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
-  <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-  <link href="/assets/css/custom/theme-variable.css" rel="stylesheet" type="text/css" />
-  <link href="/assets/css/custom/theme.css" rel="stylesheet" type="text/css" />
+  <link href="{{ appUrl() }}/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="{{ appUrl() }}/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="{{ appUrl() }}/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="{{ appUrl() }}/assets/css/custom/theme-variable.css" rel="stylesheet" type="text/css" />
+  <link href="{{ appUrl() }}/assets/css/custom/theme.css" rel="stylesheet" type="text/css" />
   <!--end::Global Theme Styles-->
 
   <!--begin::Layout Themes(used by all pages)-->
 
   <!--end::Layout Themes-->
-  <link rel="shortcut icon" href="/assets/media/logos/favicon.ico" />
-  <link rel="stylesheet" href="/assets/css/custom/stepper.css">
+  <link rel="shortcut icon" href="{{ appUrl() }}/assets/media/logos/favicon.ico" />
+  <link rel="stylesheet" href="{{ appUrl() }}/assets/css/custom/stepper.css">
 
 
-  <link rel="stylesheet" href="/assets/css/custom/style.css">
+  <link rel="stylesheet" href="{{ appUrl() }}/assets/css/custom/style.css">
   {{--  custom css  --}}
   @!section('style')
 </head>
@@ -186,21 +187,21 @@ License: You must have a valid license purchased only from themeforest(the above
   <!--end::Global Config-->
 
   <!--begin::Global Theme Bundle(used by all pages)-->
-  <script src="/assets/plugins/global/plugins.bundle.js"></script>
-  <script src="/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
-  <script src="/assets/js/scripts.bundle.js"></script>
-  <script src="/assets/js/custom/dropdown.js"></script>
-  <script src="/assets/js/custom/dynamic-validation.js"></script>
+  <script src="{{ appUrl() }}/assets/plugins/global/plugins.bundle.js"></script>
+  <script src="{{ appUrl() }}/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+  <script src="{{ appUrl() }}/assets/js/scripts.bundle.js"></script>
+  <script src="{{ appUrl() }}/assets/js/custom/dropdown.js"></script>
+  <script src="{{ appUrl() }}/assets/js/custom/dynamic-validation.js"></script>
 
   <!--end::Global Theme Bundle-->
 
   <!--begin::Page Vendors(used by this page)-->
-  {{--  <script src="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>  --}}
+  {{--  <script src="{{ appUrl() }}/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script> --}}
 
   <!--end::Page Vendors-->
 
   <!--begin::Page Scripts(used by this page)-->
-  {{--  <script src="/assets/js/pages/widgets.js"></script>  --}}
+  {{--  <script src="{{ appUrl() }}/assets/js/pages/widgets.js"></script> --}}
 
   <!--end::Page Scripts-->
   @!section('script')

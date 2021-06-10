@@ -19,6 +19,7 @@ export default Env.rules({
   PORT: Env.schema.number(),
   APP_KEY: Env.schema.string(),
   APP_NAME: Env.schema.string(),
+  APP_URL: Env.schema.string(),
   CACHE_VIEWS: Env.schema.boolean(),
   SESSION_DRIVER: Env.schema.string(),
   NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
@@ -59,6 +60,12 @@ export default Env.rules({
   DB_USER_PASCA_S3: Env.schema.string(),
   DB_PASSWORD_PASCA_S3: Env.schema.string.optional(),
   DB_DATABASE_PASCA_S3: Env.schema.string(),
+  // Exit Survey
+  DB_HOST_CDC_EXSURVEY: Env.schema.string({ format: 'host' }),
+  DB_PORT_CDC_EXSURVEY: Env.schema.number(),
+  DB_USER_CDC_EXSURVEY: Env.schema.string(),
+  DB_PASSWORD_CDC_EXSURVEY: Env.schema.string.optional(),
+  DB_DATABASE_CDC_EXSURVEY: Env.schema.string(),
 
   // mail
   SMTP_HOST: Env.schema.string({ format: 'host' }),
