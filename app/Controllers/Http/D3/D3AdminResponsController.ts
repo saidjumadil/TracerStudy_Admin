@@ -15,40 +15,42 @@ function message(session, nama_notif, type, message) {
 }
 
 export default class D3AdminResponsController {
-//TODO : tambahkan dropdown periode
   public async pengisi({ view, auth }) {
     await auth.authenticate()
     const GetFakultas = await Services.get_fakultas()
-    return view.render('d3/data/pengisi', { GetFakultas })
+    return view.render(renderName + '/data/pengisi', { GetFakultas })
   }
 
   public async hasil({ view, auth }) {
     await auth.authenticate()
-    return view.render('d3/data/hasil')
+    return view.render(renderName + '/data/hasil')
   }
 
   public async importuser({ view, auth }) {
     await auth.authenticate()
 
-    return view.render('d3/data/import_user')
+    return view.render(renderName + '/data/import_user')
   }
 
-  //TODO : tambahkan dropdown periode dan routes
-  //import user store
-  public async store_monitoring({request, session}){
+  public async store_monitoring({ request, response, session }) {
     try {
-     let {tahun, periode} = request.all()
-      let tahun_monitoring = tahun.concact(periode)
+      const { tahun, periode } = request.all()
+      const tahun_monitoring = `${tahun}${periode}`
+
       //function store
-      const store_monitoring = await Services.insert_monitoring(tahun_monitoring) 
-      if(store_monitoring){
-        return { isSuccess: true, message: 'Berhasil import data monitoring' }
+      // FIXME: lakukan pengecekan monitoring. dikarenakan data akan terus masuk secara duplikat jika user memilih tahun dan periode yang sama
+      const store_monitoring = await Services.insert_monitoring(tahun_monitoring)
+      if (store_monitoring) {
+        message(session, 'notification', 'success', 'Berhasil import data monitoring')
+        return response.redirect('back')
       }
+      message(session, 'notification', 'danger', 'Gagal import data monitoring')
+      return response.redirect('back')
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'store_monitoring', error.toString(), request.ip())
-      message(session, 'notification_sasaran', 'danger', 'Gagal import data monitoring')
-      return { isSuccess: false }
+      message(session, 'notification', 'danger', 'Gagal import data monitoring')
+      return response.redirect('back')
     }
   }
 

@@ -43,7 +43,10 @@ Route.group(() => {
     Route.group(() => {
       Route.get('pengisi', 'D3/D3AdminResponsController.pengisi').as('pengisi')
       Route.get('hasil', 'D3/D3AdminResponsController.hasil').as('hasil')
-      Route.get('importuser', 'D3/D3AdminResponsController.importuser').as('importuser')
+      Route.group(() => {
+        Route.get('', 'D3/D3AdminResponsController.importuser').as('importuser')
+        Route.post('', 'D3/D3AdminResponsController.store_monitoring').as('store_monitoring')
+      }).prefix('importuser')
     })
       .prefix('data')
       .as('data')
