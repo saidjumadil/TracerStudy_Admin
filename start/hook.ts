@@ -188,28 +188,28 @@ View.global('getCurrentYear', function () {
 })
 
 View.global('getJabatan', function (user: D3User) {
-  const jabatan = [
-    user.permission_d3,
-    user.permission_pasca_s2,
-    user.permission_pasca_s3,
-    user.permission_profesi,
-  ]
-  if (jabatan.includes(1)) return 'Super Admin'
-  if (jabatan.includes(2)) return 'Admin'
-  if (jabatan.includes(3)) return 'Kajur/Kaprodi'
-  if (jabatan.includes(4)) return 'Enum'
+  const jabatan = user.legacy_role
+  if (jabatan === 1) return 'Super Admin'
+  if (jabatan === 2) return 'Admin'
+  if (jabatan === 3) return 'Kajur/Kaprodi'
+  if (jabatan === 4) return 'Enum'
   return ''
 })
 View.global('getJabatanRole', function (user: D3User) {
-  const jabatan = [
-    user.permission_d3,
-    user.permission_pasca_s2,
-    user.permission_pasca_s3,
-    user.permission_profesi,
-  ]
-  if (jabatan.includes(1)) return 1
-  if (jabatan.includes(2)) return 2
-  if (jabatan.includes(3)) return 3
-  if (jabatan.includes(4)) return 4
+  const jabatan = user.legacy_role
+  if (jabatan === 1) return 1
+  if (jabatan === 2) return 2
+  if (jabatan === 3) return 3
+  if (jabatan === 4) return 4
   return 0
+})
+View.global('getPilihanJabatan', function (legacy_role: number) {
+  let jabatan = [
+    { id: 3, nama: 'Kajur/Kaprodi' },
+    { id: 4, nama: 'Enum' },
+  ]
+  const superAdmin = { id: 2, nama: 'Admin' }
+
+  if (legacy_role === 1) jabatan = [superAdmin, ...jabatan]
+  return jabatan
 })

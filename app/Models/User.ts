@@ -45,19 +45,23 @@ export default class D3User extends BaseModel {
     }
   }
 
-  public static async get_users(current_user){
-    if(current_user.username==="root"){
-      return await Database.connection(this.conn).query().from('users').select('*').whereNot("username","root")
-    }else{
+  public static async get_users(current_user) {
+    if (current_user.username === 'root') {
       return await Database.connection(this.conn)
-      .query()
-      .from('users')
-      .select('*')
-      .whereNot("username","root")
-      .whereNot("permission_d3",2)
-      .whereNot("permission_pasca_s2",2)
-      .whereNot("permission_pasca_s3",2)
-      .whereNot("permission_profesi",2)
+        .query()
+        .from('users')
+        .select('*')
+        .whereNot('username', 'root')
+    } else {
+      return await Database.connection(this.conn)
+        .query()
+        .from('users')
+        .select('*')
+        .whereNot('username', 'root')
+        .whereNot('permission_d3', 2)
+        .whereNot('permission_pasca_s2', 2)
+        .whereNot('permission_pasca_s3', 2)
+        .whereNot('permission_profesi', 2)
     }
   }
 
@@ -71,48 +75,52 @@ export default class D3User extends BaseModel {
 
   //menambahkan akun baru
   public static async insert_users(
-    username: string, 
+    username: string,
     nama: string,
-    email: string, 
-    password: string, 
-    permission_d3: number, 
-    permission_pasca_s2: number, 
-    permission_pasca_s3: number, 
-    permission_profesi: number){
-      return await Database.connection(this.conn).table('users').insert({
-        username: username, 
-        nama: nama,
-        email: email, 
-        password: password, 
-        permission_d3: permission_d3, 
-        permission_pasca_s2: permission_pasca_s2, 
-        permission_pasca_s3: permission_pasca_s3, 
-        permission_profesi: permission_profesi
-      })
+    email: string,
+    password: string,
+    legacy_role: number,
+    permission_d3: number,
+    permission_pasca_s2: number,
+    permission_pasca_s3: number,
+    permission_profesi: number
+  ) {
+    return await Database.connection(this.conn).table('users').insert({
+      username,
+      nama,
+      email,
+      password,
+      legacy_role,
+      permission_d3,
+      permission_pasca_s2,
+      permission_pasca_s3,
+      permission_profesi,
+    })
   }
 
   //menghapus user
-  public static async hapus_user(username: string){
+  public static async hapus_user(username: string) {
     return await this.query().where('username', username).delete()
   }
 
   //memperbaru data akun, seperti nama dan permission
   public static async update_users(
-    username: string, 
-    nama: string, 
+    username: string,
+    nama: string,
     legacy_role: number,
-    permission_d3: number, 
-    permission_pasca_s2: number, 
-    permission_pasca_s3: number, 
-    permission_profesi: number){
-      return await Database.connection(this.conn).from('users').where('username', username).update({
-        nama: nama,
-        legacy_role: legacy_role, 
-        permission_d3: permission_d3, 
-        permission_pasca_s2: permission_pasca_s2, 
-        permission_pasca_s3: permission_pasca_s3, 
-        permission_profesi: permission_profesi
-      })
+    permission_d3: number,
+    permission_pasca_s2: number,
+    permission_pasca_s3: number,
+    permission_profesi: number
+  ) {
+    return await Database.connection(this.conn).from('users').where('username', username).update({
+      nama: nama,
+      legacy_role: legacy_role,
+      permission_d3: permission_d3,
+      permission_pasca_s2: permission_pasca_s2,
+      permission_pasca_s3: permission_pasca_s3,
+      permission_profesi: permission_profesi,
+    })
   }
 
   public static async ubah_password(username: string, hashPassword: string) {
@@ -120,5 +128,4 @@ export default class D3User extends BaseModel {
       password: hashPassword,
     })
   }
-
 }

@@ -26,6 +26,7 @@ Route.group(() => {
 
     Route.post('tambah', 'OperatorController.register_users').as('store_operator')
     Route.post('reset_password', 'OperatorController.reset_password').as('reset_password')
+    Route.post('hapus_user', 'OperatorController.hapus_user').as('hapus_user')
   }).prefix('operator')
   // d3
   Route.group(() => {

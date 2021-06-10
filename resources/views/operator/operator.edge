@@ -65,13 +65,9 @@
                 })
                 @!component('components/dropdown',{
                 label:'Jabatan',
-                name:'jabatan',
+                name:'legacy_role',
                 validasi:[true,false,false],
-                choice:[
-                { id:2, nama:'Admin' },
-                { id:3, nama:'Kajur/Kaprodi' },
-                { id:4, nama:'Enum' },
-                ] })
+                choice:getPilihanJabatan(auth.user.legacy_role) })
 
                 @!component('components/checkbox',{
                 label:'Jabatan Permisi',
@@ -122,15 +118,16 @@
           <th rowspan="2">Jabatan</th>
           <th rowspan="2">Email</th>
           <th colspan="4" class="text-center">Status</th>
-          <th colspan="2" class="text-center">Opsi</th>
+          <th colspan="3" class="text-center">Opsi</th>
         </tr>
         <tr>
           <th>D3</th>
           <th>S2</th>
           <th>S3</th>
           <th>Profesi</th>
-          <th>Ubah Status</th>
+          <th>Simpan Perubahan</th>
           <th>Reset Password</th>
+          <th>Hapus Akun</th>
         </tr>
       </thead>
       <tbody>
@@ -143,7 +140,19 @@
             <input type="hidden" name="username" value="{{item.username}}">
             <td>{{ item.nama }}</td>
             <td>{{ item.username }}</td>
-            <td>{{ getJabatan(item) }}</td>
+            <td>
+              <div class="form-group w-150px">
+                <select class="form-control" name="legacy_role">
+                  @each(value in getPilihanJabatan(auth.user.legacy_role))
+                  @if(item.legacy_role === value.id)
+                  <option value="{{ value.id }}" selected>{{ value.nama }}</option>
+                  @else
+                  <option value="{{ value.id }}">{{ value.nama }}</option>
+                  @endif
+                  @endeach
+                </select>
+              </div>
+            </td>
             <td>{{ item.email }}</td>
             <td>
               <label class="checkbox justify-content-center">
@@ -184,6 +193,14 @@
 
             <td>
               <button class="btn btn-success">Reset</button>
+            </td>
+          </form>
+          <form method="POST" action="{{route('admin.hapus_user')}}">
+            {{ csrfField() }}
+            <input type="hidden" name="username" value="{{item.username}}">
+
+            <td>
+              <button class="btn btn-danger">Hapus</button>
             </td>
           </form>
         </tr>

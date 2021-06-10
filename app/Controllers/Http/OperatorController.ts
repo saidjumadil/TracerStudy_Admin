@@ -23,14 +23,13 @@ export default class OperatorController {
     return view.render('operator/operator', { users })
   }
 
-  //TODO: hilangkan dropdown opsi admin ketika user role = admin
   public async register_users({ request, session, response }) {
     try {
-      const { nama, username, email, jabatan, permission } = request.all()
-      const permission_d3 = permission.includes('1') ? jabatan : 0
-      const permission_pasca_s2 = permission.includes('2') ? jabatan : 0
-      const permission_pasca_s3 = permission.includes('3') ? jabatan : 0
-      const permission_profesi = permission.includes('4') ? jabatan : 0
+      const { nama, username, email, legacy_role, permission } = request.all()
+      const permission_d3 = permission.includes('1') ? legacy_role : 0
+      const permission_pasca_s2 = permission.includes('2') ? legacy_role : 0
+      const permission_pasca_s3 = permission.includes('3') ? legacy_role : 0
+      const permission_profesi = permission.includes('4') ? legacy_role : 0
       const password = this.generate_password()
       const hash_password = await Hash.make(password)
       //insert users
@@ -39,6 +38,7 @@ export default class OperatorController {
         nama,
         email,
         hash_password,
+        legacy_role,
         permission_d3,
         permission_pasca_s2,
         permission_pasca_s3,
@@ -71,13 +71,12 @@ export default class OperatorController {
     }
   }
 
-  //TODO: buat button hapus
-  public async hapus_user({request,session,response}){
+  public async hapus_user({ request, session, response }) {
     try {
-      const{username} = request.all()
+      const { username } = request.all()
       //hapus user
       const hapus_user = await User.hapus_user(username)
-      if(hapus_user){
+      if (hapus_user) {
         message(session, 'notification', 'success', 'Berhasil menghapus user')
         return response.redirect('back')
       }
@@ -89,10 +88,8 @@ export default class OperatorController {
     }
   }
 
-  //TOD
   public async update_users({ request, session, response }) {
     try {
-
       let {
         username,
         nama,
@@ -104,10 +101,10 @@ export default class OperatorController {
       } = request.all()
 
       //untuk fungsi uncentang
-      permission_d3 = permission_d3 || 0
-      permission_pasca_s2 = permission_pasca_s2 || 0
-      permission_pasca_s3 = permission_pasca_s3 || 0
-      permission_profesi = permission_profesi || 0
+      permission_d3 = permission_d3 ? legacy_role : 0
+      permission_pasca_s2 = permission_pasca_s2 ? legacy_role : 0
+      permission_pasca_s3 = permission_pasca_s3 ? legacy_role : 0
+      permission_profesi = permission_profesi ? legacy_role : 0
 
       const update_akun = await User.update_users(
         username,
