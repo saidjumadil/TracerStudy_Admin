@@ -17,7 +17,7 @@ function message(session, nama_notif, type, message) {
 }
 
 export default class D3PengumummanController {
-  public async get_pengumuman({ view, auth, request }) {
+  public async get_pengumuman({ view, auth }) {
     await auth.authenticate()
     const get_pengumuman = await Services.get_pengumuman()
     const uploadAction: string = '/admin/' + renderName + '/pengumuman/upload-image'

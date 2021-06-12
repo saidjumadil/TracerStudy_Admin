@@ -106,6 +106,7 @@ export default class PascaS2AdminsController {
     }
   }
 
+  //TODO: JANGAN lupa copy ke semua jenjang!!!!!
   public async set_sasaran({ request, session }) {
     try {
       let { tahun, periode } = request.all()
@@ -118,8 +119,14 @@ export default class PascaS2AdminsController {
       let cek_sasaran = await Services.cek_sasaran(tahun_periode)
       // jika cek sasaran false dan tahun sasaran baru > tahun sasaran sekarang maka izinkan untuk update tahun sasaran
       if (!cek_sasaran && num_new_sasaran > num_current) {
+        let status_import = 0
+        //cek monitoring sudah diimport apa belum
+        const get_status_monitoring = await Services.get_status_monitoring(tahun)
+        if(get_status_monitoring){
+          status_import= 1
+        }
         //update sasaran
-        let update = await Services.set_sasaran(tahun_periode)
+        let update = await Services.set_sasaran(tahun_periode, status_import)
         if (update) {
           message(
             session,
