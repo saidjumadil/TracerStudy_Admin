@@ -228,7 +228,6 @@ export default class D3AdminResponsController {
   //         return response.redirect('back')
   //       }
   //     }
-  //     // FIXME: lakukan pengecekan monitoring. dikarenakan data akan terus masuk secara duplikat jika user memilih tahun dan periode yang sama
   //     const store_monitoring = await Services.insert_monitoring(tahun, periode)
   //     if (store_monitoring) {
   //       //update status user monitoring untuk sasaran
