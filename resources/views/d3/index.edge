@@ -1,6 +1,56 @@
 @layout('layout.layout')
 
 @section('content')
+{{--  stepper  --}}
+<div class="row justify-content-center mb-5">
+  <div class="col-md-12">
+    {{--  //TODO: perubahan tergantunng data telah diisi atau tidak  --}}
+    <div class="stepper">
+      <li class="{{ (!sasaran) ? 'pending':'active' }}">
+        @if(!sasaran)
+        <a href="{{ route('admin.d3.sasaran') }}">
+          Set Tahun Sasaran
+        </a>
+        @else
+        Set Tahun Sasaran
+        @endif
+      </li>
+      <li class="{{ (!sasaran) ?  '' : 'active' }}">
+        Import Data Populasi
+      </li>
+      <li class="{{ (!sasaran) ? '' : (sasaran.status_import_monitoring === 0) ? 'pending': 'active'  }}">
+        @if(sasaran)
+          @if(sasaran.status_import_monitoring === 0)
+            <a href="{{ route('admin.d3.data.importuser') }}">
+              Import Users Monitoring
+            </a>
+          @else
+            Import Users Monitoring
+          @endif
+        @else
+          Import Users Monitoring
+        @endif
+      </li>
+      @if(sasaran)
+      <li class="{{ (sasaran.status_import_monitoring === 0) ? '': (sasaran.waktu_mulai) ? 'active':'pending' }}">
+        @if(!sasaran.waktu_mulai && sasaran.status_import_monitoring === 1)
+          <a href="{{ route('admin.d3.jadwal') }}">
+            Set Jadwal
+          </a>
+        @else
+          Set Jadwal
+        @endif
+      </li>
+      @else
+      <li class="">
+        Set Jadwal
+      </li>
+      @endif
+    </div>
+  </div>
+</div>
+{{--  end stepper  --}}
+
 <div class="card card-custom">
   <div class="card-header">
     <h3 class="card-title">

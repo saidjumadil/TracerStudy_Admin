@@ -20,7 +20,8 @@ function message(session, nama_notif, type, message) {
 export default class D3AdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
-    return view.render(renderName + '/index')
+    const sasaran = await Services.get_sasaran()
+    return view.render(renderName + '/index', { sasaran })
   }
 
   public async sasaran({ view, auth }) {
@@ -107,10 +108,11 @@ export default class D3AdminsController {
   }
 
   //TODO: JANGAN lupa copy ke semua jenjang!!!!!
+  // TODO: buat pengecekan apakah data tahun sasaran sudah pernah ada atau tidak
   public async set_sasaran({ request, session }) {
     try {
       let { tahun, periode } = request.all()
-   
+
       var tahun_periode = tahun.toString().concat(periode.toString())
       let current_sasaran = await Services.get_sasaran()
       //convert sasaran ke number
@@ -123,8 +125,8 @@ export default class D3AdminsController {
         let status_import = 0
         //cek monitoring sudah diimport apa belum
         const get_status_monitoring = await Services.get_status_monitoring(tahun)
-        if(get_status_monitoring){
-          status_import= 1
+        if (get_status_monitoring) {
+          status_import = 1
         }
         //update sasaran
         let update = await Services.set_sasaran(tahun_periode, status_import)
