@@ -12,6 +12,18 @@ export default class Services extends BaseModel {
     return await Database.connection(conn).query().from('users_fakultas')
   }
 
+  //get data pengis pada tabel monitoring
+  public static async get_data_pengisi(tahun: string, periode: string, kd_fjjp7:string){
+    let periode_wisuda = tahun.concat(periode)
+    //1508107010037
+   return await Database.connection(conn)
+   .query()
+   .from('users_monitoring')
+   .where('periode_wisuda', periode)
+   .whereRaw("SUBSTR(nim,2,7)= '"+kd_fjjp7+"'") //sesuaikan dengan fjjp7
+
+  }
+
   public static async get_prodi(id_fakultas) {
     return await Database.connection(conn)
       .query()
@@ -19,43 +31,102 @@ export default class Services extends BaseModel {
       .where('kd_fakultas2', id_fakultas)
   }
 
-  //insert data monitoring
+  public static async get_import_status(tahun: string){
+      return await Database.connection(conn)
+      .query()
+      .from('users_monitoring')
+      .whereRaw("periode_wisuda like '" + tahun + "%'")
+      .first()
+  }
+
+  //vesri lama
+  //ambil informasi status import monitoring 
+  // public static async get_import_status(tahun: string, periode: string){
+  //   let periode_wisuda = tahun.concat(periode)
+  //   if(periode==="0"){
+  //     return await Database.connection(conn)
+  //     .query()
+  //     .from('users_monitoring')
+  //     .whereRaw("periode_wisuda like '" + tahun + "%'")
+  //     .first()
+  //   }else{
+  //     return await Database.connection(conn)
+  //     .query()
+  //     .from('users_monitoring')
+  //     .where("periode_wisuda", periode_wisuda )
+  //     .first()
+  //   }
+  // }
+
   public static async insert_monitoring(tahun: string) {
-    let datas
-    if (tahun.substring(4, 5) === '0') {
-      let thn = tahun.substring(0, 4)
-      datas = await Database.connection(conn_exsurvey)
-        .query()
-        .from('alumni')
-        .select(
-          'nim',
-          'nama_lengkap as nama',
-          'periode_wisuda',
-          'hape1 as no_hape_1',
-          'hape2 as no_hape_2'
-        )
-        .whereRaw("periode_wisuda like '" + thn + "%'")
-        .whereRaw("SUBSTR(nim,5,1)= '0'") //sesuakan dengan fjjp7
-    } else {
-      datas = await Database.connection(conn_exsurvey)
-        .query()
-        .from('alumni')
-        .select(
-          'nim',
-          'nama_lengkap as nama',
-          'periode_wisuda',
-          'hape1 as no_hape_1',
-          'hape2 as no_hape_2'
-        )
-        .where('periode_wisuda', tahun)
-        .whereRaw("substr(nim,5,1)= '0'") //sesuakan dengan fjjp7
-    }
+    let datas = await Database.connection(conn_exsurvey)
+      .query()
+      .from('alumni')
+      .select(
+        'nim',
+        'nama_lengkap as nama',
+        'periode_wisuda',
+        'hape1 as no_hape_1',
+        'hape2 as no_hape_2'
+      )
+      .whereRaw("periode_wisuda like '" + tahun + "%'")
+      .whereRaw("SUBSTR(nim,5,1)= '0'") //sesuaikan dengan fjjp7
     //hasil datas ke users_monitoring
     return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
   }
 
+  //versi lama
+  //insert data monitoring
+  // public static async insert_monitoring(tahun: string, periode: string) {
+  //   let periode_wisuda = tahun.concat(periode)
+  //   let datas
+  //   if(periode==="0"){
+  //     datas = await Database.connection(conn_exsurvey)
+  //     .query()
+  //     .from('alumni')
+  //     .select(
+  //       'nim',
+  //       'nama_lengkap as nama',
+  //       'periode_wisuda',
+  //       'hape1 as no_hape_1',
+  //       'hape2 as no_hape_2'
+  //     )
+  //     .whereRaw("periode_wisuda like '" + tahun + "%'")
+  //     .whereRaw("SUBSTR(nim,5,1)= '0'") //sesuaikan dengan fjjp7
+  //   }else{
+  //     datas = await Database.connection(conn_exsurvey)
+  //       .query()
+  //       .from('alumni')
+  //       .select(
+  //         'nim',
+  //         'nama_lengkap as nama',
+  //         'periode_wisuda',
+  //         'hape1 as no_hape_1',
+  //         'hape2 as no_hape_2'
+  //       )
+  //       .where('periode_wisuda', periode_wisuda)
+  //       .whereRaw("substr(nim,5,1)= '0'") //sesuaikan dengan fjjp7
+  //   }
+  //   //hasil datas ke users_monitoring
+  //   return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
+  // }
+
+  //update status monitoring pada table sasaran
+  public static async update_status_monitoring(){
+   return await Database.connection(conn).query().from('sasaran').update({
+     status_import_monitoring: 1
+   }).where('status_aktif',1)
+  }
+
   public static async get_sasaran() {
     return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
+  }
+
+  //TODO: JANGAN lupa copy ke semua model perjenjang
+  public static async get_status_monitoring(tahun){
+    return await Database.connection(conn)
+    .from('users_monitoring').whereRaw("periode_wisuda like'" +tahun+ "%'")
+    .first()
   }
 
   public static async cek_sasaran(new_sasaran: string) {
@@ -104,7 +175,7 @@ export default class Services extends BaseModel {
     }
   }
 
-  public static async set_sasaran(tahun_periode: string) {
+  public static async set_sasaran(tahun_periode: string, status_import: number) {
     //set semua status_aktif jadi 0\
     await Database.connection(conn).from('sasaran').update({ status_aktif: 0 })
     // await Sasaran.fill({ status_aktif: 0 }).save()
@@ -112,6 +183,7 @@ export default class Services extends BaseModel {
     return await Database.connection(conn).table('sasaran').insert({
       tahun: tahun_periode,
       status_aktif: 1,
+      status_import_monitoring: status_import
     })
   }
 

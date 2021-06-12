@@ -20,4 +20,8 @@ export default class Sasaran extends BaseModel {
 
   @column()
   public waktu_berakhir: Date
+
+  @column()
+  public status_import_monitoring: number
+  
 }
