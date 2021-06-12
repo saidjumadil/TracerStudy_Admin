@@ -17,30 +17,15 @@
       <span>{{ flashMessages.get('notification.message') }}</span>
     </div>
     @endif
+    <div class="alert alert-custom alert-outline-{{(sasaran.status_import_monitoring === 1 )?'info':'danger'}}"
+      role="alert">
+      <div class="alert-text text-justify">
+        <h5>Data User Monitoring {{(sasaran.status_import_monitoring === 1 )?'Telah':'Belum'}} Diimport</h5>
+      </div>
+    </div>
     <form method="POST" id="form">
       {{ csrfField() }}
 
-
-      @!component('components/dropdown-range',{
-      'name':'tahun',
-      'label':'Tahun Sasaran',
-      'required':true,
-      'start': getCurrentYear(),
-      'end':getCurrentYear()-20
-      })
-
-      @!component('components/dropdown',{
-      'name':'periode',
-      'label':'Periode Sasaran',
-      'validasi':[true,false,false],
-      'choice':[
-      {id:0,nama:'Semua Periode'},
-      {id:1,nama:'Periode 1'},
-      {id:2,nama:'Periode 2'},
-      {id:3,nama:'Periode 3'},
-      {id:4,nama:'Periode 4'},
-      ]
-      })
       <div class="text-right mt-5">
         <button type='submit' class="btn btn-primary"><i class="fa fa-edit icon-sm"></i> Import</button>
       </div>

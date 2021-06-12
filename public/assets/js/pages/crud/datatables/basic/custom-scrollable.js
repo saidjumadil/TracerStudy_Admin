@@ -22,4 +22,5 @@ var KTDatatablesBasicScrollable = (function () {
 
 jQuery(document).ready(function () {
   KTDatatablesBasicScrollable.init()
+  // initDatatable()
 })

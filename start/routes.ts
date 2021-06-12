@@ -42,8 +42,16 @@ Route.group(() => {
 
     // data
     Route.group(() => {
-      Route.get('pengisi', 'D3/D3AdminResponsController.pengisi').as('pengisi')
-      Route.get('hasil', 'D3/D3AdminResponsController.hasil').as('hasil')
+      Route.group(() => {
+        Route.get('', 'D3/D3AdminResponsController.pengisi').as('pengisi')
+        Route.post('', 'D3/D3AdminResponsController.update_data_pengisi').as('update_data_pengisi')
+      }).prefix('pengisi')
+
+      Route.group(() => {
+        Route.get('', 'D3/D3AdminResponsController.hasil').as('hasil')
+        Route.post('', 'D3/D3AdminResponsController.export_hasil_users').as('export_hasil_users')
+      }).prefix('hasil')
+
       Route.group(() => {
         Route.get('', 'D3/D3AdminResponsController.importuser').as('importuser')
         Route.post('', 'D3/D3AdminResponsController.store_monitoring').as('store_monitoring')
@@ -83,7 +91,10 @@ Route.group(() => {
     Route.get('sms', 'D3/D3AdminsController.sms').as('sms')
 
     //ajax get prodi
-    Route.post('ajax-prodi', 'D3/D3AdminResponsController.ajax_prodi').as('get_prodi')
+    Route.get('ajax-prodi', 'D3/D3AdminResponsController.ajax_prodi').as('get_prodi')
+    Route.get('ajax-data-pengisi', 'D3/D3AdminResponsController.ajax_data_pengisi').as(
+      'get_data_pengisi'
+    )
   })
     .prefix('d3')
     .as('d3')
@@ -151,7 +162,7 @@ Route.group(() => {
       Route.get('sms', 'Pasca/S2/PascaS2AdminsController.sms').as('sms')
 
       //ajax get prodi
-      Route.post('ajax-prodi', 'Pasca/S2/PascaS2AdminResponsController.ajax_prodi').as('get_prodi')
+      Route.get('ajax-prodi', 'Pasca/S2/PascaS2AdminResponsController.ajax_prodi').as('get_prodi')
     })
       .prefix('s2')
       .as('s2')
@@ -217,7 +228,7 @@ Route.group(() => {
       Route.get('sms', 'Pasca/S3/PascaS3AdminsController.sms').as('sms')
 
       //ajax get prodi
-      Route.post('ajax-prodi', 'Pasca/S3/PascaS3AdminResponsController.ajax_prodi').as('get_prodi')
+      Route.get('ajax-prodi', 'Pasca/S3/PascaS3AdminResponsController.ajax_prodi').as('get_prodi')
     })
       .prefix('s3')
       .as('s3')
@@ -281,7 +292,7 @@ Route.group(() => {
     Route.get('sms', 'Profesi/ProfesiAdminsController.sms').as('sms')
 
     //ajax get prodi
-    Route.post('ajax-prodi', 'Profesi/ProfesiAdminResponsController.ajax_prodi').as('get_prodi')
+    Route.get('ajax-prodi', 'Profesi/ProfesiAdminResponsController.ajax_prodi').as('get_prodi')
   })
     .prefix('profesi')
     .as('profesi')
