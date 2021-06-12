@@ -26,13 +26,13 @@ const drawData = (data) => {
       } name="hp_valid_2[${index}]"><span></span>
         </label> </td>
       <td> <label class="checkbox"> <input type="checkbox" value='${row.nim}' ${
-      row.monitoring_1 === 1 ? 'checked' : ''
+      row.monitoring_1 ? 'checked' : ''
     } name="monitoring_1[]"> <span></span> </label> </td>
       <td> <label class="checkbox"> <input type="checkbox" value='${row.nim}' ${
-      row.monitoring_2 === 1 ? 'checked' : ''
+      row.monitoring_2 ? 'checked' : ''
     } name="monitoring_2[]"> <span></span> </label> </td>
       <td> <label class="checkbox"> <input type="checkbox" value='${row.nim}' ${
-      row.monitoring_3 === 1 ? 'checked' : ''
+      row.monitoring_3 ? 'checked' : ''
     } name="monitoring_3[]"> <span></span> </label> </td>
       <td>${row.tanggal_isi}</td>
       <td>
