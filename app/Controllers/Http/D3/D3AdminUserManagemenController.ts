@@ -16,19 +16,7 @@ function message(session, nama_notif, type, message) {
 }
 
 export default class D3AdminUserManagemenController {
-  public async tambah_admin({ view, auth }) {
-    await auth.authenticate()
-
-    return view.render('d3/managemen/tambah_admin')
-  }
-  public async tambah_operator({ view, auth }) {
-    await auth.authenticate()
-
-    return view.render('d3/managemen/tambah_operator')
-  }
-
-  //TODO: return ke halaman tempat edit email
-  public static async ajax_get_responden({ request, response, session }) {
+  public async ajax_get_responden({ request, response, session }) {
     try {
       const { nim } = request.all()
       const responden = await Services.get_responden(nim)
@@ -39,31 +27,31 @@ export default class D3AdminUserManagemenController {
       return { responden: [] }
     }
   }
-  //TODO: Hubungkan backend edit email
-  public static async edit_responden({ request, response, session }) {
+
+  public async edit_responden({ request, response, session }) {
     try {
       const { nim, email } = request.all()
+      console.log(nim)
+      console.log(email)
       const edit = await Services.edit_responden(nim, email)
       if (edit) {
-        message(session, 'notificaton', 'success', 'Berhasil mengubah email')
+        message(session, 'notification', 'success', 'Berhasil mengubah email')
         return response.redirect('back')
       }
+      message(session, 'notification', 'danger', 'Gagal mengubah email')
+      return response.redirect('back')
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'edit_responden', error.toString(), request.ip())
+      message(session, 'notification', 'danger', 'Gagal mengubah email')
       return response.redirect('back')
     }
   }
 
-  //yg bawah ini nga pake
-  public async tambah_akunresponden({ view, auth }) {
-    await auth.authenticate()
-
-    return view.render('d3/managemen/tambah_akunresponden')
-  }
   public async edit_dataresponden({ view, auth }) {
     await auth.authenticate()
 
-    return view.render('d3/managemen/edit_dataresponden')
+    const RouteActionSearch = `admin.${renderName}.get_responden`
+    return view.render(renderName + '/managemen/edit_akunresponden', { RouteActionSearch })
   }
 }

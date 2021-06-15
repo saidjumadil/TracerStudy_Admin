@@ -63,16 +63,11 @@ Route.group(() => {
     // user managemen
     Route.group(() => {
       Route.group(() => {
-        Route.get('akunresponden', 'D3/D3AdminUserManagemenController.tambah_akunresponden').as(
-          'akunresponden'
-        )
+        Route.get('', 'D3/D3AdminUserManagemenController.edit_dataresponden').as('dataresponden')
+        Route.post('', 'D3/D3AdminUserManagemenController.edit_responden').as('edit_responden')
       })
-        .prefix('tambah')
-        .as('tambah')
-
-      Route.get('edit/dataresponden', 'D3/D3AdminUserManagemenController.edit_dataresponden').as(
-        'edit.dataresponden'
-      )
+        .prefix('edit/dataresponden')
+        .as('edit')
     })
       .prefix('managemen')
       .as('managemen')
@@ -97,6 +92,9 @@ Route.group(() => {
     )
 
     Route.get('ajax-data-index', 'D3/D3AdminsController.ajax_data_index').as('get_data_index')
+    Route.get('ajax-get-responden', 'D3/D3AdminUserManagemenController.ajax_get_responden').as(
+      'get_responden'
+    )
   })
     .prefix('d3')
     .as('d3')
