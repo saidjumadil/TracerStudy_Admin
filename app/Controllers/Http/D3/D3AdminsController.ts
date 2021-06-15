@@ -20,7 +20,7 @@ function message(session, nama_notif, type, message) {
 
 export default class D3AdminsController {
   public async index({ view, auth }) {
-    await auth.authenticate()  
+    await auth.authenticate()
     //ini testing
     // const get_list_kd_fjjp7 = await Services.get_list_kdfjjp7()
     // let arr_kd_fjjp7 = []
@@ -33,22 +33,24 @@ export default class D3AdminsController {
     //end testing
 
     const sasaran = await Services.get_sasaran()
-    return view.render(renderName + '/index', { sasaran })
+    const RouteActionDataIndex: string = `admin.${renderName}.get_data_index`
+
+    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex })
   }
 
-  //TODO: buat get data untuk halaman index
   public async ajax_data_index({ request, session, response }) {
     try {
       const { tahun, periode } = request.all()
       const get_list_kd_fjjp7 = await Services.get_list_kdfjjp7()
+      console.log(get_list_kd_fjjp7)
       let arr_kd_fjjp7 = []
-        //parsing ke arry
+      //parsing ke arry
       for (let i = 0; i < get_list_kd_fjjp7.length; i++) {
         arr_kd_fjjp7.push(get_list_kd_fjjp7[i].kd_fjjp7)
       }
 
       const get_data = await Services.get_data_index(tahun, periode, arr_kd_fjjp7)
-      console.log("data: "+ JSON.stringify(get_data[0]))
+      console.log('data: ' + JSON.stringify(get_data[0]))
 
       return { get_data }
     } catch (error) {

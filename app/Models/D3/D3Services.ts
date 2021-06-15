@@ -14,71 +14,83 @@ export default class Services extends BaseModel {
   public static async get_data_index(tahun: string, periode: string, list_kd_fjjp7) {
     let periode_wisuda = tahun.concat(periode)
     if (periode === '0') {
-      return await Database.connection(conn).rawQuery("SELECT"+ 
-      " lulusan.nama_fakultas, "+
-      " lulusan.nama_prodi, "+
-      " COUNT(*) AS jumlah_pendaftar, "+
-      " COUNT(lulusan.tanggal_isi) AS selesai "+
-      " FROM "+
-  " (SELECT "+
-      " mapping_prodi.tanggal_isi, "+
-          " f.nama_fakultas AS nama_fakultas, "+
-              " mapping_prodi.fak, "+
-              " mapping_prodi.prodi AS nama_prodi, "+
-              " mapping_prodi.kd_fjjp7, "+
-              " mapping_prodi.kdbaru "+
-              " FROM "+
-      " (SELECT "+
-          " p.nama_prodi AS prodi, "+
-          " a.tanggal_isi, "+
-              " p.kd_fjjp7, "+
-              " p.kd_fakultas2 AS fak, "+
-              " IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru "+
-              " FROM "+
-      " users a "+
-          " LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non "+
-      " LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) "+
-      " WHERE "+
-      " SUBSTR(a.tahun_lulus, 1, 4) = '"+tahun+"' "+
-          " ORDER BY p.kd_fjjp7) AS mapping_prodi "+
-      " LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2"+
-      " WHERE "+
-      " mapping_prodi.kd_fjjp7 IN ("+list_kd_fjjp7+")) AS lulusan "+
-          " GROUP BY lulusan.nama_prodi "+
-  " ORDER BY lulusan.fak")
+      return await Database.connection(conn).rawQuery(
+        'SELECT' +
+          ' lulusan.nama_fakultas, ' +
+          ' lulusan.nama_prodi, ' +
+          ' COUNT(*) AS jumlah_pendaftar, ' +
+          ' COUNT(lulusan.tanggal_isi) AS selesai ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' mapping_prodi.tanggal_isi, ' +
+          ' f.nama_fakultas AS nama_fakultas, ' +
+          ' mapping_prodi.fak, ' +
+          ' mapping_prodi.prodi AS nama_prodi, ' +
+          ' mapping_prodi.kd_fjjp7, ' +
+          ' mapping_prodi.kdbaru ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' p.nama_prodi AS prodi, ' +
+          ' a.tanggal_isi, ' +
+          ' p.kd_fjjp7, ' +
+          ' p.kd_fakultas2 AS fak, ' +
+          ' IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru ' +
+          ' FROM ' +
+          ' users a ' +
+          ' LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non ' +
+          ' LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) ' +
+          ' WHERE ' +
+          " SUBSTR(a.tahun_lulus, 1, 4) = '" +
+          tahun +
+          "' " +
+          ' ORDER BY p.kd_fjjp7) AS mapping_prodi ' +
+          ' LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2' +
+          ' WHERE ' +
+          ' mapping_prodi.kd_fjjp7 IN (' +
+          list_kd_fjjp7 +
+          ')) AS lulusan ' +
+          ' GROUP BY lulusan.nama_prodi ' +
+          ' ORDER BY lulusan.fak'
+      )
     } else {
-      return await Database.connection(conn).rawQuery("SELECT"+ 
-      " lulusan.nama_fakultas, "+
-      " lulusan.nama_prodi, "+
-      " COUNT(*) AS jumlah_pendaftar, "+
-      " COUNT(lulusan.tanggal_isi) AS selesai "+
-      " FROM "+
-  " (SELECT "+
-      " mapping_prodi.tanggal_isi, "+
-          " f.nama_fakultas AS nama_fakultas, "+
-              " mapping_prodi.fak, "+
-              " mapping_prodi.prodi AS nama_prodi, "+
-              " mapping_prodi.kd_fjjp7, "+
-              " mapping_prodi.kdbaru "+
-              " FROM "+
-      " (SELECT "+
-          " p.nama_prodi AS prodi, "+
-          " a.tanggal_isi, "+
-              " p.kd_fjjp7, "+
-              " p.kd_fakultas2 AS fak, "+
-              " IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru "+
-              " FROM "+
-      " users a "+
-          " LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non "+
-      " LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) "+
-      " WHERE "+
-      " SUBSTR(a.tahun_lulus, 1, 5) = '"+periode_wisuda+"' "+
-          " ORDER BY p.kd_fjjp7) AS mapping_prodi "+
-      " LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2"+
-      " WHERE "+
-      " mapping_prodi.kd_fjjp7 IN ("+list_kd_fjjp7+")) AS lulusan "+
-          " GROUP BY lulusan.nama_prodi "+
-  " ORDER BY lulusan.fak")
+      return await Database.connection(conn).rawQuery(
+        'SELECT' +
+          ' lulusan.nama_fakultas, ' +
+          ' lulusan.nama_prodi, ' +
+          ' COUNT(*) AS jumlah_pendaftar, ' +
+          ' COUNT(lulusan.tanggal_isi) AS selesai ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' mapping_prodi.tanggal_isi, ' +
+          ' f.nama_fakultas AS nama_fakultas, ' +
+          ' mapping_prodi.fak, ' +
+          ' mapping_prodi.prodi AS nama_prodi, ' +
+          ' mapping_prodi.kd_fjjp7, ' +
+          ' mapping_prodi.kdbaru ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' p.nama_prodi AS prodi, ' +
+          ' a.tanggal_isi, ' +
+          ' p.kd_fjjp7, ' +
+          ' p.kd_fakultas2 AS fak, ' +
+          ' IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru ' +
+          ' FROM ' +
+          ' users a ' +
+          ' LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non ' +
+          ' LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) ' +
+          ' WHERE ' +
+          " SUBSTR(a.tahun_lulus, 1, 5) = '" +
+          periode_wisuda +
+          "' " +
+          ' ORDER BY p.kd_fjjp7) AS mapping_prodi ' +
+          ' LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2' +
+          ' WHERE ' +
+          ' mapping_prodi.kd_fjjp7 IN (' +
+          list_kd_fjjp7 +
+          ')) AS lulusan ' +
+          ' GROUP BY lulusan.nama_prodi ' +
+          ' ORDER BY lulusan.fak'
+      )
     }
   }
 

@@ -13,9 +13,9 @@
     <div class="alert alert-custom alert-outline-{{ (get_sasaran) ? 'info':'danger' }}" role="alert">
       <div class="alert-text text-justify">
         @if(get_sasaran)
-          <h5>Sasaran : Tahun {{getTitleSasaran(get_sasaran.tahun)}}</h5>
+        <h5>Sasaran : Tahun {{getTitleSasaran(get_sasaran.tahun)}}</h5>
         @else
-          <h5>Tahun Sasaran Belum Ditentukan</h5>
+        <h5>Tahun Sasaran Belum Ditentukan</h5>
         @endif
       </div>
 
@@ -164,7 +164,7 @@
           setTimeout(() => {
 
             location.reload()
-          }, 2000);
+          }, 1000);
         } else {
           alertSasaran.removeChild(alertSasaran.childNodes[0]);
           alertSasaran.insertAdjacentHTML("afterbegin", alert('danger',

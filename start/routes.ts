@@ -95,6 +95,8 @@ Route.group(() => {
     Route.get('ajax-data-pengisi', 'D3/D3AdminResponsController.ajax_data_pengisi').as(
       'get_data_pengisi'
     )
+
+    Route.get('ajax-data-index', 'D3/D3AdminsController.ajax_data_index').as('get_data_index')
   })
     .prefix('d3')
     .as('d3')
