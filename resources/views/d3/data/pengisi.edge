@@ -15,7 +15,7 @@
   </div>
   <!--begin::Form-->
 
-  <form method="POST" id="form">
+  <form method="POST">
 
 
     <div class="card-body">
@@ -26,18 +26,20 @@
         <span>{{ flashMessages.get('notification.message') }}</span>
       </div>
       @endif
-      {{--  @!component('components/dropdown-range',{
+      @if([1,2].includes(auth.user.legacy_role))
+
+      @!component('components/dropdown-range',{
       'name':'tahun',
       'label':'Tahun Wisuda',
-      'required':true,
+      'required':false,
       'start': getCurrentYear(),
-      'end':getCurrentYear()-20
+      'end':2017
       })
 
       @!component('components/dropdown',{
       'name':'periode',
       'label':'Periode Sasaran',
-      'validasi':[true,false,false],
+      'validasi':[false,false,false],
       'choice':[
       {id:0,nama:'Semua Periode'},
       {id:1,nama:'Periode 1'},
@@ -45,7 +47,8 @@
       {id:3,nama:'Periode 3'},
       {id:4,nama:'Periode 4'},
       ]
-      })  --}}
+      })
+      @endif
 
       <div class="form-group ">
         <label for="fakultas">
@@ -127,10 +130,13 @@
 
   // handle jurusan
   jurusan.addEventListener('change', res => {
+    const tahun = document.querySelector('#tahun').value || 0
+    const periode = document.querySelector('#periode').value || 0
+
     const id = res.target.value
-    console.log(id)
+    // console.log(id)
     showDataPengisi.innerHTML = drawLoading()
-    fetch(`${routeDataPengisi}/?kd_fjjp7=${id}`)
+    fetch(`${routeDataPengisi}/?kd_fjjp7=${id}&&tahun=${tahun}&&periode=${periode}`)
       .then(response => response.json())
       .then(data => {
         console.log(data.get_data_pengisi)

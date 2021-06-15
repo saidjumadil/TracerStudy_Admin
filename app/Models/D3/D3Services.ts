@@ -121,6 +121,7 @@ export default class Services extends BaseModel {
   }
 
   /* get data pengisi dari tabel monitoring */
+  // FIXME: data mengabaikan periode wisuda
   public static async get_data_pengisi(periode_wisuda: string, kd_fjjp7_non: string, kd_fjjp7_reg) {
     if (periode_wisuda.substring(4, 5) === '0') {
       periode_wisuda = periode_wisuda.substring(0, 4)
@@ -128,14 +129,16 @@ export default class Services extends BaseModel {
         .query()
         .from('users_monitoring')
         .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
-        .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
-        .orWhereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        // .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
+        // .orWhereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
     } else {
       return await Database.connection(conn)
         .query()
         .from('users_monitoring')
-        .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
-        .orWhereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        // .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
+        // .orWhereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
     }
   }
 
