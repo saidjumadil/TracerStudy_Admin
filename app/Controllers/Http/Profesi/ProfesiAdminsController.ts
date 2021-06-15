@@ -16,11 +16,13 @@ function message(session, nama_notif, type, message) {
 
 const className: string = 'ProfesiAdminsController' //sesuaikan
 const renderName: string = 'profesi' //sesuaikan
+let alumni = Env.get('WS_ALUMNI_PROFESI') //sesuaikan
 
 export default class ProfesiAdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
-    return view.render(renderName + '/index')
+    const sasaran = await Services.get_sasaran()
+    return view.render(renderName + '/index', { sasaran })
   }
 
   public async sasaran({ view, auth }) {
@@ -63,7 +65,6 @@ export default class ProfesiAdminsController {
       //get mahasiswa dari API
       response.safeHeader('Content-type', 'application/json')
       let total_inserted = 0
-      let alumni = Env.get('WS_ALUMNI_PROFESI') //sesuiakan
       if (alumni) {
         alumni = alumni.replace('yyyy', tahun)
         //ambil data alumni
@@ -106,46 +107,66 @@ export default class ProfesiAdminsController {
     }
   }
 
-  //TODO: JANGAN lupa copy ke semua jenjang!!!!!
   public async set_sasaran({ request, session }) {
     try {
       let { tahun, periode } = request.all()
-   
       var tahun_periode = tahun.toString().concat(periode.toString())
       let current_sasaran = await Services.get_sasaran()
       //convert sasaran ke number
-      let num_current: number = Number(current_sasaran.tahun)
-      let num_new_sasaran: number = Number(tahun_periode)
-      //cek sasaran sesuai aturan atau tidak
-      let cek_sasaran = await Services.cek_sasaran(tahun_periode)
-      // jika cek sasaran false dan tahun sasaran baru > tahun sasaran sekarang maka izinkan untuk update tahun sasaran
-      if (!cek_sasaran && num_new_sasaran > num_current) {
-        let status_import = 0
-        //cek monitoring sudah diimport apa belum
-        const get_status_monitoring = await Services.get_status_monitoring(tahun)
-        if(get_status_monitoring){
-          status_import= 1
-        }
-        //update sasaran
-        let update = await Services.set_sasaran(tahun_periode, status_import)
-        if (update) {
+      if(current_sasaran){
+        let num_current: number = Number(current_sasaran.tahun)
+        let num_new_sasaran: number = Number(tahun_periode)
+        //cek sasaran sesuai aturan atau tidak
+        let cek_sasaran = await Services.cek_sasaran(tahun_periode)
+        // jika cek sasaran false dan tahun sasaran baru > tahun sasaran sekarang maka izinkan untuk update tahun sasaran
+        if (!cek_sasaran && num_new_sasaran > num_current) {
+          let status_import = 0
+          //cek monitoring sudah diimport apa belum
+          const get_status_monitoring = await Services.get_status_monitoring(tahun)
+          if (get_status_monitoring) {
+            status_import = 1
+          }
+          //update sasaran
+          let update = await Services.set_sasaran(tahun_periode, status_import)
+          if (update) {
+            message(
+              session,
+              'notification_sasaran',
+              'success',
+              'Berhasil mengubah sasaran Tracer Study'
+            )
+            return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
+          }
+        } else {
           message(
             session,
             'notification_sasaran',
-            'success',
-            'Berhasil mengubah sasaran Tracer Study'
+            'danger',
+            'Gagal mengubah karena sasaran sudah pernah dibuat!'
           )
-          return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
+          return { isSuccess: false }
         }
-      } else {
-        message(
-          session,
-          'notification_sasaran',
-          'danger',
-          'Gagal mengubah karena sasaran sudah pernah dibuat!'
-        )
-        return { isSuccess: false }
-      }
+      }else{
+          //update sasaran
+          let update = await Services.set_sasaran(tahun_periode, 0)
+          if (update) {
+            message(
+              session,
+              'notification_sasaran',
+              'success',
+              'Berhasil mengubah sasaran Tracer Study'
+            )
+            return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
+          }
+         else {
+          message(
+            session,
+            'notification_sasaran',
+            'danger',
+            'Gagal mengubah karena sasaran sudah pernah dibuat!'
+          )
+        }
+      } 
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'set_sasaran', error.toString(), request.ip())
@@ -177,5 +198,5 @@ export default class ProfesiAdminsController {
       message(session, 'notification_jadwal', 'danger', 'Gagal mengubah jadwal Tracer Study')
       return response.redirect('back')
     }
-  }
+  } 
 }

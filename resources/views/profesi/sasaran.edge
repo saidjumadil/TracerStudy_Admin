@@ -10,9 +10,13 @@
   </div>
   <!--begin::Form-->
   <div class="card-body">
-    <div class="alert alert-custom alert-outline-info" role="alert">
+    <div class="alert alert-custom alert-outline-{{ (get_sasaran) ? 'info':'danger' }}" role="alert">
       <div class="alert-text text-justify">
-        <h5>Sasaran : Tahun {{getTitleSasaran(get_sasaran.tahun)}}</h5>
+        @if(get_sasaran)
+          <h5>Sasaran : Tahun {{getTitleSasaran(get_sasaran.tahun)}}</h5>
+        @else
+          <h5>Tahun Sasaran Belum Ditentukan</h5>
+        @endif
       </div>
 
     </div>

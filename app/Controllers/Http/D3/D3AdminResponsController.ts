@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
+// import express from 'express'
+// import nodeExcel from 'excel-export'
 
 const className: string = 'D3AdminResponsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
@@ -18,6 +20,7 @@ export default class D3AdminResponsController {
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
   public async pengisi({ view, auth }) {
     await auth.authenticate()
+
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
     const RouteActionDataPengisi = `admin.${renderName}.get_data_pengisi`
@@ -31,15 +34,33 @@ export default class D3AdminResponsController {
   /* ajax mengambil daftar pengisi kuesioner berdasarkan prodi */
   public async ajax_data_pengisi({ request }) {
     try {
-      const { kd_fjjp7 } = request.all()
-      const periode_wisuda = await Services.get_sasaran()
-      console.log(kd_fjjp7)
-      console.log(periode_wisuda.tahun)
-      const get_data_pengisi = await Services.get_data_pengisi(periode_wisuda.tahun, kd_fjjp7)
+      //TODO: Jika admin tampilkan kembali pilihan tahun dan periode, jika enum maka tahun dan periode hidden
+      let { tahun, periode, kd_fjjp7 } = request.all()
+      let periode_wisuda: string = tahun.concat(periode)
+      let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7) //get kd_fjjp7 non dan reg
+
+      //jika admin maka bisa lihat periode sasaran tracer sebelumnya
+      if (periode_wisuda) {
+        const get_data_pengisi = await Services.get_data_pengisi(
+          periode_wisuda,
+          kd_fjjp7_non,
+          kd_fjjp7_reg
+        )
+        return { get_data_pengisi }
+      }
+
+      //jika enum maka ambil data periode yg skrg saja
+      const get_periode_wisuda = await Services.get_sasaran() // get periode skrg
+      const get_data_pengisi = await Services.get_data_pengisi(
+        get_periode_wisuda.tahun,
+        kd_fjjp7_non,
+        kd_fjjp7_reg
+      )
       return { get_data_pengisi }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'get_data_pengisi', error.toString(), request.ip())
+      return { get_data_pengisi: [] }
     }
   }
 
@@ -64,64 +85,23 @@ export default class D3AdminResponsController {
           monitoring_3: monitoring_3.includes(nim[index]) ? current_timestamp : '',
         })
       }
-      /*
-      isi dalam variabel allData
-      [
-        {
-          nim: ...,
-          hp_valid_1: ...,
-          hp_valid_2: ...,
-          monitoring_1: ...,
-          monitoring_2: ...,
-          monitoring_3: ...,
-        },
-        ...
-      ]
-       */
-      console.log(allData)
-
-      //convert monitoring to timestamp now
-      // //jika monitoring di centang maka di update dengan waktu sekarang
-      // monitoring_1 === '1' ? (monitoring_1 = current_timestamp) : (monitoring_1 = '') //jika false maka string kosong
-      // monitoring_2 === '1' ? (monitoring_2 = current_timestamp) : (monitoring_2 = '') //jika false maka string kosong
-      // monitoring_3 === '1' ? (monitoring_3 = current_timestamp) : (monitoring_3 = '') //jika false maka string kosong
-
-      // FIXME: disarankan buat update data pengisi bersifat batch.
-      // jadi hanya melempar variabel allData ke service.
-      // dibawah ini update_data_pengisi masih bersifat per row
-      allData.forEach(
-        async ({ nim, hp_valid_1, hp_valid_2, monitoring_1, monitoring_2, monitoring_3 }) => {
-          await Services.update_data_pengisi(
-            nim,
-            hp_valid_1,
-            hp_valid_2,
-            monitoring_1,
-            monitoring_2,
-            monitoring_3
-          )
-        }
-      )
-      // if (update_data_pengisi) {
-      message(session, 'notification', 'success', 'Berhasil memperbarui data')
-      return response.redirect('back')
-      // }
+      //update data monitoring
+      const update_data_pengisi = await Services.update_data_pengisi(allData)
+      if (update_data_pengisi) {
+        message(session, 'notification', 'success', 'Berhasil memperbarui data')
+        return response.redirect('back')
+      }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'update_data_pengisi', error.toString(), request.ip())
+      message(session, 'notification', 'danger', 'Gagal memperbarui data')
+      return response.redirect('back')
     }
   }
 
   /* menambilkan halaman untuk export users_monitoring */
   public async hasil({ view, auth }) {
     await auth.authenticate()
-    //TODO : untuk testing get jawaban sebelum di export
-    const get_pendahuluan = await Services.get_jawaban_users(
-      '20181',
-      '0800202',
-      'jawaban_pendahuluan'
-    )
-    console.log('sss ' + JSON.stringify(get_pendahuluan))
-
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
     return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi })
@@ -132,10 +112,13 @@ export default class D3AdminResponsController {
     try {
       let { tahun, periode, kd_fjjp7 } = request.all()
       let periode_wisuda = tahun.concat(periode)
+      let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
       //export to excel
+
       const get_jawaban_pendahuluan = await Services.get_jawaban_users(
         periode_wisuda,
-        kd_fjjp7,
+        kd_fjjp7_non,
+        kd_fjjp7_reg,
         'jawaban_pendahuluan'
       )
       // const get_jawaban_kuliah =
