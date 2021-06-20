@@ -32,6 +32,7 @@ export default class D3AdminsController {
     // console.log("data: "+ JSON.stringify(get_data[0]))
     //end testing
 
+    // message(session)
     const sasaran = await Services.get_sasaran()
     const RouteActionDataIndex: string = `admin.${renderName}.get_data_index`
 

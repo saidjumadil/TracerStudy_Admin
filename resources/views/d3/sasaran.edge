@@ -163,7 +163,7 @@
             data.message))
           setTimeout(() => {
 
-            location.reload()
+            window.location.replace(`{{ appUrl('admin/d3') }}`);
           }, 1000);
         } else {
           alertSasaran.removeChild(alertSasaran.childNodes[0]);

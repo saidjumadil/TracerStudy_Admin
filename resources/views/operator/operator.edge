@@ -195,14 +195,48 @@
               <button class="btn btn-success">Reset</button>
             </td>
           </form>
-          <form method="POST" action="{{route('admin.hapus_user')}}">
-            {{ csrfField() }}
-            <input type="hidden" name="username" value="{{item.username}}">
 
-            <td>
-              <button class="btn btn-danger">Hapus</button>
-            </td>
-          </form>
+          <td>
+            <div data-toggle="modal" data-target="#modal_hapus{{ index }}" class="btn btn-danger">Hapus</div>
+          </td>
+          <div class="modal fade" id="modal_hapus{{ index }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Hapus User </h5>
+
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                  </button>
+                </div>
+
+                <div class="modal-body">
+                  <div class="alert alert-custom alert-outline-info" role="alert">
+                    <div class="alert-text text-justify">
+                      <div><i class="fas fa-info-circle icon-sm text-info"></i> PERHATIAN</div>
+                      <p>
+                        Akun user yang akan dihapus tidak dapat diakses lagi. apakah anda yakin ingin menghapusnya?
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <form method="POST" action="{{route('admin.hapus_user')}}">
+                    {{ csrfField() }}
+                    <input type="hidden" name="username" value="{{item.username}}">
+
+                    <button type="button" class="btn btn-light-primary font-weight-bold"
+                      data-dismiss="modal">Batal</button>
+                    <button type="submit" id="tambah_populasi" class="btn btn-danger font-weight-bold"><i
+                        class="fa fa-user-plus icon-sm"></i>
+                      Hapus </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </tr>
 
 

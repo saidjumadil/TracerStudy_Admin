@@ -6,7 +6,7 @@ export default class ProfesiEnum {
     await auth.authenticate()
     // console.log(auth)
     if ([1, 2, 4].includes(auth.user?.permission_profesi as number)) {
-      await next()
+      return await next()
     }
 
     return response.redirect().toRoute('admin.' + routeName + 'index')

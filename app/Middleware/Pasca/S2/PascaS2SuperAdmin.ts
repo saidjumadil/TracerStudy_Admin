@@ -6,7 +6,7 @@ export default class PascaS2SuperAdmin {
     await auth.authenticate()
     // console.log(auth)
     if ([1].includes(auth.user?.permission_pasca_s2 as number)) {
-      await next()
+      return await next()
     }
 
     return response.redirect().toRoute('admin.' + routeName + 'index')

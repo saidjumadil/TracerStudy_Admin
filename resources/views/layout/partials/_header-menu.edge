@@ -35,8 +35,7 @@
       header:'Profesi'
       })
 
-      @if([1,2].includes(auth.user.permission_d3) || [1,2].includes(auth.user.permission_pasca_s2) ||
-      [1,2].includes(auth.user.permission_pasca_s3) || [1,2].includes(auth.user.permission_profesi))
+      @if([1,2].includes(auth.user.legacy_role) )
       <ul class="menu-nav">
         {{-- for admin  --}}
         <li

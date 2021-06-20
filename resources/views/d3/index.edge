@@ -32,7 +32,7 @@
       </li>
       @if(sasaran)
       <li class="{{ (sasaran.status_import_monitoring === 0) ? '': (sasaran.waktu_mulai) ? 'active':'pending' }}">
-        @if(!sasaran.waktu_mulai && sasaran.status_import_monitoring === 1)
+        @if(sasaran.status_import_monitoring === 1)
         <a href="{{ route('admin.d3.jadwal') }}">
           Set Jadwal
         </a>
@@ -43,6 +43,15 @@
       @else
       <li class="">
         Set Jadwal
+      </li>
+      @endif
+      @if(sasaran)
+      <li class="{{ (!sasaran.waktu_berakhir) ? '': (sasaran.waktu_berakhir <= Date.now()) ? 'active':'pending' }}">
+        Selesai
+      </li>
+      @else
+      <li class="">
+        Selesai
       </li>
       @endif
     </div>
@@ -59,7 +68,13 @@
   </div>
   <div class="card-body text-bold ">
     <div id='showAlert'>
-
+      @if(flashMessages.get('notification'))
+      <div
+        class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+        role="alert">
+        <span>{{ flashMessages.get('notification.message') }}</span>
+      </div>
+      @endif
     </div>
     <form>
       {{ csrfField() }}

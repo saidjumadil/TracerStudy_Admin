@@ -6,7 +6,7 @@ export default class D3SuperAdmin {
     await auth.authenticate()
     // console.log(auth)
     if ([1].includes(auth.user?.permission_d3 as number)) {
-      await next()
+      return await next()
     }
 
     return response.redirect().toRoute('admin.' + routeName + 'index')
