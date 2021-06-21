@@ -88,7 +88,8 @@ License: You must have a valid license purchased only from themeforest(the above
               'label':'Password',
               'validasi':[true,false,false],
               'type':'password',
-              'notification':'<a href="#" class="text-primary">Lupa password?</a>'
+              'notification':`<a href="#" class="text-primary" data-toggle="modal"
+                  data-target="#modal_lupapassword">Lupa password?</a>`
               })
 
 
@@ -97,6 +98,60 @@ License: You must have a valid license purchased only from themeforest(the above
                 <button class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-4">Masuk</button>
               </div>
             </form>
+            {{--  modal lupa password  --}}
+            <div class="modal fade" id="modal_lupapassword" tabindex="-1" role="dialog"
+              aria-labelledby="modallabel_lupapassword" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modallabel_lupapassword">Lupa Password </h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                  </div>
+                  {{--  TODO: route lupa password  --}}
+                  <form action="" method="POST" id="form_lupapassword">
+                    {{ csrfField() }}
+                    <div class="modal-body">
+                      <div class="alert alert-custom alert-outline-info" role="alert">
+                        <div class="alert-text text-justify">
+                          <div><i class="fas fa-info-circle icon-sm text-info"></i> PERHATIAN</div>
+                          <p>
+                            Masukkan email dari akun yang terdaftar untuk mereset password. reset password hanya diperbolehkan 2 x 24 jam
+                          </p>
+                        </div>
+                      </div>
+                      @if(flashMessages.get('notification_lupapassword'))
+                      <div
+                        class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification_lupapassword.type') }} alert-dismissible animated fadeIn"
+                        role="alert">
+                        <span>{{ flashMessages.get('notification_lupapassword.message') }}</span>
+                      </div>
+                      @endif
+
+                      @!component('components/input',{
+                      'label':'email',
+                      'name':'email_lupapassword',
+                      'validasi':[true,false,false],
+                      'type':'text',
+                      'placeholder':'nama@mail.com'
+                      })
+
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-light-primary font-weight-bold"
+                        data-dismiss="modal">Batal</button>
+                      <button type="submit" class="btn btn-primary font-weight-bold"><i
+                          class="fa fa-user-plus icon-sm"></i>
+                        Kirim </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {{--  end modal lupa password  --}}
           </div>
 
           <!--end::Login Sign in form-->
@@ -186,7 +241,12 @@ License: You must have a valid license purchased only from themeforest(the above
   <!--end::Page Scripts-->
 
   <script src="{{appUrl()}}/assets/js/custom/validation.js"></script>
+  @if(flashMessages.get('notification_lupapassword'))
+  <script>
+    $('#modal_lupapassword').modal('show')
 
+  </script>
+  @endif
 </body>
 <!--end::Body-->
 
