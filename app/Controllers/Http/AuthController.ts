@@ -105,6 +105,12 @@ export default class AuthController {
     }
   }
 
+  // TODO: buat backend lupa password
+  public async ActionLupaPassword({ request, response }) {
+    const { email_lupapassword } = request.all()
+    return response.redirect('back')
+  }
+
   public async logout({ auth, response }) {
     try {
       await auth.logout()

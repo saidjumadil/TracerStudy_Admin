@@ -111,7 +111,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     </button>
                   </div>
                   {{--  TODO: route lupa password  --}}
-                  <form action="" method="POST" id="form_lupapassword">
+                  <form action="{{route('auth.actionLupaPassword')}}" method="POST" id="form_lupapassword">
                     {{ csrfField() }}
                     <div class="modal-body">
                       <div class="alert alert-custom alert-outline-info" role="alert">

@@ -7,6 +7,7 @@ Route.group(() => {
   Route.group(() => {
     Route.get('', 'AuthController.index').as('login')
     Route.post('', 'AuthController.authentication').as('authentication')
+    Route.post('lupapassword', 'AuthController.ActionLupaPassword').as('actionLupaPassword')
   }).middleware(['guest'])
 
   Route.group(() => {

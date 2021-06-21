@@ -9,24 +9,29 @@
 
   </div>
   <div class="card-body text-bold ">
-    <form method="POST" id="form" enctype="multipart/form-data">
+    @if(flashMessages.get('notification'))
+    <div
+      class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+      role="alert">
+      <span>{{ flashMessages.get('notification.message') }}</span>
+    </div>
+    @endif
+    <form>
       {{ csrfField() }}
-      {{--  <div class="form-group">
-        <label>Banner Header Tracer Study</label>
-        <div></div>
-        <div class="custom-file">
-          <input type="file" name="path_banner" class="custom-file-input" id="customFile">
-          <label class="custom-file-label" for="customFile">Choose file</label>
-        </div>
-      </div>  --}}
       <div class="form-group ">
         <label for="path_banner">
           Banner Header Tracer Study
         </label>
-        <input type="text" name="path_banner" id="path_banner" autocomplete="off" value="{{get_pengumuman.path_banner}}"
-          class="form-control" placeholder="">
-
+        <div class="dropzone dropzone-default" id="kt_dropzone_3">
+          <div class="dropzone-msg dz-message needsclick">
+            <h3 class="dropzone-msg-title">Masukkan file di area ini atau klik disini</h3>
+            <span class="dropzone-msg-desc">Hanya gambar format .jpg yang diperbolehkan</span>
+          </div>
+        </div>
       </div>
+    </form>
+    <form method="POST" id="form" enctype="multipart/form-data">
+      {{ csrfField() }}
 
       <div class="form-group">
         <label>Pengumuman</label>
@@ -75,11 +80,16 @@
 @endsection
 
 @section('script')
+<script>
+  let RouteAction = '{{ appUrl()+uploadAction }}'
+
+</script>
 <!--begin::Page Vendors(used by this page)-->
-<script src="/assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+<script src="{{ appUrl() }}/assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
 <!--end::Page Vendors-->
 <!--begin::Page Scripts(used by this page)-->
-<script src="/assets/js/custom/ckeditor-custom.js"></script>
+<script src="{{ appUrl() }}/assets/js/custom/ckeditor-custom.js"></script>
 <!--end::Page Scripts-->
+<script src="{{ appUrl() }}/assets/js/custom/dropzone-custom.js"></script>
 
 @endsection
