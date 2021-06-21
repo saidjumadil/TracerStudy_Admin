@@ -54,11 +54,13 @@ export default class D3AdminResponsController {
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
     const RouteActionDataPengisi = `admin.${renderName}.get_data_pengisi`
-
+    const RouteActionUpdateDataPengisi = `admin.${renderName}.data.update_data_pengisi`
     return view.render(renderName + '/data/pengisi', {
       GetFakultas,
       RouteActionProdi,
       RouteActionDataPengisi,
+      RouteActionUpdateDataPengisi,
+
       daftar_sasaran,
     })
   }
@@ -119,14 +121,19 @@ export default class D3AdminResponsController {
       )
 
       if (update_data_pengisi) {
-        message(session, 'notification', 'success', 'Berhasil memperbarui data')
-        return response.redirect('back')
+        return {
+          isSuccess: true,
+          notification: { type: 'success', message: 'Berhasil memperbarui data' },
+        }
       }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'update_data_pengisi', error.toString(), request.ip())
       message(session, 'notification', 'danger', 'Gagal memperbarui data')
-      return response.redirect('back')
+      return {
+        isSuccess: false,
+        notification: { type: 'danger', message: 'Gagal memperbarui data' },
+      }
     }
   }
 

@@ -8,6 +8,7 @@ export default class D3Step12 {
 
     // console.log(auth)
     if (!tahunSasaran) return await next()
+    if (Number(tahunSasaran.waktu_berakhir) < Date.now()) return await next()
     if (tahunSasaran.tahun) {
       message(
         session,

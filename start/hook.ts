@@ -1,6 +1,7 @@
 import View from '@ioc:Adonis/Core/View'
 import Env from '@ioc:Adonis/Core/Env'
 import D3User from 'App/Models/User'
+import { Choice } from 'App/Global/Type'
 
 View.global('appUrl', (path: string) => {
   const APP_URL: string = Env.get('APP_URL')
@@ -211,4 +212,17 @@ View.global('getPilihanJabatan', function (legacy_role: number) {
 
   if (legacy_role === 1) jabatan = [superAdmin, ...jabatan]
   return jabatan
+})
+View.global('getTahun', function (tahun: string) {
+  return tahun.substr(0, 4)
+})
+
+View.global('getPeriodeSasaran', function (daftarSasaran: any) {
+  let choice: Choice[] = []
+  daftarSasaran.forEach((sasaran) => {
+    let periodeString =
+      sasaran.tahun.substr(4, 5) === '0' ? 'Semua Periode' : `Periode ${sasaran.tahun.substr(4, 5)}`
+    choice.push({ id: sasaran.tahun.substr(4, 5), nama: periodeString })
+  })
+  return choice
 })

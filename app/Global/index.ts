@@ -1,4 +1,4 @@
 import { message } from './Message'
-import { TahunSasaran } from 'App/Global/Type'
+import { Choice, TahunSasaran } from 'App/Global/Type'
 
-export { message, TahunSasaran }
+export { message, TahunSasaran, Choice }

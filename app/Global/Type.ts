@@ -6,3 +6,8 @@ export type TahunSasaran = {
   waktu_berakhir: Date
   status_import_monitoring: number
 }
+
+export type Choice = {
+  id: number
+  nama: string
+}
