@@ -21,16 +21,6 @@ function message(session, nama_notif, type, message) {
 export default class D3AdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
-    //ini testing
-    // const get_list_kd_fjjp7 = await Services.get_list_kdfjjp7()
-    // let arr_kd_fjjp7 = []
-    //   //parsing ke arry
-    // for (let i = 0; i < get_list_kd_fjjp7.length; i++) {
-    //   arr_kd_fjjp7.push(get_list_kd_fjjp7[i].kd_fjjp7)
-    // }
-    // const get_data = await Services.get_data_index("2018", '1', arr_kd_fjjp7)
-    // console.log("data: "+ JSON.stringify(get_data[0]))
-    //end testing
 
     // message(session)
     const sasaran = await Services.get_sasaran()
@@ -42,9 +32,9 @@ export default class D3AdminsController {
   public async ajax_data_index({ request, session, response }) {
     try {
       const { tahun, periode } = request.all()
-      const get_list_kd_fjjp7 = await Services.get_list_kdfjjp7()
+      let get_list_kd_fjjp7 = await Services.get_list_kdfjjp7()
       console.log(get_list_kd_fjjp7)
-      let arr_kd_fjjp7 = []
+      let arr_kd_fjjp7: Array<any> = []
       //parsing ke arry
       for (let i = 0; i < get_list_kd_fjjp7.length; i++) {
         arr_kd_fjjp7.push(get_list_kd_fjjp7[i].kd_fjjp7)

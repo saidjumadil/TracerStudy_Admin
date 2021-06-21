@@ -3,7 +3,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import Sasaran from './D3Sasaran' // sesuaikan
 import Pengumuman from './D3Pengumuman' //sesuaikan
-import UsersMonitoring from './D3UsersMonitoring'
+// import UsersMonitoring from './D3UsersMonitoring'
 
 const conn: string = 'cdc_tracerstudy_d3' // sesuaikan
 const conn_exsurvey: string = 'cdc_exsurvey' // sesuaikan
@@ -98,6 +98,7 @@ export default class Services extends BaseModel {
   public static async get_list_kdfjjp7() {
     return await Database.connection(conn).from('users_kd_fjjp7').select('kd_fjjp7')
   }
+
   /* mengambil daftar fakultas */
   public static async get_fakultas() {
     return await Database.connection(conn).query().from('users_fakultas')
@@ -126,28 +127,59 @@ export default class Services extends BaseModel {
     if (periode_wisuda.substring(4, 5) === '0') {
       periode_wisuda = periode_wisuda.substring(0, 4)
       return await Database.connection(conn)
-        .query()
         .from('users_monitoring')
-        .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
-        // .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
-        // .orWhereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
-        .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        .where((query) => {
+          query
+            .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
+            .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
+        })
+        .orWhere((query) => {
+          query
+            .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
+            .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        })
     } else {
       return await Database.connection(conn)
-        .query()
         .from('users_monitoring')
-        // .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
-        // .orWhereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
-        .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        .where((query) => {
+          query
+            .where('periode_wisuda', periode_wisuda)
+            .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'")
+        })
+        .orWhere((query) => {
+          query
+            .where('periode_wisuda', periode_wisuda)
+            .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'")
+        })
     }
   }
 
   /* edit data pengisi dari table monitoring */
-  public static async update_data_pengisi(arrData: any) {
-    const keyForSearch = 'nim'
-    const payload = arrData
-    return await UsersMonitoring.updateOrCreateMany(keyForSearch, payload)
+  public static async update_data_pengisi(
+    nim: string,
+    hp_valid_1: number,
+    hp_valid_2: number,
+    monitoring_1: any,
+    monitoring_2: any,
+    monitoring_3: any
+  ) {
+    return await Database.connection(conn)
+      .from('users_monitoring')
+      .update({
+        hp_valid_1,
+        hp_valid_2,
+        monitoring_1,
+        monitoring_2,
+        monitoring_3,
+      })
+      .where('nim', nim)
   }
+  //versi sebelumnya
+  // public static async update_data_pengisi(arrData: any) {
+  //   const keyForSearch = 'nim'
+  //   const payload = arrData
+  //   return await UsersMonitoring.updateOrCreateMany(keyForSearch, payload)
+  // }
 
   /* mengambil informasi status import monitoring, jika data sudah pernah import ada maka tidak dizinkan lagi import */
   public static async get_status_monitoring(tahun: string) {
@@ -157,52 +189,70 @@ export default class Services extends BaseModel {
       .whereRaw("periode_wisuda like '" + tahun + "%'")
       .first()
   }
-  //vesri lama
-  //ambil informasi status import monitoring
-  // public static async get_status_monitoring(tahun: string, periode: string){
-  //   let periode_wisuda = tahun.concat(periode)
-  //   if(periode==="0"){
-  //     return await Database.connection(conn)
-  //     .query()
-  //     .from('users_monitoring')
-  //     .whereRaw("periode_wisuda like '" + tahun + "%'")
-  //     .first()
-  //   }else{
-  //     return await Database.connection(conn)
-  //     .query()
-  //     .from('users_monitoring')
-  //     .where("periode_wisuda", periode_wisuda )
-  //     .first()
-  //   }
-  // }
 
   /* get data jawaban kuesioner untuk export ke excel */
+  // public static async get_jawaban_users(tahun: string, kd_fjjp7: string, nama_tabel: string) {
+  //   if (tahun.substring(4, 5) === '0') {
+  //     let tahun_lulus = tahun.substring(0, 4)
+  //     console.log(tahun_lulus)
+  //     return await Database.connection(conn)
+  //       .from('users')
+  //       .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
+  //       .select('jawaban_pendahuluan.*')
+  //       .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7 + "'")
+  //       .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
+  //     // .whereNotNull('users.tanggal_isi')
+  //   } else {
+  //     return await Database.connection(conn)
+  //       .from('users')
+  //       .join('jawaban_pendahuluan', 'users.nim', '=', 'jawaban_pendahuluan.nim')
+  //       .select('jawaban_pendahuluan.*')
+  //       .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7 + "'")
+  //       .where('users.tahun_lulus', tahun)
+  //     //.whereNotNull('users.tanggal_isi')
+  //   }
+  // }
   public static async get_jawaban_users(
-    tahun: string,
+    periode_wisuda: string,
     kd_fjjp7_non: string,
     kd_fjjp7_reg: string,
     nama_tabel: string
   ) {
-    if (tahun.substring(4, 5) === '0') {
-      let tahun_lulus = tahun.substring(0, 4)
-      console.log(tahun_lulus)
+    if (periode_wisuda.substring(4, 5) === '0') {
+      let tahun_lulus = periode_wisuda.substring(0, 4)
+      return await Database.connection(conn)
+        .from('users')
+        .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
+        .select(nama_tabel + '.*')
+        .where((query) => {
+          query
+            .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
+            .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'")
+          //.whereNotNull('users.tanggal_isi')
+        })
+        .orWhere((query) => {
+          query
+            .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
+            .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_reg + "'")
+          //.whereNotNull('users.tanggal_isi')
+        })
+    } else {
       return await Database.connection(conn)
         .from('users')
         .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
         .select('jawaban_pendahuluan.*')
-        .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'")
-        .orWhereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_reg + "'")
-        .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
-      //.whereNotNull('users.tanggal_isi')
-    } else {
-      return await Database.connection(conn)
-        .from('users')
-        .join('jawaban_pendahuluan', 'users.nim', '=', 'jawaban_pendahuluan.nim')
-        .select('jawaban_pendahuluan.*')
-        .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'")
-        .orWhereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_reg + "'")
-        .where('users.tahun_lulus', tahun)
-      //.whereNotNull('users.tanggal_isi')
+        .where((query) => {
+          query
+            .where('users.tahun_lulus', periode_wisuda)
+            .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'")
+          //.whereNotNull('users.tanggal_isi')
+        })
+        .orWhere((query) => {
+          query
+            .where('users.tahun_lulus', periode_wisuda)
+            .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_reg + "'")
+          //.whereNotNull('users.tanggal_isi')
+        })
     }
   }
 
@@ -223,41 +273,6 @@ export default class Services extends BaseModel {
     //hasil datas ke users_monitoring
     return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
   }
-  //versi lama
-  //insert data monitoring
-  // public static async insert_monitoring(tahun: string, periode: string) {
-  //   let periode_wisuda = tahun.concat(periode)
-  //   let datas
-  //   if(periode==="0"){
-  //     datas = await Database.connection(conn_exsurvey)
-  //     .query()
-  //     .from('alumni')
-  //     .select(
-  //       'nim',
-  //       'nama_lengkap as nama',
-  //       'periode_wisuda',
-  //       'hape1 as no_hape_1',
-  //       'hape2 as no_hape_2'
-  //     )
-  //     .whereRaw("periode_wisuda like '" + tahun + "%'")
-  //     .whereRaw("SUBSTR(nim,5,1)= '0'") //sesuaikan dengan fjjp7
-  //   }else{
-  //     datas = await Database.connection(conn_exsurvey)
-  //       .query()
-  //       .from('alumni')
-  //       .select(
-  //         'nim',
-  //         'nama_lengkap as nama',
-  //         'periode_wisuda',
-  //         'hape1 as no_hape_1',
-  //         'hape2 as no_hape_2'
-  //       )
-  //       .where('periode_wisuda', periode_wisuda)
-  //       .whereRaw("substr(nim,5,1)= '0'") //sesuaikan dengan fjjp7
-  //   }
-  //   //hasil datas ke users_monitoring
-  //   return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
-  // }
 
   /* update status monitoring pada table sasaran */
   public static async update_status_monitoring() {
@@ -280,6 +295,11 @@ export default class Services extends BaseModel {
     return await Database.connection(conn).from('users').where('nim', nim).update({
       email: email,
     })
+  }
+
+  /* mengambil data dari table sasaran yang sedang aktif */
+  public static async get_list_sasaran() {
+    return await Database.connection(conn).from('sasaran')
   }
 
   /* mengambil data dari table sasaran yang sedang aktif */
@@ -310,6 +330,11 @@ export default class Services extends BaseModel {
       //jika belum pernah diset sasaran semua periode maka opsi set perperiode dizinkan
       return await Database.connection(conn).from('sasaran').where('tahun', new_sasaran).first()
     }
+  }
+
+  /* ambil informasi nim valid, jika nim valid return data */
+  public static async get_validasi_nim(nim: string) {
+    return await Database.connection(conn).from('populasi').where('nim', nim).first()
   }
 
   /* ambil informasi apakah populasi sudah pernah diinsert ke database */

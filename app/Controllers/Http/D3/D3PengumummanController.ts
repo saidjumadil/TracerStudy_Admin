@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
-import Application from '@ioc:Adonis/Core/Application'
 import Services from 'App/Models/D3/D3Services' //sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
+import Application from '@ioc:Adonis/Core/Application'
 
 const className: string = 'D3PengumummanController' //sesuaikan
 const renderName: string = 'd3' //sesuiakan
+const picture_name: string = 'banner_d3.jpg' //sesuikan
 
 function message(session, nama_notif, type, message) {
   session.flash({
@@ -26,13 +27,13 @@ export default class D3PengumummanController {
 
   public async upload_image({ request }) {
     const banner = request.file('banner', {
-      size: '2mb',
+      size: '5mb',
       extnames: ['jpg'],
     })
 
     if (banner) {
       await banner.move(Application.publicPath('uploads'), {
-        name: 'banner.jpg',
+        name: picture_name,
         overwrite: true,
       })
     }
@@ -44,7 +45,7 @@ export default class D3PengumummanController {
         request.all()
 
       const store = await Services.update_pengumuman(
-        Env.get('APP_URL') + '/uploads/banner.jpg',
+        Env.get('APP_URL') + '/uploads/' + picture_name,
         pengumuman,
         laporan_online,
         tujuan,
@@ -53,7 +54,7 @@ export default class D3PengumummanController {
         hubungi_kami
       )
       if (store) {
-        message(session, 'notification', 'success', 'berhasil memperbarui pengumuman')
+        message(session, 'notification', 'success', 'Berhasil memperbarui pengumuman')
       }
       return response.redirect('back')
     } catch (error) {

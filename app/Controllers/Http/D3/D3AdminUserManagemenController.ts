@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-
+/* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
 
@@ -16,7 +15,38 @@ function message(session, nama_notif, type, message) {
 }
 
 export default class D3AdminUserManagemenController {
-  public async ajax_get_responden({ request, response, session }) {
+  //TODO: Buat edge untuk view insert
+  public async view_tambah_responden({}) {
+    //return ke halaman tambah responden
+  }
+
+  //TODO: Buat edge untuk insert
+  public async insert_responden({ request, response, session }) {
+    try {
+      const { nim } = request.all()
+      //cek nim di table populasi
+      const cek_nim = await Services.get_validasi_nim(nim)
+      if (cek_nim) {
+        //insert users
+        //const create_akun = await User.insert_users()
+      }
+
+      message(
+        session,
+        'notification',
+        'success',
+        'Berhasil menambah akun responden, password adalah NPM'
+      )
+      return response.redirect('back')
+    } catch (error) {
+      console.log(error)
+      await ErrorLog.error_log(className, 'insert_responden', error.toString(), request.ip())
+      message(session, 'notification', 'danger', 'Gagal menambah akun responden')
+      return response.redirect('back')
+    }
+  }
+
+  public async ajax_get_responden({ request }) {
     try {
       const { nim } = request.all()
       const responden = await Services.get_responden(nim)
