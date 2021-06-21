@@ -140,6 +140,14 @@ export default class D3User extends BaseModel {
     })
   }
 
+  //reset jumlah ubah jadi 0
+  public static async reset_jumlah(username) {
+    return await Database.connection(this.conn)
+      .from('users')
+      .update({ password_jumlah_terakhir_reset: 0 })
+      .where('username', username)
+  }
+
   public static async ubah_password(username: string, hashPassword: string) {
     return await Database.from('users').where('username', username).update({
       password: hashPassword,
