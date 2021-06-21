@@ -58,7 +58,7 @@
 
 
         </label>
-        <select class="form-control" name="kd_fjjp7" data-fv-not-empty='true'
+        <select class="form-control" name="kd_fjjp7_prodi" data-fv-not-empty='true'
           data-fv-not-empty___message='Pertanyaan ini wajib diisi' id="jurusan">
           <option value="">-- pilihan anda --</option>
         </select>
@@ -94,7 +94,7 @@
       .then(data => {
         jurusan.innerHTML = '<option>-- pilihan anda --</option>';
         data.GetProdi.forEach(row => {
-          jurusan.innerHTML += '<option value="' + row.kd_fjjp7 + '">' + row.nama_prodi + '</option>';
+          jurusan.innerHTML += '<option value="' + row.kd_fjjp7 + ':'+row.nama_prodi+'">' + row.nama_prodi + '</option>';
         })
       })
   })

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import Application from '@ioc:Adonis/Core/Application'
+import { formatFileExcel } from 'App/Global'
 import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
 import ExportToExcelController from '../ExportToExcelController'
@@ -147,8 +148,9 @@ export default class D3AdminResponsController {
   /* menambilkan halaman untuk export users_monitoring */
   public async export_hasil_users({ request, response, session }) {
     try {
-      let { tahun, periode, kd_fjjp7 } = request.all()
+      let { tahun, periode, kd_fjjp7_prodi } = request.all()
       let periode_wisuda = tahun.concat(periode)
+      const [kd_fjjp7, prodi] = kd_fjjp7_prodi.split(':')
       let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
       console.log({ kd_fjjp7_non, kd_fjjp7_reg })
 
@@ -160,10 +162,14 @@ export default class D3AdminResponsController {
         'jawaban_pendahuluan'
       )
 
-      console.log(get_jawaban_pendahuluan)
-      const workSheetColumnName: any = ['ID', 'Name', 'Age']
+      // console.log(get_jawaban_pendahuluan)
+      // const workSheetColumnName: any = ['ID', 'Name', 'Age']
+      const workSheetColumnName: any = [...Object.keys(get_jawaban_pendahuluan[0])]
+      // console.log(workSheetColumnName)
       const workSheetName = 'Jawaban Pendahuluan'
-      const filePath = Application.publicPath('uploads')
+      const filePath =
+        Application.publicPath(`uploads`) + formatFileExcel(tahun, periode, renderName, prodi)
+
       ExportToExcelController.exportExcel(
         get_jawaban_pendahuluan,
         workSheetColumnName,
