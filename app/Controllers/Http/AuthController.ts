@@ -59,7 +59,7 @@ export default class AuthController {
       if (
         user.legacy_role > 2 &&
         waktu_sekarang < waktu_diizinkan_ubah &&
-        cek_perubahan_password.password_jumlah_terakhir_reset > 1
+        cek_perubahan_password.password_jumlah_terakhir_reset < 2
       ) {
         message(
           session,
@@ -77,10 +77,19 @@ export default class AuthController {
       const hash_password = await Hash.make(password_baru)
       if (verify && password_baru === konfirmasi_password) {
         await User.ubah_password(user.username, hash_password)
-        //set jumlah ubah password
-        await User.jumlah_ubah_password(user.username, waktu_sekarang, jumlah_ubah_password + 1)
-        message(session, 'notification', 'success', 'Password berhasil diubah')
-        return response.redirect('back')
+        //klo uda 2 kali dan hari sudah berganti maka izinkan ubah password dan set jumlah ubah jadi 0
+        if (waktu_sekarang > waktu_diizinkan_ubah && jumlah_ubah_password >= 2) {
+          //reset jumlah ubah ke 0
+          await User.reset_jumlah(user.username)
+          //set jumlah ubah password
+          await User.jumlah_ubah_password(user.username, waktu_sekarang, jumlah_ubah_password + 1)
+          message(session, 'notification', 'success', 'Password berhasil diubah')
+          return response.redirect('back')
+        } else {
+          await User.jumlah_ubah_password(user.username, waktu_sekarang, jumlah_ubah_password + 1)
+          message(session, 'notification', 'success', 'Password berhasil diubah')
+          return response.redirect('back')
+        }
       } else if (password_baru !== konfirmasi_password) {
         message(session, 'notification', 'danger', 'Kata sandi konfirmasi tidak sama')
         return response.redirect('back')
