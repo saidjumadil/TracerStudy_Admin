@@ -123,6 +123,23 @@ export default class D3User extends BaseModel {
     })
   }
 
+  //cek perubahan password perhari
+  public static async cek_perubahan_password(username) {
+    return await Database.connection(this.conn).from('users').where('username', username).first()
+  }
+
+  //update jumlah ubah password
+  public static async jumlah_ubah_password(
+    username: string,
+    waktu_ubah: Date,
+    jumlah_ubah_password: number
+  ) {
+    return await Database.connection(this.conn).from('users').where('username', username).update({
+      password_terakhir_reset: waktu_ubah,
+      password_jumlah_terakhir_reset: jumlah_ubah_password,
+    })
+  }
+
   public static async ubah_password(username: string, hashPassword: string) {
     return await Database.from('users').where('username', username).update({
       password: hashPassword,

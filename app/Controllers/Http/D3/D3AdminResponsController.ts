@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
+import Application from '@ioc:Adonis/Core/Application'
 import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
-// import express from 'express'
-// import nodeExcel from 'excel-export'
-
+import ExportToExcelController from '../ExportToExcelController'
 const className: string = 'D3AdminResponsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
 
@@ -17,17 +16,50 @@ function message(session, nama_notif, type, message) {
 }
 
 export default class D3AdminResponsController {
+  //TODO: tampilkan daftar sasaran untuk admin. khusus enuum hanya daftar periode pada tahun tersebut
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
   public async pengisi({ view, auth }) {
     await auth.authenticate()
 
+    //testing
+    // let tahun = '2018'
+    // let periode = '0'
+    // let kd_fjjp7 = '0800202'
+    // let periode_wisuda = tahun.concat(periode)
+    // let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
+    // console.log({ kd_fjjp7_non, kd_fjjp7_reg })
+
+    // //export to excel
+    // const get_jawaban_pendahuluan = await Services.get_jawaban_users(
+    //   periode_wisuda,
+    //   kd_fjjp7_non,
+    //   kd_fjjp7_reg,
+    //   'jawaban_pendahuluan'
+    // )
+
+    // // console.log(get_jawaban_pendahuluan)
+    // const workSheetColumnName: any = ['ID', 'Name', 'Age']
+    // const workSheetName = 'Jawaban Pendahuluan'
+    // const filePath = './public/uploads'
+    // ExportToExcelController.exportUsersToExcel(
+    //   get_jawaban_pendahuluan,
+    //   workSheetColumnName,
+    //   workSheetName,
+    //   filePath
+    // )
+    //end testing
+
+    //get daftar sasaran
+    const daftar_sasaran = await Services.get_list_sasaran()
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
     const RouteActionDataPengisi = `admin.${renderName}.get_data_pengisi`
+
     return view.render(renderName + '/data/pengisi', {
       GetFakultas,
       RouteActionProdi,
       RouteActionDataPengisi,
+      daftar_sasaran,
     })
   }
 
@@ -69,25 +101,23 @@ export default class D3AdminResponsController {
   public async update_data_pengisi({ request, session, response }) {
     try {
       let { nim, hp_valid_1, hp_valid_2, monitoring_1, monitoring_2, monitoring_3 } = request.all()
+      //convert monitoring to timestamp now
       let current_timestamp = Date.now()
-      let allData: Array<any> = []
-      // handle jika monitoring tidak ada dicentang satupun oleh user
-      monitoring_1 = monitoring_1 || []
-      monitoring_2 = monitoring_2 || []
-      monitoring_3 = monitoring_3 || []
-      for (let index = 0; index < nim.length; index++) {
-        allData.push({
-          nim: nim[index],
-          hp_valid_1: Number(hp_valid_1[index]),
-          hp_valid_2: Number(hp_valid_2[index]),
-          // pengecekan apakah monitoring ada dicentang
-          monitoring_1: monitoring_1.includes(nim[index]) ? current_timestamp : '',
-          monitoring_2: monitoring_2.includes(nim[index]) ? current_timestamp : '',
-          monitoring_3: monitoring_3.includes(nim[index]) ? current_timestamp : '',
-        })
-      }
+      //jika monitoring di centang maka di update dengan waktu sekarang
+      monitoring_1 = monitoring_1 ? current_timestamp : '' //jika false maka string kosong
+      monitoring_2 = monitoring_2 ? current_timestamp : '' //jika false maka string kosong
+      monitoring_3 = monitoring_3 ? current_timestamp : '' //jika false maka string kosong
+
       //update data monitoring
-      const update_data_pengisi = await Services.update_data_pengisi(allData)
+      const update_data_pengisi = await Services.update_data_pengisi(
+        nim,
+        hp_valid_1,
+        hp_valid_2,
+        monitoring_1,
+        monitoring_2,
+        monitoring_3
+      )
+
       if (update_data_pengisi) {
         message(session, 'notification', 'success', 'Berhasil memperbarui data')
         return response.redirect('back')
@@ -114,15 +144,30 @@ export default class D3AdminResponsController {
       let { tahun, periode, kd_fjjp7 } = request.all()
       let periode_wisuda = tahun.concat(periode)
       let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
-      //export to excel
+      console.log({ kd_fjjp7_non, kd_fjjp7_reg })
 
+      //export to excel
       const get_jawaban_pendahuluan = await Services.get_jawaban_users(
         periode_wisuda,
         kd_fjjp7_non,
         kd_fjjp7_reg,
         'jawaban_pendahuluan'
       )
-      // const get_jawaban_kuliah =
+
+      console.log(get_jawaban_pendahuluan)
+      const workSheetColumnName: any = ['ID', 'Name', 'Age']
+      const workSheetName = 'Jawaban Pendahuluan'
+      const filePath = Application.publicPath('uploads')
+      ExportToExcelController.exportExcel(
+        get_jawaban_pendahuluan,
+        workSheetColumnName,
+        workSheetName,
+        filePath
+      )
+      // var result = nodeExcel.execute(conf)
+      // response.setHeader('Content-Type', 'application/vnd.openxmlformats')
+      // response.setHeader('Content-Disposition', 'attachment; filename=' + 'Report.xlsx')
+      // response.end(result, 'binary')
 
       // 		//$result = Data::getPendahuluan($tahun,$fakultas,$jurusan);
       // 		// $pendahuluan = json_decode(Data::getPendahuluan($tahun,$kode_jurusan), true);
@@ -196,38 +241,6 @@ export default class D3AdminResponsController {
       return response.redirect('back')
     }
   }
-  //versi lama
-  // public async store_monitoring({ request, response, session }) {
-  //   try {
-  //     const { tahun, periode } = request.all()
-  //    // const tahun_monitoring = `${tahun}${periode}`
-  //     //function untuk ngecek data sudah pernah diimport atau belum
-  //     const get_import_status = await Services.get_import_status(tahun, periode)
-  //     if(get_import_status){
-  //       if(periode==="0"){
-  //         message(session, 'notification', 'warning', 'Tidak dizinkan import data monitoring, karena beberapa periode sudah pernah diimport! Silahkan pilih periode lainnya!')
-  //         return response.redirect('back')
-  //       }else{
-  //         message(session, 'notification', 'warning', 'Data monitoring sudah pernah diimport!')
-  //         return response.redirect('back')
-  //       }
-  //     }
-  //     const store_monitoring = await Services.insert_monitoring(tahun, periode)
-  //     if (store_monitoring) {
-  //       //update status user monitoring untuk sasaran
-  //       await Services.update_status_monitoring()
-  //       message(session, 'notification', 'success', 'Berhasil import data monitoring')
-  //       return response.redirect('back')
-  //     }
-  //     message(session, 'notification', 'danger', 'Gagal import data monitoring')
-  //     return response.redirect('back')
-  //   } catch (error) {
-  //     console.log(error)
-  //     await ErrorLog.error_log(className, 'store_monitoring', error.toString(), request.ip())
-  //     message(session, 'notification', 'danger', 'Gagal import data monitoring')
-  //     return response.redirect('back')
-  //   }
-  // }
 
   /* ajax mengambil daftar prodi berdasarkan fakultas */
   public async ajax_prodi({ request }) {
