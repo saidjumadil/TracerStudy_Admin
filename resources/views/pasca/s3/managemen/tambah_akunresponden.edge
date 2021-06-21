@@ -4,26 +4,40 @@
 <div class="card card-custom">
   <div class="card-header">
     <h3 class="card-title">
-      Tambah Responden
+      Tambah Akun Responden
     </h3>
 
   </div>
   <!--begin::Form-->
-  <form>
-    <div class="card-body">
-      <div class="form-group">
-        <label>NIM<span class="text-danger">*</span></label>
-        <input type="number" class="form-control" placeholder="Contoh: 1708107010026">
-
+  <div class="card-body">
+    <div id="showAlert">
+      @if(flashMessages.get('notification'))
+      <div
+        class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+        role="alert">
+        <span>{{ flashMessages.get('notification.message') }}</span>
       </div>
+      @endif
+    </div>
+    <form method="POST" id="form">
+      {{ csrfField() }}
+      @!component('components/input',{
+      label:'NPM',
+      name:'nim',
+      validasi:[true,true,false],
+      placeholder:'contoh: 1708107010026',
+      type:'number'
+      })
 
 
       <div class="text-right">
 
-        <div class="btn btn-primary"><i class="fas fa-arrow-right icon-sm"></i> Daftar </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search icon-sm"></i> Cari </button>
       </div>
-    </div>
-  </form>
+    </form>
+
+
+  </div>
   <!--end::Form-->
 </div>
 
