@@ -15,12 +15,10 @@ function message(session, nama_notif, type, message) {
 }
 
 export default class D3AdminUserManagemenController {
-  //TODO: Buat edge untuk view insert
-  public async view_tambah_responden({}) {
-    //return ke halaman tambah responden
+  public async view_tambah_responden({ view }) {
+    return view.render(renderName + '/managemen/tambah_akunresponden')
   }
 
-  //TODO: Buat edge untuk insert
   public async insert_responden({ request, response, session }) {
     try {
       const { nim } = request.all()

@@ -76,6 +76,12 @@ Route.group(() => {
       })
         .prefix('edit/dataresponden')
         .as('edit')
+      Route.group(() => {
+        Route.get('', 'D3/D3AdminUserManagemenController.view_tambah_responden').as('dataresponden')
+        Route.post('', 'D3/D3AdminUserManagemenController.insert_responden').as('tambah_responden')
+      })
+        .prefix('tambah/dataresponden')
+        .as('tambah')
     })
       .prefix('managemen')
       .as('managemen')
@@ -173,6 +179,16 @@ Route.group(() => {
         })
           .prefix('edit/dataresponden')
           .as('edit')
+        Route.group(() => {
+          Route.get('', 'Pasca/S2/PascaS2AdminUserManagemenController.view_tambah_responden').as(
+            'dataresponden'
+          )
+          Route.post('', 'Pasca/S2/PascaS2AdminUserManagemenController.insert_responden').as(
+            'tambah_responden'
+          )
+        })
+          .prefix('tambah/dataresponden')
+          .as('tambah')
       })
         .prefix('managemen')
         .as('managemen')
@@ -275,6 +291,17 @@ Route.group(() => {
         })
           .prefix('edit/dataresponden')
           .as('edit')
+
+        Route.group(() => {
+          Route.get('', 'Pasca/S3/PascaS3AdminUserManagemenController.view_tambah_responden').as(
+            'dataresponden'
+          )
+          Route.post('', 'Pasca/S3/PascaS3AdminUserManagemenController.insert_responden').as(
+            'tambah_responden'
+          )
+        })
+          .prefix('tambah/dataresponden')
+          .as('tambah')
       })
         .prefix('managemen')
         .as('managemen')
@@ -378,6 +405,17 @@ Route.group(() => {
       })
         .prefix('edit/dataresponden')
         .as('edit')
+
+      Route.group(() => {
+        Route.get('', 'Profesi/ProfesiAdminUserManagemenController.view_tambah_responden').as(
+          'dataresponden'
+        )
+        Route.post('', 'Profesi/ProfesiAdminUserManagemenController.insert_responden').as(
+          'tambah_responden'
+        )
+      })
+        .prefix('tambah/dataresponden')
+        .as('tambah')
     })
       .prefix('managemen')
       .as('managemen')

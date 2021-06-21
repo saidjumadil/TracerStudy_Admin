@@ -16,7 +16,6 @@ function message(session, nama_notif, type, message) {
 }
 
 export default class D3AdminResponsController {
-  //TODO: tampilkan daftar sasaran untuk admin. khusus enuum hanya daftar periode pada tahun tersebut
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
   public async pengisi({ view, auth }) {
     await auth.authenticate()
