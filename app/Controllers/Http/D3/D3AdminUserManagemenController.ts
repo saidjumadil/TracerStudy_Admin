@@ -1,18 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
+import Hash from '@ioc:Adonis/Core/Hash'
+import { message } from 'App/Global'
 
 const className: string = 'D3AdminUserManagemenController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
-
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
 
 export default class D3AdminUserManagemenController {
   public async view_tambah_responden({ view }) {
@@ -23,19 +16,29 @@ export default class D3AdminUserManagemenController {
     try {
       const { nim } = request.all()
       //cek nim di table populasi
-      const cek_nim = await Services.get_validasi_nim(nim)
+      let cek_nim = await Services.get_validasi_nim(nim)
       if (cek_nim) {
+        const hash_password = await Hash.make(nim)
+        const password_clear = nim
         //insert users
-        //const create_akun = await User.insert_users()
+        await Services.create_responden(
+          nim,
+          cek_nim.nama_mhs,
+          cek_nim.periode,
+          password_clear,
+          hash_password
+        )
+        message(
+          session,
+          'notification',
+          'success',
+          'Berhasil menambah akun responden, password adalah NPM'
+        )
+        return response.redirect('back')
+      } else {
+        message(session, 'notification', 'danger', 'NPM tidak valid')
+        return response.redirect('back')
       }
-
-      message(
-        session,
-        'notification',
-        'success',
-        'Berhasil menambah akun responden, password adalah NPM'
-      )
-      return response.redirect('back')
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'insert_responden', error.toString(), request.ip())

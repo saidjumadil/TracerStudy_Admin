@@ -3,19 +3,11 @@ import Services from 'App/Models/D3/D3Services' //sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
 import Application from '@ioc:Adonis/Core/Application'
+import { message } from 'App/Global'
 
 const className: string = 'D3PengumummanController' //sesuaikan
 const renderName: string = 'd3' //sesuiakan
 const picture_name: string = 'banner_d3.jpg' //sesuikan
-
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
 
 export default class D3PengumummanController {
   public async get_pengumuman({ view, auth }) {

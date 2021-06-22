@@ -290,6 +290,18 @@ export default class Services extends BaseModel {
     return await Database.connection(conn).from('users').where('nim', nim).first()
   }
 
+  /*insert responden*/
+  public static async create_responden(nim, nama_lengkap, tahun_lulus, password_clear, password) {
+    return await Database.connection(conn).table('users').insert({
+      nim,
+      nama_lengkap,
+      tahun_lulus,
+      password_clear,
+      password,
+      role: 5,
+    })
+  }
+
   /* edit email responden*/
   public static async edit_responden(nim: string, email: string) {
     return await Database.connection(conn).from('users').where('nim', nim).update({
