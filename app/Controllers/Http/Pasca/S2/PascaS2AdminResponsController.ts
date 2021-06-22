@@ -170,7 +170,7 @@ public async export_hasil_users({ request, response, session }) {
         //update status user monitoring untuk sasaran
         await Services.update_status_monitoring()
         message(session, 'notification', 'success', 'Berhasil import data monitoring')
-        return response.redirect('back')
+        return response.redirect().toRoute('admin.'+routeName+'.index')
       }
       message(session, 'notification', 'danger', 'Gagal import data monitoring')
       return response.redirect('back')
