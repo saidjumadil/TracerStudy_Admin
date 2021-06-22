@@ -113,6 +113,13 @@ var KTFormControls = (function () {
             },
           },
         },
+        username_lupapassword: {
+          validators: {
+            notEmpty: {
+              message: 'Masukkan username anda',
+            },
+          },
+        },
       },
 
       plugins: {

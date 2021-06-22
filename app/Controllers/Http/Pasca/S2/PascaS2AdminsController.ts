@@ -8,6 +8,7 @@ import { message } from 'App/Global'
 
 const className: string = 'PascaS2AdminsController' //sesuaikan
 const renderName: string = 'pasca/s2' //sesuaikan
+const routeName: string = 'pasca.s2' //sesuaikan
 let alumni = Env.get('WS_ALUMNI_PASCA_S2') //sesuaikan
 
 export default class PascaS2AdminsController {
@@ -16,9 +17,9 @@ export default class PascaS2AdminsController {
 
     // message(session)
     const sasaran = await Services.get_sasaran()
-    const RouteActionDataIndex: string = `admin.${renderName}.get_data_index`
-
-    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex })
+    const RouteActionDataIndex: string = `admin.${routeName}.get_data_index`
+    const tahunSasaran = await Services.get_sasaran()
+    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex,tahunSasaran })
   }
 
   public async ajax_data_index({ request, session, response }) {
@@ -55,12 +56,13 @@ export default class PascaS2AdminsController {
     const cekPopulasiRoute: string = '/admin/' + renderName + '/ajax-cek-populasi'
     const getPopulasiRoute: string = '/admin/' + renderName + '/ajax-get-populasi'
     const ubahSasaranRoute: string = '/admin/' + renderName + '/sasaran'
-
+    const tahunSasaran = await Services.get_sasaran()
     return view.render(renderName + '/sasaran', {
       get_sasaran,
       cekPopulasiRoute,
       getPopulasiRoute,
       ubahSasaranRoute,
+      tahunSasaran
     })
   }
 
@@ -206,8 +208,9 @@ export default class PascaS2AdminsController {
 
   public async jadwal({ view, auth }) {
     await auth.authenticate()
+    const tahunSasaran = await Services.get_sasaran()
     const get_jadwal = await Services.get_jadwal()
-    return view.render(renderName + '/jadwal', { get_jadwal })
+    return view.render(renderName + '/jadwal', { get_jadwal,tahunSasaran })
   }
 
   public async set_jadwal({ request, session, response, auth }) {

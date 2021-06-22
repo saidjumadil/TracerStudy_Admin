@@ -15,7 +15,8 @@ export default class PascaS2PengumummanController {
     await auth.authenticate()
     const get_pengumuman = await Services.get_pengumuman()
     const uploadAction: string = '/admin/' + renderName + '/pengumuman/upload-image'
-    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction })
+    const tahunSasaran = await Services.get_sasaran()
+    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction,tahunSasaran })
   }
 
   public async upload_image({ request }) {

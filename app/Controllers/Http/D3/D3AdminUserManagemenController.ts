@@ -9,7 +9,8 @@ const renderName: string = 'd3' //sesuikan
 
 export default class D3AdminUserManagemenController {
   public async view_tambah_responden({ view }) {
-    return view.render(renderName + '/managemen/tambah_akunresponden')
+    const tahunSasaran = await Services.get_sasaran()
+    return view.render(renderName + '/managemen/tambah_akunresponden',{tahunSasaran})
   }
 
   public async insert_responden({ request, response, session }) {
@@ -81,8 +82,8 @@ export default class D3AdminUserManagemenController {
 
   public async edit_dataresponden({ view, auth }) {
     await auth.authenticate()
-
+    const tahunSasaran = await Services.get_sasaran()
     const RouteActionSearch = `admin.${renderName}.get_responden`
-    return view.render(renderName + '/managemen/edit_akunresponden', { RouteActionSearch })
+    return view.render(renderName + '/managemen/edit_akunresponden', { RouteActionSearch,tahunSasaran })
   }
 }

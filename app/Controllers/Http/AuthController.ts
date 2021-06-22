@@ -103,7 +103,6 @@ export default class AuthController {
     }
   }
 
-     //TODO: hubungkan dengan view lupa password di halam login
   public async ActionLupaPassword({ request, response , session}) {
     try {
       const { username_lupapassword, email_lupapassword } = request.all()
@@ -127,7 +126,7 @@ export default class AuthController {
         ) {
           message(
             session,
-            'notification',
+            'notification_lupapassword',
             'danger',
             'Tidak dapat reset password, silahkan coba lagi pada ' +
               formatDate(waktu_diizinkan_ubah) +
@@ -166,25 +165,25 @@ export default class AuthController {
         })
 
         if (!kirimEmail) {
-          message(session, 'notification', 'danger', 'gagal mengirim email!')
+          message(session, 'notification_lupapassword', 'danger', 'gagal mengirim email!')
           return response.redirect('back')
         }
 
         message(
           session,
-          'notification',
+          'notification_lupapassword',
           'success',
           'password anda berhasil direset, silahkan cek email anda!'
         )
         return response.redirect('back')
       } else {
-        message(session, 'notification', 'warning', 'NPM atau email! belum terdaftar!')
+        message(session, 'notification_lupapassword', 'warning', 'NPM atau email! belum terdaftar!')
         return response.redirect('back')
       }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'forget_password', error.toString(), request.ip())
-      message(session, 'notification', 'danger', 'Gagal mengubah password')
+      message(session, 'notification_lupapassword', 'danger', 'gagal mengirim email!')
       return response.redirect('back')
     }
   }

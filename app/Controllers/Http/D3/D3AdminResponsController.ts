@@ -14,6 +14,7 @@ export default class D3AdminResponsController {
   public async pengisi({ view, auth }) {
     await auth.authenticate()
     //get daftar sasaran
+    const tahunSasaran = await Services.get_sasaran()
     const daftar_sasaran = await Services.get_list_sasaran()
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
@@ -25,6 +26,7 @@ export default class D3AdminResponsController {
       RouteActionDataPengisi,
       RouteActionUpdateDataPengisi,
       daftar_sasaran,
+      tahunSasaran
     })
   }
 
@@ -102,9 +104,11 @@ export default class D3AdminResponsController {
   /* menambilkan halaman untuk export users_monitoring */
   public async hasil({ view, auth }) {
     await auth.authenticate()
+    const tahunSasaran = await Services.get_sasaran()
+
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
-    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi })
+    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi,tahunSasaran })
   }
 
   /* menambilkan halaman untuk export users_monitoring */
@@ -148,9 +152,10 @@ export default class D3AdminResponsController {
 
   public async importuser({ view, auth }) {
     await auth.authenticate()
+    const tahunSasaran = await Services.get_sasaran()
     const sasaran = await Services.get_sasaran()
 
-    return view.render(renderName + '/data/import_user', { sasaran })
+    return view.render(renderName + '/data/import_user', { sasaran,tahunSasaran })
   }
 
   /* store data import monitoring */

@@ -9,6 +9,7 @@ const renderName: string = 'pasca/s3' //sesuaikan
 const className: string = 'PascaS3AdminResponsController' //sesuaikan
 const table_name = ['jawaban_pendahuluan', 'jawaban_pendahuluan', 'jawaban_pendahuluan'] //sesuaikan
 const workSheetName = ['Jawaban Pendahuluan 1', 'jawaban_pendahuluan 2 ', ' jawaban_pendahuluan 3'] //sesuaikan
+const routeName: string = 'pasca.s3' //sesuaikan
 
 export default class PascaS3AdminResponsController {
  /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
@@ -17,10 +18,12 @@ export default class PascaS3AdminResponsController {
   //get daftar sasaran
   const daftar_sasaran = await Services.get_list_sasaran()
   const GetFakultas = await Services.get_fakultas()
-  const RouteActionProdi = `admin.${renderName}.get_prodi`
-  const RouteActionDataPengisi = `admin.${renderName}.get_data_pengisi`
-  const RouteActionUpdateDataPengisi = `admin.${renderName}.data.update_data_pengisi`
+  const RouteActionProdi = `admin.${routeName}.get_prodi`
+  const RouteActionDataPengisi = `admin.${routeName}.get_data_pengisi`
+  const RouteActionUpdateDataPengisi = `admin.${routeName}.data.update_data_pengisi`
+  const tahunSasaran = await Services.get_sasaran()
   return view.render(renderName + '/data/pengisi', {
+    tahunSasaran,
     GetFakultas,
     RouteActionProdi,
     RouteActionDataPengisi,
@@ -103,9 +106,10 @@ public async update_data_pengisi({ request, session }) {
 /* menambilkan halaman untuk export users_monitoring */
 public async hasil({ view, auth }) {
   await auth.authenticate()
+  const tahunSasaran = await Services.get_sasaran()
   const GetFakultas = await Services.get_fakultas()
-  const RouteActionProdi = `admin.${renderName}.get_prodi`
-  return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi })
+  const RouteActionProdi = `admin.${routeName}.get_prodi`
+  return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi,tahunSasaran })
 }
 
 /* menambilkan halaman untuk export users_monitoring */
@@ -150,8 +154,8 @@ public async export_hasil_users({ request, response, session }) {
 public async importuser({ view, auth }) {
   await auth.authenticate()
   const sasaran = await Services.get_sasaran()
-
-  return view.render(renderName + '/data/import_user', { sasaran })
+    const tahunSasaran = await Services.get_sasaran()
+  return view.render(renderName + '/data/import_user', { sasaran,tahunSasaran })
 }
 
 /* store data import monitoring */

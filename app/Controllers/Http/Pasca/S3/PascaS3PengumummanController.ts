@@ -12,9 +12,10 @@ const picture_name : string = 'banner_s3.jpg' //sesuikan
 export default class PascaS3PengumummanController {
   public async get_pengumuman({ view, auth }) {
     await auth.authenticate()
+    const tahunSasaran = await Services.get_sasaran()
     const get_pengumuman = await Services.get_pengumuman()
     const uploadAction: string = '/admin/' + renderName + '/pengumuman/upload-image'
-    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction })
+    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction,tahunSasaran })
   }
 
   public async upload_image({ request }) {
