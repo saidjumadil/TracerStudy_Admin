@@ -6,8 +6,8 @@ import ErrorLog from 'App/Models/ErrorLog'
 
 const className: string = 'D3AdminResponsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
-const table_name = ['jawaban_pendahuluan', 'jawaban_pendahuluan', 'jawaban_pendahuluan'] //sesuaikan
-const workSheetName = ['Jawaban Pendahuluan 1', 'jawaban_pendahuluan 2 ', ' jawaban_pendahuluan 3'] //sesuaikan
+const table_name = ['jawaban_pendahuluan', 'jawaban_kuliah', 'jawaban_bekerja','jawaban_study','jawaban_wirausaha'] //sesuaikan
+const workSheetName = ['Pertanyaan Pendahuluan', 'Pengalaman Perkuliahan', 'Bekerja','Lanjut Studi','Wirausaha'] //sesuaikan
 
 export default class D3AdminResponsController {
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */

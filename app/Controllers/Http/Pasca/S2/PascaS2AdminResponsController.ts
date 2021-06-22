@@ -8,8 +8,8 @@ import Application from '@ioc:Adonis/Core/Application'
 const renderName: string = 'pasca/s2' //sesuaikan
 const routeName: string = 'pasca.s2' //sesuaikan
 const className: string = 'PascaS2AdminResponsController' //sesuaikan
-const table_name = ['jawaban_pendahuluan', 'jawaban_pendahuluan', 'jawaban_pendahuluan'] //sesuaikan
-const workSheetName = ['Jawaban Pendahuluan 1', 'jawaban_pendahuluan 2 ', ' jawaban_pendahuluan 3'] //sesuaikan
+const table_name = ['jawaban_pendahuluan', 'jawaban_kuliah', 'jawaban_bekerja','jawaban_study','jawaban_wirausaha'] //sesuaikan
+const workSheetName = ['Pertanyaan Pendahuluan', 'Pengalaman Perkuliahan', 'Bekerja','Lanjut Studi','Wirausaha'] //sesuaikan
 
 export default class PascaS2AdminResponsController {
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */

@@ -7,8 +7,8 @@ import Application from '@ioc:Adonis/Core/Application'
 
 const renderName: string = 'pasca/s3' //sesuaikan
 const className: string = 'PascaS3AdminResponsController' //sesuaikan
-const table_name = ['jawaban_pendahuluan', 'jawaban_pendahuluan', 'jawaban_pendahuluan'] //sesuaikan
-const workSheetName = ['Jawaban Pendahuluan 1', 'jawaban_pendahuluan 2 ', ' jawaban_pendahuluan 3'] //sesuaikan
+const table_name = ['jawaban_pendahuluan', 'jawaban_kuliah', 'jawaban_bekerja','jawaban_study','jawaban_wirausaha'] //sesuaikan
+const workSheetName = ['Pertanyaan Pendahuluan', 'Pengalaman Perkuliahan', 'Bekerja','Lanjut Studi','Wirausaha'] //sesuaikan
 const routeName: string = 'pasca.s3' //sesuaikan
 
 export default class PascaS3AdminResponsController {
