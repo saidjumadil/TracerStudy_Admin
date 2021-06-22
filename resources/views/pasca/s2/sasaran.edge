@@ -239,16 +239,19 @@
       .then(data => {
 
         // console.log(data)
-        if (data.total_inserted) {
-          tambahPopulasi.classList.remove(...loading)
+        tambahPopulasi.classList.remove(...loading)
+        if (data.isSuccess) {
+          alertSasaran.removeChild(alertSasaran.childNodes[0]);
           alertSasaran.insertAdjacentHTML("afterbegin", alert('success',
-            `Populasi tahun ${tahun} telah ditambahkan sebanyak ${data.total_inserted} data`))
+          `Populasi tahun ${tahun} telah ditambahkan sebanyak ${data.total_inserted} data`))
           ubahSasaran({
             tahun,
             periode
           })
-        } else
-          alertSasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Web Service tidak dapat diakses'))
+        } else{
+          alertSasaran.removeChild(alertSasaran.childNodes[0]);
+          alertSasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Web Service tidak dapat diakses. Mohon coba lagi nanti'))
+        }
 
         $('#modal_tambah_populasi').modal('hide')
 

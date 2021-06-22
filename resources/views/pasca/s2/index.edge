@@ -48,6 +48,8 @@
       @if(sasaran)
       <li class="{{ (!sasaran.waktu_berakhir) ? '': (sasaran.waktu_berakhir <= Date.now()) ? 'active':'pending' }}">
         Selesai
+        <br>
+        {{{ getTimeFormatStep(sasaran.waktu_berakhir) || '' }}}
       </li>
       @else
       <li class="">
