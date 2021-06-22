@@ -116,18 +116,18 @@ export default class PascaS3AdminsController {
         //insert data baru
         const status = await Services.insert_populasi(populasi)
         // cek kalo statusnya tidak 0
-        if (status) {
+       if (status) {
           //tambahkan total_inserted dengan jumlah data yang didapat
           total_inserted += populasi.length
-        }
+        } else return { isSuccess: false }
         //return jumlah data yang berhasil ditambahkan
-        return { total_inserted }
+        return { isSuccess: true, total_inserted }
       }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'insert_populasi', error.toString(), request.ip())
       message(session, 'notification_sasaran', 'danger', 'Ada masalah dengan webservice!')
-      return response.redirect('back')
+      return { isSuccess: false }
     }
   }
 
