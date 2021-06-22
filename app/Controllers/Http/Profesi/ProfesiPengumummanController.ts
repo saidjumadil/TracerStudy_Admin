@@ -3,20 +3,11 @@ import Services from 'App/Models/Profesi/ProfesiServices' // sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
 import Application from '@ioc:Adonis/Core/Application'
+import { message } from 'App/Global'
 
 const className: string = 'ProfesiPengumummanController' //sesuaikan
 const renderName: string = 'profesi' //sesuaikan
 const picture_name : string = 'banner_profesi.jpg' //sesuikan
-
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
-
 
 export default class ProfesiPengumummanController {
   public async get_pengumuman({ view, auth }) {

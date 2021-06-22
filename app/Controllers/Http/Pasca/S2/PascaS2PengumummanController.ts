@@ -3,19 +3,12 @@ import Services from 'App/Models/Pasca/S2/PascaS2Services' //sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
+import { message } from 'App/Global'
 
 const className: string = 'PascaS2PengumummanController' //sesuaikan
 const renderName: string = 'pasca/s2' //sesuaikan
 const picture_name : string = 'banner_s2.jpg' //sesuikan
 
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
 
 export default class PascaS2PengumummanController {
   public async get_pengumuman({ view, auth }) {

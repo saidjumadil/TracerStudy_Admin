@@ -4,15 +4,7 @@ import Services from 'App/Models/Profesi/ProfesiServices' //sesuaikan
 import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
 import axios from 'axios'
-
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
+import { message } from 'App/Global'
 
 const className: string = 'ProfesiAdminsController' //sesuaikan
 const renderName: string = 'profesi' //sesuaikan
@@ -21,8 +13,40 @@ let alumni = Env.get('WS_ALUMNI_PROFESI') //sesuaikan
 export default class ProfesiAdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
+
+    // message(session)
     const sasaran = await Services.get_sasaran()
-    return view.render(renderName + '/index', { sasaran })
+    const RouteActionDataIndex: string = `admin.${renderName}.get_data_index`
+
+    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex })
+  }
+
+  public async ajax_data_index({ request, session, response }) {
+    try {
+      const { tahun, periode } = request.all()
+      let get_list_kd_fjjp7 = await Services.get_list_kdfjjp7()
+      console.log(get_list_kd_fjjp7)
+      let arr_kd_fjjp7: Array<any> = []
+      //parsing ke arry
+      for (let i = 0; i < get_list_kd_fjjp7.length; i++) {
+        arr_kd_fjjp7.push(get_list_kd_fjjp7[i].kd_fjjp7)
+      }
+
+      const get_data = await Services.get_data_index(tahun, periode, arr_kd_fjjp7)
+      console.log('data: ' + JSON.stringify(get_data[0]))
+
+      return { get_data }
+    } catch (error) {
+      console.log(error)
+      await ErrorLog.error_log(className, 'cek_populasi', error.toString(), request.ip())
+      message(
+        session,
+        'notification_sasaran',
+        'danger',
+        'Gagal mengambil data populasi sasaran Tracer Study'
+      )
+      return response.redirect('back')
+    }
   }
 
   public async sasaran({ view, auth }) {
@@ -113,7 +137,7 @@ export default class ProfesiAdminsController {
       var tahun_periode = tahun.toString().concat(periode.toString())
       let current_sasaran = await Services.get_sasaran()
       //convert sasaran ke number
-      if(current_sasaran){
+      if (current_sasaran) {
         let num_current: number = Number(current_sasaran.tahun)
         let num_new_sasaran: number = Number(tahun_periode)
         //cek sasaran sesuai aturan atau tidak
@@ -146,19 +170,24 @@ export default class ProfesiAdminsController {
           )
           return { isSuccess: false }
         }
-      }else{
-          //update sasaran
-          let update = await Services.set_sasaran(tahun_periode, 0)
-          if (update) {
-            message(
-              session,
-              'notification_sasaran',
-              'success',
-              'Berhasil mengubah sasaran Tracer Study'
-            )
-            return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
-          }
-         else {
+      } else {
+        let status_import = 0
+        //cek monitoring sudah diimport apa belum
+        const get_status_monitoring = await Services.get_status_monitoring(tahun)
+        if (get_status_monitoring) {
+          status_import = 1
+        }
+        //update sasaran
+        let update = await Services.set_sasaran(tahun_periode, status_import)
+        if (update) {
+          message(
+            session,
+            'notification_sasaran',
+            'success',
+            'Berhasil mengubah sasaran Tracer Study'
+          )
+          return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
+        } else {
           message(
             session,
             'notification_sasaran',
@@ -166,7 +195,7 @@ export default class ProfesiAdminsController {
             'Gagal mengubah karena sasaran sudah pernah dibuat!'
           )
         }
-      } 
+      }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'set_sasaran', error.toString(), request.ip())
@@ -198,5 +227,5 @@ export default class ProfesiAdminsController {
       message(session, 'notification_jadwal', 'danger', 'Gagal mengubah jadwal Tracer Study')
       return response.redirect('back')
     }
-  } 
+  }
 }

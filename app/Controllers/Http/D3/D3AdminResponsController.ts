@@ -1,54 +1,18 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
 import Application from '@ioc:Adonis/Core/Application'
-import { formatFileExcel } from 'App/Global'
+import { formatFileExcel, message, exportExcel } from 'App/Global'
 import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
-import ExportToExcelController from '../ExportToExcelController'
+
 const className: string = 'D3AdminResponsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
-
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
+const table_name = ['jawaban_pendahuluan', 'jawaban_pendahuluan', 'jawaban_pendahuluan'] //sesuaikan
+const workSheetName = ['Jawaban Pendahuluan 1', 'jawaban_pendahuluan 2 ', ' jawaban_pendahuluan 3'] //sesuaikan
 
 export default class D3AdminResponsController {
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
   public async pengisi({ view, auth }) {
     await auth.authenticate()
-
-    //testing
-    // let tahun = '2018'
-    // let periode = '0'
-    // let kd_fjjp7 = '0800202'
-    // let periode_wisuda = tahun.concat(periode)
-    // let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
-    // console.log({ kd_fjjp7_non, kd_fjjp7_reg })
-
-    // //export to excel
-    // const get_jawaban_pendahuluan = await Services.get_jawaban_users(
-    //   periode_wisuda,
-    //   kd_fjjp7_non,
-    //   kd_fjjp7_reg,
-    //   'jawaban_pendahuluan'
-    // )
-
-    // // console.log(get_jawaban_pendahuluan)
-    // const workSheetColumnName: any = ['ID', 'Name', 'Age']
-    // const workSheetName = 'Jawaban Pendahuluan'
-    // const filePath = './public/uploads'
-    // ExportToExcelController.exportUsersToExcel(
-    //   get_jawaban_pendahuluan,
-    //   workSheetColumnName,
-    //   workSheetName,
-    //   filePath
-    // )
-    //end testing
-
     //get daftar sasaran
     const daftar_sasaran = await Services.get_list_sasaran()
     const GetFakultas = await Services.get_fakultas()
@@ -60,7 +24,6 @@ export default class D3AdminResponsController {
       RouteActionProdi,
       RouteActionDataPengisi,
       RouteActionUpdateDataPengisi,
-
       daftar_sasaran,
     })
   }
@@ -80,7 +43,6 @@ export default class D3AdminResponsController {
           kd_fjjp7_non,
           kd_fjjp7_reg
         )
-        // console.log(get_data_pengisi)
         return { get_data_pengisi }
       } else {
         //jika enum maka ambil data periode yg skrg saja
@@ -100,7 +62,7 @@ export default class D3AdminResponsController {
   }
 
   /* memperbarui data pengisi kuesioner pada table users_monitoring */
-  public async update_data_pengisi({ request, session, response }) {
+  public async update_data_pengisi({ request, session }) {
     try {
       let { nim, hp_valid_1, hp_valid_2, monitoring_1, monitoring_2, monitoring_3 } = request.all()
       //convert monitoring to timestamp now
@@ -152,63 +114,28 @@ export default class D3AdminResponsController {
       let periode_wisuda = tahun.concat(periode)
       const [kd_fjjp7, prodi] = kd_fjjp7_prodi.split(':')
       let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
-      console.log({ kd_fjjp7_non, kd_fjjp7_reg })
+      let datas: any[] = []
 
-      //export to excel
-      const get_jawaban_pendahuluan = await Services.get_jawaban_users(
-        periode_wisuda,
-        kd_fjjp7_non,
-        kd_fjjp7_reg,
-        'jawaban_pendahuluan'
-      )
+      for (let index = 0; index < table_name.length; index++) {
+        const get_jawabans = await Services.get_jawaban_users(
+          periode_wisuda,
+          kd_fjjp7_non,
+          kd_fjjp7_reg,
+          table_name[index]
+        )
+        datas.push(get_jawabans)
+      }
 
-      // console.log(get_jawaban_pendahuluan)
-      // const workSheetColumnName: any = ['ID', 'Name', 'Age']
-      const workSheetColumnName: any = [...Object.keys(get_jawaban_pendahuluan[0])]
-      // console.log(workSheetColumnName)
-      const workSheetName = 'Jawaban Pendahuluan'
+      if (!datas[0]) {
+        message(session, 'notification', 'warning', 'data export tidak tersedia')
+        return response.redirect('back')
+      }
+
       const filePath =
         Application.publicPath(`uploads`) + formatFileExcel(tahun, periode, renderName, prodi)
+      //export to excel
+      exportExcel(datas, workSheetName, filePath)
 
-      ExportToExcelController.exportExcel(
-        get_jawaban_pendahuluan,
-        workSheetColumnName,
-        workSheetName,
-        filePath
-      )
-      // var result = nodeExcel.execute(conf)
-      // response.setHeader('Content-Type', 'application/vnd.openxmlformats')
-      // response.setHeader('Content-Disposition', 'attachment; filename=' + 'Report.xlsx')
-      // response.end(result, 'binary')
-
-      // 		//$result = Data::getPendahuluan($tahun,$fakultas,$jurusan);
-      // 		// $pendahuluan = json_decode(Data::getPendahuluan($tahun,$kode_jurusan), true);
-      // 		// //$result = Data::getKuliah($tahun,$fakultas,$jurusan);
-      // 		// $kuliah = json_decode(Data::getKuliah($tahun,$kode_jurusan), true);
-      // 		// //$result = Data::getStudy($tahun,$fakultas,$jurusan);
-      // 		// $study = json_decode(Data::getStudy($tahun,$kode_jurusan), true);
-      // 		// //$result = Data::getBekerja($tahun,$fakultas,$jurusan);
-      // 		// $bekerja = json_decode(Data::getBekerja($tahun,$kode_jurusan), true);
-      // 		// //$result = Data::getWirausaha($tahun,$fakultas,$jurusan);
-      // 		// $wirausaha = json_decode(Data::getWirausaha($tahun,$kode_jurusan), true);
-
-      // 		// Excel::create('hasil_ts_'.$tahun.'_'.$nama_jurusan, function($excel) use($pendahuluan, $kuliah, $bekerja, $study, $wirausaha) {
-      // 		// 	$excel->sheet('Pertanyaan Pendahuluan', function($sheet) use($pendahuluan) {
-      // 		// 		$sheet->fromArray($pendahuluan);
-      // 		// 	});
-      // 		// 	$excel->sheet('Pengalaman Perkuliahan', function($sheet) use($kuliah) {
-      // 		// 		$sheet->fromArray($kuliah);
-      // 		// 	});
-      // 		// 	$excel->sheet('Bekerja', function($sheet) use($bekerja) {
-      // 		// 		$sheet->fromArray($bekerja);
-      // 		// 	});
-      // 		// 	$excel->sheet('Lanjut Studi', function($sheet) use($study) {
-      // 		// 		$sheet->fromArray($study);
-      // 		// 	});
-      // 		// 	$excel->sheet('Wirausaha', function($sheet) use($wirausaha) {
-      // 		// 		$sheet->fromArray($wirausaha);
-      // 		// 	});
-      // 		// })->export('xls');
       message(session, 'notification', 'success', 'Berhasil export data hasil kuesioner TS')
       return response.redirect('back')
     } catch (error) {

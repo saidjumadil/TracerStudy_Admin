@@ -4,19 +4,11 @@ import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
 import Env from '@ioc:Adonis/Core/Env'
 import axios from 'axios'
+import { message } from 'App/Global'
 
 const className: string = 'D3AdminsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
 let alumni = Env.get('WS_ALUMNI_D3') //sesuaikan
-
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
 
 export default class D3AdminsController {
   public async index({ view, auth }) {

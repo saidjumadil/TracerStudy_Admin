@@ -2,17 +2,14 @@
 import ErrorLog from 'App/Models/ErrorLog'
 import Hash from '@ioc:Adonis/Core/Hash'
 import User from 'App/Models/User'
+import randomstring from 'randomstring'
+import Mail from '@ioc:Adonis/Addons/Mail'
+import Env from '@ioc:Adonis/Core/Env'
+import { formatDate, message } from 'App/Global'
 
 const className: string = 'AuthController'
 
-function message(session, nama_notif, type, message) {
-  session.flash({
-    [nama_notif]: {
-      type: type,
-      message: message,
-    },
-  })
-}
+
 export default class AuthController {
   public index({ view }) {
     return view.render('login')
@@ -59,14 +56,14 @@ export default class AuthController {
       if (
         user.legacy_role > 2 &&
         waktu_sekarang < waktu_diizinkan_ubah &&
-        cek_perubahan_password.password_jumlah_terakhir_reset < 2
+        cek_perubahan_password.password_jumlah_terakhir_reset >= 2
       ) {
         message(
           session,
           'notification',
           'danger',
           'Tidak dapat mengubah password, silahkan coba lagi pada ' +
-            waktu_diizinkan_ubah +
+            formatDate(waktu_diizinkan_ubah) +
             '. Password hanya dapat diganti 2 kali dalam 1x24 jam'
         )
         return response.redirect('back')
@@ -81,6 +78,7 @@ export default class AuthController {
         if (waktu_sekarang > waktu_diizinkan_ubah && jumlah_ubah_password >= 2) {
           //reset jumlah ubah ke 0
           await User.reset_jumlah(user.username)
+          jumlah_ubah_password = 0
           //set jumlah ubah password
           await User.jumlah_ubah_password(user.username, waktu_sekarang, jumlah_ubah_password + 1)
           message(session, 'notification', 'success', 'Password berhasil diubah')
@@ -105,10 +103,102 @@ export default class AuthController {
     }
   }
 
-  // TODO: buat backend lupa password
-  public async ActionLupaPassword({ request, response }) {
-    const { email_lupapassword } = request.all()
-    return response.redirect('back')
+     //TODO: hubungkan dengan view lupa password di halam login
+  public async ActionLupaPassword({ request, response , session}) {
+    try {
+      const { username_lupapassword, email_lupapassword } = request.all()
+      //cek username dan email valid atau tidak
+      const get_akun = await User.get_available_users(username_lupapassword, email_lupapassword)
+      if (get_akun[0]) {
+         //cek perubahan password
+        let cek_perubahan_password = await User.cek_perubahan_password(username_lupapassword)
+        let jumlah_ubah_password = cek_perubahan_password.password_jumlah_terakhir_reset
+        //waktu yg dizinkan untuk mengubah password
+        var waktu_diizinkan_ubah = new Date(cek_perubahan_password.password_terakhir_reset)
+        waktu_diizinkan_ubah.setHours(waktu_diizinkan_ubah.getHours() + 24) //set 24 jam kemudian
+        //get waktu skrg
+        const get_time_now = Date.now()
+        var waktu_sekarang = new Date(get_time_now)
+        //if not admin maka cuma boleh ubah password maksimal 2 kali 1x24jam
+        if (
+          get_akun[0].legacy_role > 2 &&
+          waktu_sekarang < waktu_diizinkan_ubah &&
+          cek_perubahan_password.password_jumlah_terakhir_reset >= 2
+        ) {
+          message(
+            session,
+            'notification',
+            'danger',
+            'Tidak dapat reset password, silahkan coba lagi pada ' +
+              formatDate(waktu_diizinkan_ubah) +
+              '. Password hanya dapat diganti 2 kali dalam 1x24 jam'
+          )
+          return response.redirect('back')
+        }
+
+        const passwordClear = this.generate_password()
+        const hashPassword = await Hash.make(passwordClear)
+        //reset password
+        await User.ubah_password(username_lupapassword, hashPassword)
+        // kirim email
+        const emailData = {
+          nama: get_akun[0].nama,
+          username: username_lupapassword,
+          password: passwordClear,
+        }
+
+        //klo uda 2 kali dan hari sudah berganti maka izinkan ubah password dan set jumlah ubah jadi 0
+        if (waktu_sekarang > waktu_diizinkan_ubah && jumlah_ubah_password >= 2) {
+          //reset jumlah ubah ke 0
+          await User.reset_jumlah(username_lupapassword)
+          jumlah_ubah_password = 0
+        }
+
+        //set jumlah ubah password
+        await User.jumlah_ubah_password(username_lupapassword, waktu_sekarang, jumlah_ubah_password + 1)
+
+        const kirimEmail = await Mail.send((message) => {
+          message
+            .to(email_lupapassword)
+            .from(Env.get('MAIL_USERNAME'), Env.get('MAIL_PASSWORD'))
+            .subject('Konfirmasi Reset Password Operator Tracer Study Universitas Syiah Kuala')
+            .htmlView('email/lupa_password', emailData)
+        })
+
+        if (!kirimEmail) {
+          message(session, 'notification', 'danger', 'gagal mengirim email!')
+          return response.redirect('back')
+        }
+
+        message(
+          session,
+          'notification',
+          'success',
+          'password anda berhasil direset, silahkan cek email anda!'
+        )
+        return response.redirect('back')
+      } else {
+        message(session, 'notification', 'warning', 'NPM atau email! belum terdaftar!')
+        return response.redirect('back')
+      }
+    } catch (error) {
+      console.log(error)
+      await ErrorLog.error_log(className, 'forget_password', error.toString(), request.ip())
+      message(session, 'notification', 'danger', 'Gagal mengubah password')
+      return response.redirect('back')
+    }
+  }
+
+
+  public generate_password() {
+    try {
+      return randomstring.generate({
+        length: 8,
+        charset: '1234567890abcdefghijklmnopqrstuvwxyz',
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   public async logout({ auth, response }) {
