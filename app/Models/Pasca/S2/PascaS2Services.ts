@@ -239,7 +239,7 @@ export default class Services extends BaseModel {
       return await Database.connection(conn)
         .from('users')
         .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-        .select('jawaban_pendahuluan.*')
+        .select(nama_tabel + '.*')
         .where((query) => {
           query
             .where('users.tahun_lulus', periode_wisuda)

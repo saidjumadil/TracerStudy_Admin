@@ -92,17 +92,17 @@ export default class Services extends BaseModel {
         )
       }
     }
-  
+
     /* mengambil daftar kd_fjjp7 yg ada pada jenjang tersebut*/
     public static async get_list_kdfjjp7() {
       return await Database.connection(conn).from('users_kd_fjjp7').select('kd_fjjp7')
     }
-  
+
     /* mengambil daftar fakultas */
     public static async get_fakultas() {
       return await Database.connection(conn).query().from('users_fakultas')
     }
-  
+
     /* mengambil daftar prodi */
     public static async get_prodi(id_fakultas: string) {
       return await Database.connection(conn)
@@ -110,7 +110,7 @@ export default class Services extends BaseModel {
         .from('users_kd_fjjp7')
         .where('kd_fakultas2', id_fakultas)
     }
-  
+
     /*mengambil data  users_mapping_kd_fjjp7*/
     public static async get_users_mapping_kd_fjjp7(kd_fjjp7) {
       return await Database.connection(conn)
@@ -119,7 +119,7 @@ export default class Services extends BaseModel {
         .orWhere('kd_fjjp7_reg', kd_fjjp7)
         .first()
     }
-  
+
     /* get data pengisi dari tabel monitoring */
     // FIXME: data mengabaikan periode wisuda
     public static async get_data_pengisi(periode_wisuda: string, kd_fjjp7_non: string, kd_fjjp7_reg) {
@@ -152,7 +152,7 @@ export default class Services extends BaseModel {
           })
       }
     }
-  
+
     /* edit data pengisi dari table monitoring */
     public static async update_data_pengisi(
       nim: string,
@@ -179,7 +179,7 @@ export default class Services extends BaseModel {
     //   const payload = arrData
     //   return await UsersMonitoring.updateOrCreateMany(keyForSearch, payload)
     // }
-  
+
     /* mengambil informasi status import monitoring, jika data sudah pernah import ada maka tidak dizinkan lagi import */
     public static async get_status_monitoring(tahun: string) {
       return await Database.connection(conn)
@@ -188,7 +188,7 @@ export default class Services extends BaseModel {
         .whereRaw("periode_wisuda like '" + tahun + "%'")
         .first()
     }
-  
+
     /* get data jawaban kuesioner untuk export ke excel */
     // public static async get_jawaban_users(tahun: string, kd_fjjp7: string, nama_tabel: string) {
     //   if (tahun.substring(4, 5) === '0') {
@@ -239,7 +239,7 @@ export default class Services extends BaseModel {
         return await Database.connection(conn)
           .from('users')
           .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-          .select('jawaban_pendahuluan.*')
+          .select(nama_tabel + '.*')
           .where((query) => {
             query
               .where('users.tahun_lulus', periode_wisuda)
@@ -254,7 +254,7 @@ export default class Services extends BaseModel {
           })
       }
     }
-  
+
     /* untuk memasukan data dari alumni pada database exit survei ke table users_monitoring */
     public static async import_monitoring(tahun: string) {
       let datas = await Database.connection(conn_exsurvey)
@@ -272,7 +272,7 @@ export default class Services extends BaseModel {
       //hasil datas ke users_monitoring
       return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
     }
-  
+
     /* update status monitoring pada table sasaran */
     public static async update_status_monitoring() {
       return await Database.connection(conn)
@@ -283,12 +283,12 @@ export default class Services extends BaseModel {
         })
         .where('status_aktif', 1)
     }
-  
+
     /* get data responden*/
     public static async get_responden(nim: string) {
       return await Database.connection(conn).from('users').where('nim', nim).first()
     }
-  
+
     /*insert responden*/
     public static async create_responden(nim, nama_lengkap, tahun_lulus, password_clear, password) {
       return await Database.connection(conn).table('users').insert({
@@ -300,24 +300,24 @@ export default class Services extends BaseModel {
         role: 5,
       })
     }
-  
+
     /* edit email responden*/
     public static async edit_responden(nim: string, email: string) {
       return await Database.connection(conn).from('users').where('nim', nim).update({
         email: email,
       })
     }
-  
+
     /* mengambil data dari table sasaran yang sedang aktif */
     public static async get_list_sasaran() {
       return await Database.connection(conn).from('sasaran')
     }
-  
+
     /* mengambil data dari table sasaran yang sedang aktif */
     public static async get_sasaran() {
       return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
     }
-  
+
     /* mengambil informasi apakah sasaran sudah pernah di buat pada tracer study sebelumnya */
     public static async cek_sasaran(new_sasaran: string) {
       //return true = sasaran sudah pernah dibuat maka tidak diizinkan ubah sasaran
@@ -342,12 +342,12 @@ export default class Services extends BaseModel {
         return await Database.connection(conn).from('sasaran').where('tahun', new_sasaran).first()
       }
     }
-  
+
     /* ambil informasi nim valid, jika nim valid return data */
     public static async get_validasi_nim(nim: string) {
       return await Database.connection(conn).from('populasi').where('nim', nim).first()
     }
-  
+
     /* ambil informasi apakah populasi sudah pernah diinsert ke database */
     public static async get_populasi(tahun) {
       return await Database.connection(conn)
@@ -355,15 +355,15 @@ export default class Services extends BaseModel {
         .whereRaw("periode like '" + tahun + "%' ")
         .first()
     }
-  
+
     /* insert data populasi dari webservice ke database */
     public static async insert_populasi(data_populasi) {
       const trx = await Database.connection(conn).transaction()
       try {
         await trx.insertQuery().table('populasi').insert(data_populasi)
-  
+
         await trx.commit()
-  
+
         return true
       } catch (error) {
         console.log(error)
@@ -371,40 +371,40 @@ export default class Services extends BaseModel {
         return false
       }
     }
-  
+
     /* mengubah sasaran tracer study */
     public static async set_sasaran(tahun_periode: string, status_import: number) {
       //set semua status_aktif jadi 0
       await Database.connection(conn).from('sasaran').update({ status_aktif: 0 })
-  
+
       return await Database.connection(conn).table('sasaran').insert({
         tahun: tahun_periode,
         status_aktif: 1,
         status_import_monitoring: status_import,
       })
     }
-  
+
     /* mengambil jadwal tracer study yg sedang aktif */
     public static async get_jadwal() {
       return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
     }
-  
+
     /* mengubah jadwal tracer study yg sedang aktif */
     public static async set_jadwal(waktu_mulai: Date, waktu_berakhir: Date) {
       const SearchId = { status_aktif: 1 }
-  
+
       const Updates = {
         waktu_mulai: waktu_mulai,
         waktu_berakhir: waktu_berakhir,
       }
       return await Sasaran.updateOrCreate(SearchId, Updates)
     }
-  
+
     /* mengambil data pengumuman */
     public static async get_pengumuman() {
       return await Database.connection(conn).from('pengumuman').first()
     }
-  
+
     /* memperbarui data pengumuman */
     public static async update_pengumuman(
       path_banner: string,

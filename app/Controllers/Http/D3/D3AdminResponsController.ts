@@ -6,6 +6,7 @@ import ErrorLog from 'App/Models/ErrorLog'
 
 const className: string = 'D3AdminResponsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
+const excelName: string = 'd3' //sesuikan
 const table_name = ['jawaban_pendahuluan', 'jawaban_kuliah', 'jawaban_bekerja','jawaban_study','jawaban_wirausaha'] //sesuaikan
 const workSheetName = ['Pertanyaan Pendahuluan', 'Pengalaman Perkuliahan', 'Bekerja','Lanjut Studi','Wirausaha'] //sesuaikan
 
@@ -130,23 +131,18 @@ export default class D3AdminResponsController {
         datas.push(get_jawabans)
       }
 
-      if (!datas[0]) {
-        message(session, 'notification', 'warning', 'data export tidak tersedia')
-        return response.redirect('back')
+      if (!datas[0][0]) {
+        return { isSuccess: false, message:{type:'warning',message:'data export tidak tersedia'}}
       }
 
-      const filePath =
-        Application.publicPath(`uploads`) + formatFileExcel(tahun, periode, renderName, prodi)
+      const filePath = formatFileExcel(tahun, periode, excelName, prodi)
       //export to excel
-      exportExcel(datas, workSheetName, filePath)
-
-      message(session, 'notification', 'success', 'Berhasil export data hasil kuesioner TS')
-      return response.redirect('back')
+      const workBook = exportExcel(datas, workSheetName, filePath)
+      return {isSuccess:true,workBook,filePath,message:{type:'success',message:'Berhasil export data'}}
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'export_hasil', error.toString(), request.ip())
-      message(session, 'notification', 'danger', 'Gagal export data hasil kuesioner TS')
-      return response.redirect('back')
+      return { isSuccess: false, message:{type:'danger',message:'Gagal export data hasil kuesioner TS'}}
     }
   }
 

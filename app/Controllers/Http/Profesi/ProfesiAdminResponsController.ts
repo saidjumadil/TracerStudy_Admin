@@ -6,6 +6,7 @@ import { message, exportExcel, formatFileExcel } from "App/Global"
 import Application from '@ioc:Adonis/Core/Application'
 
 const renderName: string = 'profesi' //sesuaikan
+const excelName: string = 'profesi' //sesuaikan
 const className: string = 'PascaS3AdminResponsController' //sesuaikan
 const table_name = ['jawaban_pendahuluan', 'jawaban_kuliah', 'jawaban_bekerja','jawaban_study','jawaban_wirausaha'] //sesuaikan
 const workSheetName = ['Pertanyaan Pendahuluan', 'Pengalaman Perkuliahan', 'Bekerja','Lanjut Studi','Wirausaha'] //sesuaikan
@@ -113,42 +114,37 @@ public async hasil({ view, auth }) {
 
 /* menambilkan halaman untuk export users_monitoring */
 public async export_hasil_users({ request, response, session }) {
-  try {
-    let { tahun, periode, kd_fjjp7_prodi } = request.all()
-    let periode_wisuda = tahun.concat(periode)
-    const [kd_fjjp7, prodi] = kd_fjjp7_prodi.split(':')
-    let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
-    let datas: any[] = []
+    try {
+      let { tahun, periode, kd_fjjp7_prodi } = request.all()
+      let periode_wisuda = tahun.concat(periode)
+      const [kd_fjjp7, prodi] = kd_fjjp7_prodi.split(':')
+      let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7)
+      let datas: any[] = []
 
-    for (let index = 0; index < table_name.length; index++) {
-      const get_jawabans = await Services.get_jawaban_users(
-        periode_wisuda,
-        kd_fjjp7_non,
-        kd_fjjp7_reg,
-        table_name[index]
-      )
-      datas.push(get_jawabans)
+      for (let index = 0; index < table_name.length; index++) {
+        const get_jawabans = await Services.get_jawaban_users(
+          periode_wisuda,
+          kd_fjjp7_non,
+          kd_fjjp7_reg,
+          table_name[index]
+        )
+        datas.push(get_jawabans)
+      }
+
+      if (!datas[0][0]) {
+        return { isSuccess: false, message:{type:'warning',message:'data export tidak tersedia'}}
+      }
+
+      const filePath = formatFileExcel(tahun, periode, excelName, prodi)
+      //export to excel
+      const workBook = exportExcel(datas, workSheetName, filePath)
+      return {isSuccess:true,workBook,filePath,message:{type:'success',message:'Berhasil export data'}}
+    } catch (error) {
+      console.log(error)
+      await ErrorLog.error_log(className, 'export_hasil', error.toString(), request.ip())
+      return { isSuccess: false, message:{type:'danger',message:'Gagal export data hasil kuesioner TS'}}
     }
-
-    if (!datas[0]) {
-      message(session, 'notification', 'warning', 'data export tidak tersedia')
-      return response.redirect('back')
-    }
-
-    const filePath =
-      Application.publicPath(`uploads`) + formatFileExcel(tahun, periode, renderName, prodi)
-    //export to excel
-    exportExcel(datas, workSheetName, filePath)
-
-    message(session, 'notification', 'success', 'Berhasil export data hasil kuesioner TS')
-    return response.redirect('back')
-  } catch (error) {
-    console.log(error)
-    await ErrorLog.error_log(className, 'export_hasil', error.toString(), request.ip())
-    message(session, 'notification', 'danger', 'Gagal export data hasil kuesioner TS')
-    return response.redirect('back')
   }
-}
 
 public async importuser({ view, auth }) {
   await auth.authenticate()

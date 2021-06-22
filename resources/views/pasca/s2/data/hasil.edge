@@ -12,13 +12,15 @@
   <form method="post" id="form">
     {{ csrfField() }}
     <div class="card-body">
-      @if(flashMessages.get('notification'))
-      <div
-        class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
-        role="alert">
-        <span>{{ flashMessages.get('notification.message') }}</span>
+      <div id="showAlert">
+        @if(flashMessages.get('notification'))
+        <div
+          class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+          role="alert">
+          <span>{{ flashMessages.get('notification.message') }}</span>
+        </div>
+        @endif
       </div>
-      @endif
       @!component('components/dropdown-range',{
       'name':'tahun',
       'label':'Tahun Wisuda',
@@ -67,7 +69,7 @@
 
       <div class="text-right">
 
-        <button type="submit" class="btn btn-warning"><i class="fa fa-download icon-sm"></i> Download </button>
+        <div id='exportBtn' class="btn btn-warning"><i class="fa fa-download icon-sm"></i> Download </div>
       </div>
     </div>
   </form>
@@ -77,15 +79,18 @@
 @endsection
 
 @section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+<script src="{{appUrl()}}/assets/js/custom/filesaver.js"></script>
 <script>
   // route action
+  const routeExport = '{{appUrl() + request.url()}}'
   const routeProdi = '{{appUrl()+ route(RouteActionProdi) }}'
-  // console.log(routeProdi)
-  // console.log(routeDataPengisi)
+  let loading = ['spinner', 'spinner-left', 'spinner-light', 'disabled'];
 
   const fakultas = document.querySelector('#fakultas')
   const jurusan = document.querySelector('#jurusan')
-
+  const exportBtn = document.querySelector('#exportBtn')
+  const showAlert = document.querySelector('#showAlert')
   // handle fakultas
   fakultas.addEventListener('change', res => {
     const id = res.target.value
@@ -94,10 +99,68 @@
       .then(data => {
         jurusan.innerHTML = '<option>-- pilihan anda --</option>';
         data.GetProdi.forEach(row => {
-          jurusan.innerHTML += '<option value="' + row.kd_fjjp7 + ':'+row.nama_prodi+'">' + row.nama_prodi + '</option>';
+          jurusan.innerHTML += '<option value="' + row.kd_fjjp7 + ':' + row.nama_prodi + '">' + row
+            .nama_prodi + '</option>';
         })
       })
   })
+
+  exportBtn.addEventListener('click', res => {
+    const data = {
+      tahun: document.querySelector('#tahun').value,
+      periode: document.querySelector('#periode').value,
+      kd_fjjp7_prodi: document.querySelector('#jurusan').value
+    }
+
+    exportBtn.classList.add(...loading)
+    fetch(routeExport, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-csrf-token': document.querySelector(`[name='_csrf']`).value
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.isSuccess) {
+          // console.log(data)
+          saveAsExcel(data.workBook, data.filePath)
+          showAlert.innerHTML = Alert(data.message.type, data.message.message)
+        } else {
+          showAlert.innerHTML = Alert(data.message.type, data.message.message)
+        }
+        exportBtn.classList.remove(...loading)
+
+      })
+      .catch(error => {
+        console.log(error)
+        exportBtn.classList.remove(...loading)
+      })
+  })
+
+  const Alert = (tipe, pesan) => {
+    return `<div
+      class="m-alert m-alert--outline alert alert-${tipe} alert-dismissible animated fadeIn"
+      role="alert">
+      <span>${pesan}</span>
+      </div>`
+  }
+
+  const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+
+  const saveAsExcel = (workBook, filepath) => {
+    const excelBuffer = XLSX.write(workBook, {
+      bookType: 'xlsx',
+      type: 'array'
+    })
+    const data = new Blob([excelBuffer], {
+      type: EXCEL_TYPE
+    })
+
+    saveAs(data, filepath)
+  }
 
 </script>
 
