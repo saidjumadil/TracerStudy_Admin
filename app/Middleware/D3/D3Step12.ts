@@ -8,6 +8,8 @@ export default class D3Step12 {
     const tahunSasaran: TahunSasaran = await Services.get_sasaran() // get periode skrg
 
     // console.log(auth)
+
+    if (!tahunSasaran) return await next()
     if (!tahunSasaran.waktu_mulai) {
       message(
         session,
@@ -18,7 +20,6 @@ export default class D3Step12 {
       return response.redirect().toRoute('admin.' + routeName + 'index')
     }
 
-    if (!tahunSasaran) return await next()
     if (Number(tahunSasaran.waktu_berakhir) < Date.now()) return await next()
     if (tahunSasaran.tahun) {
       message(

@@ -8,6 +8,15 @@ export default class PascaS2Step12 {
 
     // console.log(auth)
     if (!tahunSasaran) return await next()
+    if (!tahunSasaran.waktu_mulai) {
+      message(
+        session,
+        'notification',
+        'danger',
+        'Tidak dapat mengubah Tahun Sasaran yang telah di set sebelumnya sampai Tracer selesai'
+      )
+      return response.redirect().toRoute('admin.' + routeName + 'index')
+    }
     if (tahunSasaran.tahun) {
       message(
         session,
