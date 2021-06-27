@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable prettier/prettier */
-import Application from '@ioc:Adonis/Core/Application'
 import { formatFileExcel, message, exportExcel } from 'App/Global'
 import Services from 'App/Models/D3/D3Services'
 import ErrorLog from 'App/Models/ErrorLog'
@@ -7,8 +6,20 @@ import ErrorLog from 'App/Models/ErrorLog'
 const className: string = 'D3AdminResponsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
 const excelName: string = 'd3' //sesuikan
-const table_name = ['jawaban_pendahuluan', 'jawaban_kuliah', 'jawaban_bekerja','jawaban_study','jawaban_wirausaha'] //sesuaikan
-const workSheetName = ['Pertanyaan Pendahuluan', 'Pengalaman Perkuliahan', 'Bekerja','Lanjut Studi','Wirausaha'] //sesuaikan
+const table_name = [
+  'jawaban_pendahuluan',
+  'jawaban_kuliah',
+  'jawaban_bekerja',
+  'jawaban_study',
+  'jawaban_wirausaha',
+] //sesuaikan
+const workSheetName = [
+  'Pertanyaan Pendahuluan',
+  'Pengalaman Perkuliahan',
+  'Bekerja',
+  'Lanjut Studi',
+  'Wirausaha',
+] //sesuaikan
 
 export default class D3AdminResponsController {
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
@@ -27,7 +38,7 @@ export default class D3AdminResponsController {
       RouteActionDataPengisi,
       RouteActionUpdateDataPengisi,
       daftar_sasaran,
-      tahunSasaran
+      tahunSasaran,
     })
   }
 
@@ -109,11 +120,11 @@ export default class D3AdminResponsController {
 
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
-    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi,tahunSasaran })
+    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi, tahunSasaran })
   }
 
   /* menambilkan halaman untuk export users_monitoring */
-  public async export_hasil_users({ request, response, session }) {
+  public async export_hasil_users({ request }) {
     try {
       let { tahun, periode, kd_fjjp7_prodi } = request.all()
       let periode_wisuda = tahun.concat(periode)
@@ -132,17 +143,28 @@ export default class D3AdminResponsController {
       }
 
       if (!datas[0][0]) {
-        return { isSuccess: false, message:{type:'warning',message:'data export tidak tersedia'}}
+        return {
+          isSuccess: false,
+          message: { type: 'warning', message: 'data export tidak tersedia' },
+        }
       }
 
       const filePath = formatFileExcel(tahun, periode, excelName, prodi)
       //export to excel
       const workBook = exportExcel(datas, workSheetName, filePath)
-      return {isSuccess:true,workBook,filePath,message:{type:'success',message:'Berhasil export data'}}
+      return {
+        isSuccess: true,
+        workBook,
+        filePath,
+        message: { type: 'success', message: 'Berhasil export data' },
+      }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'export_hasil', error.toString(), request.ip())
-      return { isSuccess: false, message:{type:'danger',message:'Gagal export data hasil kuesioner TS'}}
+      return {
+        isSuccess: false,
+        message: { type: 'danger', message: 'Gagal export data hasil kuesioner TS' },
+      }
     }
   }
 
@@ -151,7 +173,7 @@ export default class D3AdminResponsController {
     const tahunSasaran = await Services.get_sasaran()
     const sasaran = await Services.get_sasaran()
 
-    return view.render(renderName + '/data/import_user', { sasaran,tahunSasaran })
+    return view.render(renderName + '/data/import_user', { sasaran, tahunSasaran })
   }
 
   /* store data import monitoring */
@@ -170,7 +192,7 @@ export default class D3AdminResponsController {
         //update status user monitoring untuk sasaran
         await Services.update_status_monitoring()
         message(session, 'notification', 'success', 'Berhasil import data monitoring')
-      return response.redirect().toRoute('admin.'+renderName+'.index')
+        return response.redirect().toRoute('admin.' + renderName + '.index')
       }
       message(session, 'notification', 'danger', 'Gagal import data monitoring')
       return response.redirect('back')
