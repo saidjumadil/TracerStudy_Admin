@@ -17,6 +17,8 @@ export default class PascaS2Step12 {
       )
       return response.redirect().toRoute('admin.' + routeName + 'index')
     }
+    if (Number(tahunSasaran.waktu_berakhir) < Date.now()) return await next()
+
     if (tahunSasaran.tahun) {
       message(
         session,
