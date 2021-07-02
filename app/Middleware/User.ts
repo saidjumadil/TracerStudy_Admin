@@ -4,7 +4,7 @@ export default class User {
   public async handle({ request, response, auth }: HttpContextContract, next: () => Promise<void>) {
     try {
       await auth.authenticate()
-      await next()
+      return await next()
     } catch (error) {
       console.log(error)
       return response.redirect().toRoute('auth.login')

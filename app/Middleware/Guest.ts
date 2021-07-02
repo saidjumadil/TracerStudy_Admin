@@ -7,7 +7,7 @@ export default class Guest {
       return response.redirect().toRoute('admin.d3.index')
     } catch (error) {
       console.log(error)
-      await next()
+      return await next()
     }
   }
 }

@@ -9,8 +9,8 @@ const conn_exsurvey: string = 'cdc_exsurvey' // sesuaikan
 const jenjang: string = '2' //kode jenjang
 
 export default class Services extends BaseModel {
-   /* mengambil data untuk halaman beranda */
-   public static async get_data_index(tahun: string, periode: string, list_kd_fjjp7) {
+  /* mengambil data untuk halaman beranda */
+  public static async get_data_index(tahun: string, periode: string, list_kd_fjjp7) {
     let periode_wisuda = tahun.concat(periode)
     if (periode === '0') {
       return await Database.connection(conn).rawQuery(
@@ -291,6 +291,13 @@ export default class Services extends BaseModel {
 
   /*insert responden*/
   public static async create_responden(nim, nama_lengkap, tahun_lulus, password_clear, password) {
+    await Database.connection(conn)
+      .query()
+      .from('users_monitoring')
+      .update({
+        username: nim,
+      })
+      .where('nim', nim)
     return await Database.connection(conn).table('users').insert({
       nim,
       nama_lengkap,

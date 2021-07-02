@@ -291,6 +291,13 @@ export default class Services extends BaseModel {
 
   /*insert responden*/
   public static async create_responden(nim, nama_lengkap, tahun_lulus, password_clear, password) {
+    await Database.connection(conn)
+      .query()
+      .from('users_monitoring')
+      .update({
+        username: nim,
+      })
+      .where('nim', nim)
     return await Database.connection(conn).table('users').insert({
       nim,
       nama_lengkap,

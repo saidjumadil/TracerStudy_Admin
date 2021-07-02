@@ -9,6 +9,6 @@ export default class D3Auth {
       return response.redirect().toRoute('admin.' + routeName + 'index')
     }
 
-    await next()
+    return await next()
   }
 }

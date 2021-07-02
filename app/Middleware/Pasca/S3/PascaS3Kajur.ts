@@ -6,7 +6,7 @@ export default class PascaS3Kajur {
     await auth.authenticate()
     // console.log(auth)
     if ([1, 2, 3, 4].includes(auth.user?.permission_pasca_s3 as number)) {
-      await next()
+      return await next()
     }
 
     return response.redirect().toRoute('admin.' + routeName + 'index')
