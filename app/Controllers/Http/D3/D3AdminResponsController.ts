@@ -151,7 +151,7 @@ export default class D3AdminResponsController {
 
       const filePath = formatFileExcel(tahun, periode, excelName, prodi)
       //export to excel
-      const workBook = exportExcel(datas, workSheetName, filePath)
+      const workBook = exportExcel(datas, workSheetName)
       return {
         isSuccess: true,
         workBook,

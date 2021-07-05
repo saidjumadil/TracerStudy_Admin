@@ -1,16 +1,27 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable prettier/prettier */
-import Services from "App/Models/Pasca/S2/PascaS2Services"
-import ErrorLog from "App/Models/ErrorLog"
-import { message, exportExcel, formatFileExcel } from "App/Global"
-import Application from '@ioc:Adonis/Core/Application'
+import Services from 'App/Models/Pasca/S2/PascaS2Services'
+import ErrorLog from 'App/Models/ErrorLog'
+import { message, exportExcel, formatFileExcel } from 'App/Global'
 
 const renderName: string = 'pasca/s2' //sesuaikan
 const routeName: string = 'pasca.s2' //sesuaikan
 const excelName: string = 'pasca_s2' //sesuaikan
 const className: string = 'PascaS2AdminResponsController' //sesuaikan
-const table_name = ['jawaban_pendahuluan', 'jawaban_kuliah', 'jawaban_bekerja','jawaban_study','jawaban_wirausaha'] //sesuaikan
-const workSheetName = ['Pertanyaan Pendahuluan', 'Pengalaman Perkuliahan', 'Bekerja','Lanjut Studi','Wirausaha'] //sesuaikan
+const table_name = [
+  'jawaban_pendahuluan',
+  'jawaban_kuliah',
+  'jawaban_bekerja',
+  'jawaban_study',
+  'jawaban_wirausaha',
+] //sesuaikan
+const workSheetName = [
+  'Pertanyaan Pendahuluan',
+  'Pengalaman Perkuliahan',
+  'Bekerja',
+  'Lanjut Studi',
+  'Wirausaha',
+] //sesuaikan
 
 export default class PascaS2AdminResponsController {
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
@@ -29,7 +40,7 @@ export default class PascaS2AdminResponsController {
       RouteActionDataPengisi,
       RouteActionUpdateDataPengisi,
       daftar_sasaran,
-      tahunSasaran
+      tahunSasaran,
     })
   }
 
@@ -110,11 +121,11 @@ export default class PascaS2AdminResponsController {
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${routeName}.get_prodi`
     const tahunSasaran = await Services.get_sasaran()
-    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi,tahunSasaran })
+    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi, tahunSasaran })
   }
 
   /* menambilkan halaman untuk export users_monitoring */
-public async export_hasil_users({ request, response, session }) {
+  public async export_hasil_users({ request }) {
     try {
       let { tahun, periode, kd_fjjp7_prodi } = request.all()
       let periode_wisuda = tahun.concat(periode)
@@ -133,17 +144,28 @@ public async export_hasil_users({ request, response, session }) {
       }
 
       if (!datas[0][0]) {
-        return { isSuccess: false, message:{type:'warning',message:'data export tidak tersedia'}}
+        return {
+          isSuccess: false,
+          message: { type: 'warning', message: 'data export tidak tersedia' },
+        }
       }
 
       const filePath = formatFileExcel(tahun, periode, excelName, prodi)
       //export to excel
-      const workBook = exportExcel(datas, workSheetName, filePath)
-      return {isSuccess:true,workBook,filePath,message:{type:'success',message:'Berhasil export data'}}
+      const workBook = exportExcel(datas, workSheetName)
+      return {
+        isSuccess: true,
+        workBook,
+        filePath,
+        message: { type: 'success', message: 'Berhasil export data' },
+      }
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'export_hasil', error.toString(), request.ip())
-      return { isSuccess: false, message:{type:'danger',message:'Gagal export data hasil kuesioner TS'}}
+      return {
+        isSuccess: false,
+        message: { type: 'danger', message: 'Gagal export data hasil kuesioner TS' },
+      }
     }
   }
 
@@ -151,7 +173,7 @@ public async export_hasil_users({ request, response, session }) {
     await auth.authenticate()
     const sasaran = await Services.get_sasaran()
     const tahunSasaran = await Services.get_sasaran()
-    return view.render(renderName + '/data/import_user', { sasaran,tahunSasaran })
+    return view.render(renderName + '/data/import_user', { sasaran, tahunSasaran })
   }
 
   /* store data import monitoring */
@@ -170,7 +192,7 @@ public async export_hasil_users({ request, response, session }) {
         //update status user monitoring untuk sasaran
         await Services.update_status_monitoring()
         message(session, 'notification', 'success', 'Berhasil import data monitoring')
-        return response.redirect().toRoute('admin.'+routeName+'.index')
+        return response.redirect().toRoute('admin.' + routeName + '.index')
       }
       message(session, 'notification', 'danger', 'Gagal import data monitoring')
       return response.redirect('back')
