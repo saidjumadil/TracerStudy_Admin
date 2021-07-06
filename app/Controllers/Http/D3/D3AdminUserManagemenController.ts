@@ -10,7 +10,7 @@ const renderName: string = 'd3' //sesuikan
 export default class D3AdminUserManagemenController {
   public async view_tambah_responden({ view }) {
     const tahunSasaran = await Services.get_sasaran()
-    return view.render(renderName + '/managemen/tambah_akunresponden',{tahunSasaran})
+    return view.render(renderName + '/managemen/tambah_akunresponden', { tahunSasaran })
   }
 
   public async insert_responden({ request, response, session }) {
@@ -63,8 +63,13 @@ export default class D3AdminUserManagemenController {
   public async edit_responden({ request, response, session }) {
     try {
       const { nim, email } = request.all()
-      console.log(nim)
-      console.log(email)
+      //cek email sudah dipakai atau belum
+      const cek_email = await Services.get_availabe_email(email)
+      //jika email sudah terpakai maka tidak dizinkan daftar
+      if (cek_email) {
+        message(session, 'notification', 'danger', 'email sudah pernah digunakan!')
+        return response.redirect('back')
+      }
       const edit = await Services.edit_responden(nim, email)
       if (edit) {
         message(session, 'notification', 'success', 'Berhasil mengubah email')
@@ -84,6 +89,9 @@ export default class D3AdminUserManagemenController {
     await auth.authenticate()
     const tahunSasaran = await Services.get_sasaran()
     const RouteActionSearch = `admin.${renderName}.get_responden`
-    return view.render(renderName + '/managemen/edit_akunresponden', { RouteActionSearch,tahunSasaran })
+    return view.render(renderName + '/managemen/edit_akunresponden', {
+      RouteActionSearch,
+      tahunSasaran,
+    })
   }
 }

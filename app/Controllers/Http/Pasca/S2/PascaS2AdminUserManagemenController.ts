@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/naming-convention */
-import Services from "App/Models/Pasca/S2/PascaS2Services"
-import ErrorLog from "App/Models/ErrorLog"
+import Services from 'App/Models/Pasca/S2/PascaS2Services'
+import ErrorLog from 'App/Models/ErrorLog'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { message } from 'App/Global'
 
@@ -12,7 +12,7 @@ const routeName: string = 'pasca.s2' //sesuaikan
 export default class PascaS2AdminUserManagemenController {
   public async view_tambah_responden({ view }) {
     const tahunSasaran = await Services.get_sasaran()
-    return view.render(renderName + '/managemen/tambah_akunresponden',{tahunSasaran})
+    return view.render(renderName + '/managemen/tambah_akunresponden', { tahunSasaran })
   }
 
   public async insert_responden({ request, response, session }) {
@@ -65,8 +65,13 @@ export default class PascaS2AdminUserManagemenController {
   public async edit_responden({ request, response, session }) {
     try {
       const { nim, email } = request.all()
-      console.log(nim)
-      console.log(email)
+      //cek email sudah dipakai atau belum
+      const cek_email = await Services.get_availabe_email(email)
+      //jika email sudah terpakai maka tidak dizinkan daftar
+      if (cek_email) {
+        message(session, 'notification', 'danger', 'email sudah pernah digunakan!')
+        return response.redirect('back')
+      }
       const edit = await Services.edit_responden(nim, email)
       if (edit) {
         message(session, 'notification', 'success', 'Berhasil mengubah email')
@@ -86,6 +91,9 @@ export default class PascaS2AdminUserManagemenController {
     await auth.authenticate()
     const tahunSasaran = await Services.get_sasaran()
     const RouteActionSearch = `admin.${routeName}.get_responden`
-    return view.render(renderName + '/managemen/edit_akunresponden', { RouteActionSearch,tahunSasaran })
+    return view.render(renderName + '/managemen/edit_akunresponden', {
+      RouteActionSearch,
+      tahunSasaran,
+    })
   }
 }
