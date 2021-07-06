@@ -74,8 +74,8 @@ class D3AdminsController {
             response.safeHeader('Content-type', 'application/json');
             let total_inserted = 0;
             if (alumni) {
-                alumni = alumni.replace('yyyy', tahun);
-                const data = await axios_1.default.get(alumni);
+                let get_alumni = alumni.replace('yyyy', tahun);
+                const data = await axios_1.default.get(get_alumni);
                 const populasi = data.data[0];
                 populasi.map((obj) => {
                     if (obj.hasOwnProperty('npm')) {

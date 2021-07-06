@@ -39,7 +39,7 @@
       <ul class="menu-nav">
         {{-- for admin  --}}
         <li
-          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/admin/operator')?' menu-item-open menu-item-here':''}}">
+          class="menu-item menu-item-submenu menu-item-rel{{(request.url().search('/admin/operator') != -1)?' menu-item-open menu-item-here':''}}">
           <a href="{{route('admin.operator')}}" class="menu-link">
             <span class="menu-text">Operator</span>
           </a>

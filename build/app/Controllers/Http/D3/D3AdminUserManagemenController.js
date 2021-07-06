@@ -52,8 +52,11 @@ class D3AdminUserManagemenController {
     async edit_responden({ request, response, session }) {
         try {
             const { nim, email } = request.all();
-            console.log(nim);
-            console.log(email);
+            const cek_email = await D3Services_1.default.get_availabe_email(email);
+            if (cek_email) {
+                Global_1.message(session, 'notification', 'danger', 'email sudah pernah digunakan!');
+                return response.redirect('back');
+            }
             const edit = await D3Services_1.default.edit_responden(nim, email);
             if (edit) {
                 Global_1.message(session, 'notification', 'success', 'Berhasil mengubah email');
@@ -73,7 +76,10 @@ class D3AdminUserManagemenController {
         await auth.authenticate();
         const tahunSasaran = await D3Services_1.default.get_sasaran();
         const RouteActionSearch = `admin.${renderName}.get_responden`;
-        return view.render(renderName + '/managemen/edit_akunresponden', { RouteActionSearch, tahunSasaran });
+        return view.render(renderName + '/managemen/edit_akunresponden', {
+            RouteActionSearch,
+            tahunSasaran,
+        });
     }
 }
 exports.default = D3AdminUserManagemenController;
