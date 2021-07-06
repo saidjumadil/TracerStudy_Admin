@@ -66,6 +66,11 @@ export default class D3User extends BaseModel {
   }
 
   //cek email masih tersedia atau tidak
+  public static async get_availabe_username(username: string) {
+    return await Database.connection(this.conn).from('users').where('username', username)
+  }
+
+  //cek email masih tersedia atau tidak
   public static async get_availabe_email(email: string) {
     return await Database.connection(this.conn).from('users').where('email', email)
   }
