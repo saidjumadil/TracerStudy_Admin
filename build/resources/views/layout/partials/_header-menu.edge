@@ -1,0 +1,59 @@
+<!--begin::Header Menu Wrapper-->
+<div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+  <div class="container">
+
+    <!--begin::Header Menu-->
+    <div id="kt_header_menu"
+      class="header-menu header-menu-left header-menu-mobile header-menu-layout-default header-menu-root-arrow">
+
+      @!component('layout/components/nav-menu',{
+      routeUrl:'admin.d3.',
+      prefix:'admin/d3',
+      header:'D3',
+      permission:auth.user.permission_d3,
+      role_permission:'permission_d3',
+      })
+      @!component('layout/components/nav-menu',{
+      routeUrl:'admin.pasca.s2.',
+      prefix:'admin/pasca/s2',
+      header:'Pasca S2',
+      permission:auth.user.permission_pasca_s2,
+      role_permission:'permission_pasca_s2'
+      })
+      @!component('layout/components/nav-menu',{
+      routeUrl:'admin.pasca.s3.',
+      prefix:'admin/pasca/s3',
+      permission:auth.user.permission_pasca_s3,
+      role_permission:'permission_pasca_s3',
+      header:'Pasca S3'
+      })
+      @!component('layout/components/nav-menu',{
+      routeUrl:'admin.profesi.',
+      prefix:'admin/profesi',
+      permission:auth.user.permission_profesi,
+      role_permission:'permission_profesi',
+      header:'Profesi'
+      })
+
+      @if([1,2].includes(auth.user.legacy_role) )
+      <ul class="menu-nav">
+        {{-- for admin  --}}
+        <li
+          class="menu-item menu-item-submenu menu-item-rel{{(request.url() == '/admin/operator')?' menu-item-open menu-item-here':''}}">
+          <a href="{{route('admin.operator')}}" class="menu-link">
+            <span class="menu-text">Operator</span>
+          </a>
+        </li>
+
+      </ul>
+      {{--  </div>  --}}
+      {{--  </li>  --}}
+      </ul>
+      @endif
+    </div>
+
+    <!--end::Header Menu-->
+  </div>
+</div>
+
+<!--end::Header Menu Wrapper-->

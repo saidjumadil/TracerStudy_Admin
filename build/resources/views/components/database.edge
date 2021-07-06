@@ -1,0 +1,8 @@
+<div class="form-group {{ form_class}}">
+  <label>{{ label }} </label>
+  <p class="form-control-plaintext text-muted">{{ information }}</p>
+  @if(name != 'nim')
+    <input type="hidden" name="{{name}}" value="{{ information }}">
+  @endif
+
+</div>

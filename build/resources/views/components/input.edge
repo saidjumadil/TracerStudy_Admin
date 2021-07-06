@@ -1,0 +1,20 @@
+<div class="form-group {{ form_class}}" data-target-dependency="{{ target }}" data-answer-dependency="{{ answer }}">
+  <label for="{{name}}">
+    {{ label }}
+    @if(validasi[0])
+    <span class="text-danger">*</span>
+    @endif
+  </label>
+  <input type="{{ type }}" name="{{ name }}" id="{{ name }}" autocomplete="off" class="form-control {{ input_class  }}"
+    placeholder="{{placeholder}}" data-fv-not-empty='{{ (target) ? false : validasi[0] }}'
+    data-fv-not-empty___message='Pertanyaan ini wajib diisi' not-empty='{{validasi[0]}}'
+    data-fv-string-length="{{ (target) ? false : (validasi[1] != null) }}"
+    data-fv-string-length___max="{{ validasi[1] }}"
+    data-fv-string-length___message="Tidak boleh lebih dari {{validasi[1]}} digit"
+    string-length='{{validasi[1] != null}}' data-fv-numeric="{{ (target) ? false : validasi[2] }}"
+    data-fv-numeric___message="Hanya menerima inputan angka" numeric='{{validasi[2]}}'>
+
+  @if(notification)
+  <span class="form-text text-muted">{{{ notification }}}</span>
+  @endif
+</div>

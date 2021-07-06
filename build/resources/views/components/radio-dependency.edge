@@ -1,0 +1,36 @@
+@set('lainnya',false)
+<div class="form-group">
+  <label>
+    {{ label }}
+    @if(validasi[0])
+      <span class="text-danger">*</span>
+    @endif
+  </label>
+  <div class="radio-list" >
+    @each((value,index) in choice)
+    @if(value.id == 10000)
+      @set('lainnya',true)
+    @endif
+    <label class="radio">
+      @if(index == 0)
+        <input type="radio" data-dependency-id="{{ id }}" data-type='radio-dependency'
+          data-fv-not-empty='{{  validasi[0] }}'
+          data-fv-not-empty___message='Pertanyaan ini wajib diisi'
+          value="{{ value.id }}" name="{{ name }}" data-key='{{ name }}'>
+      @else
+        <input type="radio" data-dependency-id="{{ id }}" data-type='radio-dependency' value="{{ value.id }}" name="{{ name }}" data-key='{{ name }}'>
+      @endif
+      <span></span>
+      {{ value.nama }}
+    </label>
+    @endeach
+  </div>
+</div>
+
+@if(lainnya)
+  <input type="text" name="lainnya[]" data-id='{{ name }}' placeholder="lainnya..." class="form-control {{form_class}} d-none">
+  <input type="hidden" name="id_pertanyaan_lainnya[]" data-id='{{ name }}' value="{{ id }}" class="d-none">
+
+@endif
+
+@!component('components/pertanyaan_category',{ 'soals':soals ,'form_class':'ml-5 d-none','angka_dependency':angka_dependency,'ascii':ascii} )

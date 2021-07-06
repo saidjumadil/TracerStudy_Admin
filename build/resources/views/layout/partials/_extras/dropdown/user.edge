@@ -1,0 +1,44 @@
+<!--begin::Header-->
+<div class="d-flex align-items-center p-8 rounded-top">
+
+  <!--begin::Symbol-->
+  <div class="symbol symbol-md bg-light-primary mr-3 flex-shrink-0">
+    <img src="{{ appUrl() }}/assets/media/users/default.png" alt="" />
+  </div>
+
+  <!--end::Symbol-->
+
+  <!--begin::Text-->
+  <div class="text-dark m-0 flex-grow-1 mr-3 font-size-h5">{{ auth.user.nama }}</div>
+
+  <!--end::Text-->
+</div>
+
+<!--end::Header-->
+
+<!--begin::Nav-->
+<div class="navi navi-spacer-x-0 pt-5">
+  <!--begin::Item-->
+  <a href="{{ route('auth.ubah_password') }}" class="navi-item px-8">
+    <div class="navi-link">
+      <div class="navi-icon mr-2">
+        <i class="flaticon2-calendar-3 text-primary"></i>
+      </div>
+      <div class="navi-text">
+        <div class="font-weight-bold">Ubah Password</div>
+      </div>
+    </div>
+  </a>
+  <!--end::Item-->
+
+
+  <!--begin::Footer-->
+  <div class="navi-separator mt-3"></div>
+  <div class="navi-footer px-8 py-5">
+    <a href="{{route('auth.logout')}}" class="btn btn-light-primary font-weight-bold">Keluar</a>
+  </div>
+
+  <!--end::Footer-->
+</div>
+
+<!--end::Nav-->

@@ -1,0 +1,45 @@
+@layout('layout.layout')
+
+@section('content')
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">
+      <a href="{{route('admin.pasca.s3.index')}}" class="text-primary mr-3"><i class="far fa-arrow-alt-circle-left icon-xl text-primary"></i></a> Import Data Users Monitoring
+    </h3>
+
+  </div>
+  <!--begin::Form-->
+  <div class="card-body">
+    @if(flashMessages.get('notification'))
+    <div
+      class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+      role="alert">
+      <span>{{ flashMessages.get('notification.message') }}</span>
+    </div>
+    @endif
+    <div class="alert alert-custom alert-outline-{{(sasaran.status_import_monitoring === 1 )?'info':'danger'}}"
+      role="alert">
+      <div class="alert-text text-justify">
+        <h5>Data User Monitoring {{(sasaran.status_import_monitoring === 1 )?'Telah':'Belum'}} Diimport</h5>
+      </div>
+    </div>
+    <form method="POST" id="form">
+      {{ csrfField() }}
+
+      <div class="text-right mt-5">
+        <button type='submit' class="btn btn-primary"><i class="fa fa-edit icon-sm"></i> Import</button>
+      </div>
+
+    </form>
+    <!--end::Form-->
+  </div>
+
+</div>
+
+@endsection
+
+@section('script')
+<script src="{{ appUrl() }}/assets/js/pages/crud/file-upload/custom-dropzonejs.js"></script>
+
+
+@endsection

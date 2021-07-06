@@ -1,0 +1,14 @@
+<div class="form-group {{ form_class }}" data-target-dependency="{{ target }}" data-answer-dependency="{{ answer }}">
+  <label for="{{ name }}">
+    {{ label }}
+    @if(validasi[0])
+      <span class="text-danger">*</span>
+    @endif
+  </label>
+  <textarea class="form-control" id="{{ name }}" name="{{ name }}" rows="3"
+    data-fv-not-empty='{{ (target) ? false : validasi[0] }}'
+    data-fv-not-empty___message='Pertanyaan ini wajib diisi'
+    not-empty='{{validasi[0]}}'
+
+  ></textarea>
+</div>

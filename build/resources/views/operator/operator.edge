@@ -1,0 +1,265 @@
+@layout('layout.layout')
+@section('style')
+<link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+@endsection
+
+@section('content')
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">
+      Data Enumerator
+    </h3>
+
+  </div>
+  <!--begin::Form-->
+  <form method="POST" id="form" action="{{route('admin.store_operator')}}">
+    <div class="card-body">
+      <!-- Button trigger modal-->
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_tambah">
+        <i class="fas fa-user-plus icon-sm"></i> Tambah Enum
+      </button>
+
+      <!-- Modal-->
+      <div class="modal fade" id="modal_tambah" tabindex="-1" role="dialog" aria-labelledby="modal_tambahLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal_tambahLabel">Tambah Enumerator </h5>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i aria-hidden="true" class="ki ki-close"></i>
+              </button>
+            </div>
+            <form method="POST" id="form">
+              <div class="modal-body">
+                @if(flashMessages.get('notification_user'))
+                <div
+                  class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification_user.type') }} alert-dismissible animated fadeIn"
+                  role="alert">
+                  <span>{{ flashMessages.get('notification_user.message') }}</span>
+                </div>
+                @endif
+                {{ csrfField() }}
+
+                @!component('components/input',{
+                'placeholder': 'Contoh: Aqil Fiqran DziUl Haq',
+                'name':'nama',
+                'label':'Nama',
+                'validasi':[true,false,false],
+                'type':'text'
+                })
+                @!component('components/input',{
+                'placeholder': 'Contoh: aqilfiqran',
+                'name':'username',
+                'label':'Username',
+                'validasi':[true,false,false],
+                'type':'text'
+                })
+                @!component('components/input',{
+                'placeholder': 'Contoh: aqilfiqran@mhs.unsyiah.ac.id',
+                'name':'email',
+                'label':'Email',
+                'validasi':[true,false,false],
+                'type':'text'
+                })
+                @!component('components/dropdown',{
+                label:'Jabatan',
+                name:'legacy_role',
+                validasi:[true,false,false],
+                choice:getPilihanJabatan(auth.user.legacy_role) })
+
+                @!component('components/checkbox',{
+                label:'Jabatan Permisi',
+                name:'permission',
+                validasi:[true,false,false],
+                choice:[
+                { id:1, nama:'D3' },
+                { id:2, nama:'Pasca S2' },
+                { id:3, nama:'Pasca S3' },
+                { id:4, nama:'Profesi' },
+                ] })
+
+
+                <div class="text-info"><i class="fas fa-info-circle icon-sm text-info"></i> Password akun
+                  enumerator
+                  akan
+                  dikirim ke email mereka</div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary font-weight-bold"><i class="fa fa-user-plus icon-sm"></i>
+                  Tambahkan </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--end::Form-->
+
+  <!--begin::Card-->
+  <div class="card-body">
+    @if(flashMessages.get('notification'))
+    <div
+      class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+      role="alert">
+      <span>{{ flashMessages.get('notification.message') }}</span>
+    </div>
+    @endif
+    <!--begin: Datatable-->
+    <table class="table table-separate table-head-custom table-checkable w100" id="kt_datatable2">
+      <thead>
+        <tr>
+          <th rowspan="2">Nama</th>
+          <th rowspan="2">Username</th>
+          <th rowspan="2">Jabatan</th>
+          <th rowspan="2">Email</th>
+          <th colspan="4" class="text-center">Status</th>
+          <th colspan="3" class="text-center">Opsi</th>
+        </tr>
+        <tr>
+          <th>D3</th>
+          <th>S2</th>
+          <th>S3</th>
+          <th>Profesi</th>
+          <th>Simpan Perubahan</th>
+          <th>Reset Password</th>
+          <th>Hapus Akun</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each((item,index) in users)
+
+        <tr>
+          <form method="POST">
+            {{ csrfField() }}
+            <input type="hidden" name="nama" value="{{item.nama}}">
+            <input type="hidden" name="username" value="{{item.username}}">
+            <td>{{ item.nama }}</td>
+            <td>{{ item.username }}</td>
+            <td>
+              <div class="form-group w-150px">
+                <select class="form-control" name="legacy_role">
+                  @each(value in getPilihanJabatan(auth.user.legacy_role))
+                  @if(item.legacy_role === value.id)
+                  <option value="{{ value.id }}" selected>{{ value.nama }}</option>
+                  @else
+                  <option value="{{ value.id }}">{{ value.nama }}</option>
+                  @endif
+                  @endeach
+                </select>
+              </div>
+            </td>
+            <td>{{ item.email }}</td>
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" value="{{getJabatanRole(item)}}" {{(item.permission_d3 !== 0)?'checked':''}}
+                  name="permission_d3"><span></span>
+              </label>
+            </td>
+
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" value="{{getJabatanRole(item)}}"
+                  {{(item.permission_pasca_s2 !== 0)?'checked':''}} name="permission_pasca_s2"><span></span>
+              </label>
+            </td>
+
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" value="{{getJabatanRole(item)}}"
+                  {{(item.permission_pasca_s3 !== 0)?'checked':''}} name="permission_pasca_s3"><span></span>
+              </label>
+            </td>
+            <td>
+              <label class="checkbox justify-content-center">
+                <input type="checkbox" value="{{getJabatanRole(item)}}" {{(item.permission_profesi !== 0)?'checked':''}}
+                  name="permission_profesi"><span></span>
+              </label>
+            </td>
+
+
+            <td>
+              <button class="btn btn-primary">Ubah</button>
+            </td>
+          </form>
+          <form method="POST" action="{{route('admin.reset_password')}}">
+            {{ csrfField() }}
+            <input type="hidden" name="username_lupapassword" value="{{item.username}}">
+            <input type="hidden" name="email_lupapassword" value="{{item.email}}">
+
+            <td>
+              <button class="btn btn-success">Reset</button>
+            </td>
+          </form>
+
+          <td>
+            <div data-toggle="modal" data-target="#modal_hapus{{ index }}" class="btn btn-danger">Hapus</div>
+          </td>
+          <div class="modal fade" id="modal_hapus{{ index }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Hapus User </h5>
+
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                  </button>
+                </div>
+
+                <div class="modal-body">
+                  <div class="alert alert-custom alert-outline-info" role="alert">
+                    <div class="alert-text text-justify">
+                      <div><i class="fas fa-info-circle icon-sm text-info"></i> PERHATIAN</div>
+                      <p>
+                        Akun user yang akan dihapus tidak dapat diakses lagi. apakah anda yakin ingin menghapusnya?
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <form method="POST" action="{{route('admin.hapus_user')}}">
+                    {{ csrfField() }}
+                    <input type="hidden" name="username" value="{{item.username}}">
+
+                    <button type="button" class="btn btn-light-primary font-weight-bold"
+                      data-dismiss="modal">Batal</button>
+                    <button type="submit" id="tambah_populasi" class="btn btn-danger font-weight-bold"><i
+                        class="fa fa-user-plus icon-sm"></i>
+                      Hapus </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tr>
+
+
+
+        @endeach
+      </tbody>
+    </table>
+
+    <!--end: Datatable-->
+  </div>
+
+  <!--end::Card-->
+
+</div>
+@endsection
+@section('script')
+<script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+
+<script src="/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
+@if(flashMessages.get('notification_user'))
+<script>
+  $('#modal_tambah').modal('show')
+
+</script>
+@endif
+@endsection
