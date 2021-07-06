@@ -94,9 +94,9 @@ export default class D3AdminsController {
       response.safeHeader('Content-type', 'application/json')
       let total_inserted = 0
       if (alumni) {
-        alumni = alumni.replace('yyyy', tahun)
+        let get_alumni = alumni.replace('yyyy', tahun)
         //ambil data alumni
-        const data = await axios.get(alumni)
+        const data = await axios.get(get_alumni)
         const populasi = data.data[0]
         //disini kita akan modifikasi setiap objek yang ada di array dataMappingProdi menggunakan fungsi map
         populasi.map((obj) => {
