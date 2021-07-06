@@ -128,9 +128,9 @@
   const alertSasaran = document.querySelector('#alert-sasaran')
   const sasaranBtn = document.querySelector('#ubah_sasaran')
   const csrfToken = document.querySelector('[name="_csrf"]').value
-  const cekPopulasiRoute = '{{ cekPopulasiRoute }}'
-  const getPopulasiRoute = '{{ getPopulasiRoute }}'
-  const ubahSasaranRoute = '{{ ubahSasaranRoute }}'
+  const cekPopulasiRoute = '{{ appUrl()+cekPopulasiRoute }}'
+  const getPopulasiRoute = '{{ appUrl()+getPopulasiRoute }}'
+  const ubahSasaranRoute = '{{ appUrl()+ubahSasaranRoute }}'
   const tambahPopulasi = document.querySelector('#tambah_populasi')
   let loading = ['spinner', 'spinner-left', 'spinner-light', 'disabled'];
 
@@ -163,7 +163,7 @@
             data.message))
           setTimeout(() => {
 
-            window.location.replace(`{{ appUrl('admin/pasca/s2') }}`);
+            window.location.replace(`{{ appUrl('tracer-study-admin/admin/pasca/s2') }}`);
           }, 1000);
         } else {
           alertSasaran.removeChild(alertSasaran.childNodes[0]);

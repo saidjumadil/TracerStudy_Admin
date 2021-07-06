@@ -11,12 +11,13 @@ const Global_1 = global[Symbol.for('ioc.use')]("App/Global");
 const className = 'D3PengumummanController';
 const renderName = 'd3';
 const picture_name = 'banner_d3.jpg';
+const subfolder = `/${Env_1.default.get('PREFIX')}`;
 class D3PengumummanController {
     async get_pengumuman({ view, auth }) {
         await auth.authenticate();
         const tahunSasaran = await D3Services_1.default.get_sasaran();
         const get_pengumuman = await D3Services_1.default.get_pengumuman();
-        const uploadAction = '/admin/' + renderName + '/pengumuman/upload-image';
+        const uploadAction = subfolder + '/admin/' + renderName + '/pengumuman/upload-image';
         return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction, tahunSasaran });
     }
     async upload_image({ request }) {

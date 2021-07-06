@@ -8,6 +8,7 @@ const ErrorLog_1 = __importDefault(global[Symbol.for('ioc.use')]("App/Models/Err
 const Env_1 = __importDefault(global[Symbol.for('ioc.use')]("Adonis/Core/Env"));
 const axios_1 = __importDefault(require("axios"));
 const Global_1 = global[Symbol.for('ioc.use')]("App/Global");
+const subfolder = `/${Env_1.default.get('PREFIX')}`;
 const className = 'D3AdminsController';
 const renderName = 'd3';
 let alumni = Env_1.default.get('WS_ALUMNI_D3');
@@ -42,16 +43,16 @@ class D3AdminsController {
     async sasaran({ view, auth }) {
         await auth.authenticate();
         const get_sasaran = await D3Services_1.default.get_sasaran();
-        const cekPopulasiRoute = '/admin/' + renderName + '/ajax-cek-populasi';
-        const getPopulasiRoute = '/admin/' + renderName + '/ajax-get-populasi';
-        const ubahSasaranRoute = '/admin/' + renderName + '/sasaran';
+        const cekPopulasiRoute = subfolder + '/admin/' + renderName + '/ajax-cek-populasi';
+        const getPopulasiRoute = subfolder + '/admin/' + renderName + '/ajax-get-populasi';
+        const ubahSasaranRoute = subfolder + '/admin/' + renderName + '/sasaran';
         const tahunSasaran = await D3Services_1.default.get_sasaran();
         return view.render(renderName + '/sasaran', {
             get_sasaran,
             cekPopulasiRoute,
             getPopulasiRoute,
             ubahSasaranRoute,
-            tahunSasaran
+            tahunSasaran,
         });
     }
     async cek_populasi({ request, session, response }) {

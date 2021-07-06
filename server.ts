@@ -21,8 +21,8 @@ sourceMapSupport.install({ handleUncaughtExceptions: false })
 
 // key untuk ssl https
 const options = {
-  key: fs.readFileSync(path.join(__dirname, '.ssl_certificate/unsyiah.ac.id.key')),
-  cert: fs.readFileSync(path.join(__dirname, '.ssl_certificate/unsyiah.ac.id.pem')),
+  key: fs.readFileSync(path.join(__dirname, './ssl_certificate/unsyiah.ac.id.key')),
+  cert: fs.readFileSync(path.join(__dirname, './ssl_certificate/unsyiah.ac.id.pem')),
 }
 
 new Ignitor(__dirname).httpServer().start((handle) => {

@@ -6,6 +6,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import axios from 'axios'
 import { message } from 'App/Global'
 
+const subfolder: string = `/${Env.get('PREFIX')}`
 const className: string = 'PascaS3AdminsController' //sesuaikan
 const renderName: string = 'pasca/s3' //sesuaikan
 const routeName: string = 'pasca.s3' //sesuaikan
@@ -20,7 +21,7 @@ export default class PascaS3AdminsController {
     const sasaran = await Services.get_sasaran()
     const RouteActionDataIndex: string = `admin.${routeName}.get_data_index`
 
-    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex,tahunSasaran })
+    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex, tahunSasaran })
   }
 
   public async ajax_data_index({ request, session, response }) {
@@ -55,9 +56,9 @@ export default class PascaS3AdminsController {
     await auth.authenticate()
     const tahunSasaran = await Services.get_sasaran()
     const get_sasaran = await Services.get_sasaran()
-    const cekPopulasiRoute: string = '/admin/' + renderName + '/ajax-cek-populasi'
-    const getPopulasiRoute: string = '/admin/' + renderName + '/ajax-get-populasi'
-    const ubahSasaranRoute: string = '/admin/' + renderName + '/sasaran'
+    const cekPopulasiRoute: string = subfolder + '/admin/' + renderName + '/ajax-cek-populasi'
+    const getPopulasiRoute: string = subfolder + '/admin/' + renderName + '/ajax-get-populasi'
+    const ubahSasaranRoute: string = subfolder + '/admin/' + renderName + '/sasaran'
 
     return view.render(renderName + '/sasaran', {
       get_sasaran,
@@ -120,7 +121,7 @@ export default class PascaS3AdminsController {
         //insert data baru
         const status = await Services.insert_populasi(populasi)
         // cek kalo statusnya tidak 0
-       if (status) {
+        if (status) {
           //tambahkan total_inserted dengan jumlah data yang didapat
           total_inserted += populasi.length
         } else return { isSuccess: false }
@@ -212,7 +213,7 @@ export default class PascaS3AdminsController {
     await auth.authenticate()
     const tahunSasaran = await Services.get_sasaran()
     const get_jadwal = await Services.get_jadwal()
-    return view.render(renderName + '/jadwal', { get_jadwal,tahunSasaran })
+    return view.render(renderName + '/jadwal', { get_jadwal, tahunSasaran })
   }
 
   public async set_jadwal({ request, session, response, auth }) {

@@ -11,11 +11,12 @@ const Global_1 = global[Symbol.for('ioc.use')]("App/Global");
 const className = 'PascaS2PengumummanController';
 const renderName = 'pasca/s2';
 const picture_name = 'banner_s2.jpg';
+const subfolder = `/${Env_1.default.get('PREFIX')}`;
 class PascaS2PengumummanController {
     async get_pengumuman({ view, auth }) {
         await auth.authenticate();
         const get_pengumuman = await PascaS2Services_1.default.get_pengumuman();
-        const uploadAction = '/admin/' + renderName + '/pengumuman/upload-image';
+        const uploadAction = subfolder + '/admin/' + renderName + '/pengumuman/upload-image';
         const tahunSasaran = await PascaS2Services_1.default.get_sasaran();
         return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction, tahunSasaran });
     }

@@ -8,6 +8,7 @@ const ErrorLog_1 = __importDefault(global[Symbol.for('ioc.use')]("App/Models/Err
 const Env_1 = __importDefault(global[Symbol.for('ioc.use')]("Adonis/Core/Env"));
 const axios_1 = __importDefault(require("axios"));
 const Global_1 = global[Symbol.for('ioc.use')]("App/Global");
+const subfolder = `/${Env_1.default.get('PREFIX')}`;
 const className = 'PascaS3AdminsController';
 const renderName = 'pasca/s3';
 const routeName = 'pasca.s3';
@@ -44,9 +45,9 @@ class PascaS3AdminsController {
         await auth.authenticate();
         const tahunSasaran = await PascaS3Services_1.default.get_sasaran();
         const get_sasaran = await PascaS3Services_1.default.get_sasaran();
-        const cekPopulasiRoute = '/admin/' + renderName + '/ajax-cek-populasi';
-        const getPopulasiRoute = '/admin/' + renderName + '/ajax-get-populasi';
-        const ubahSasaranRoute = '/admin/' + renderName + '/sasaran';
+        const cekPopulasiRoute = subfolder + '/admin/' + renderName + '/ajax-cek-populasi';
+        const getPopulasiRoute = subfolder + '/admin/' + renderName + '/ajax-get-populasi';
+        const ubahSasaranRoute = subfolder + '/admin/' + renderName + '/sasaran';
         return view.render(renderName + '/sasaran', {
             get_sasaran,
             tahunSasaran,

@@ -6,6 +6,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import axios from 'axios'
 import { message } from 'App/Global'
 
+const subfolder: string = `/${Env.get('PREFIX')}`
 const className: string = 'D3AdminsController' //sesuaikan
 const renderName: string = 'd3' //sesuikan
 let alumni = Env.get('WS_ALUMNI_D3') //sesuaikan
@@ -19,7 +20,7 @@ export default class D3AdminsController {
     const sasaran = await Services.get_sasaran()
     const RouteActionDataIndex: string = `admin.${renderName}.get_data_index`
 
-    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex,tahunSasaran })
+    return view.render(renderName + '/index', { sasaran, RouteActionDataIndex, tahunSasaran })
   }
 
   public async ajax_data_index({ request, session, response }) {
@@ -53,9 +54,9 @@ export default class D3AdminsController {
   public async sasaran({ view, auth }) {
     await auth.authenticate()
     const get_sasaran = await Services.get_sasaran()
-    const cekPopulasiRoute: string = '/admin/' + renderName + '/ajax-cek-populasi'
-    const getPopulasiRoute: string = '/admin/' + renderName + '/ajax-get-populasi'
-    const ubahSasaranRoute: string = '/admin/' + renderName + '/sasaran'
+    const cekPopulasiRoute: string = subfolder + '/admin/' + renderName + '/ajax-cek-populasi'
+    const getPopulasiRoute: string = subfolder + '/admin/' + renderName + '/ajax-get-populasi'
+    const ubahSasaranRoute: string = subfolder + '/admin/' + renderName + '/sasaran'
     const tahunSasaran = await Services.get_sasaran()
 
     return view.render(renderName + '/sasaran', {
@@ -63,7 +64,7 @@ export default class D3AdminsController {
       cekPopulasiRoute,
       getPopulasiRoute,
       ubahSasaranRoute,
-      tahunSasaran
+      tahunSasaran,
     })
   }
 
@@ -211,7 +212,7 @@ export default class D3AdminsController {
     await auth.authenticate()
     const tahunSasaran = await Services.get_sasaran()
     const get_jadwal = await Services.get_jadwal()
-    return view.render(renderName + '/jadwal', { get_jadwal,tahunSasaran })
+    return view.render(renderName + '/jadwal', { get_jadwal, tahunSasaran })
   }
 
   public async set_jadwal({ request, session, response, auth }) {

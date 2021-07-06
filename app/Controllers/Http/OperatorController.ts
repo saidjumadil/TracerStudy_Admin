@@ -127,7 +127,6 @@ export default class OperatorController {
     }
   }
 
-  
   public async reset_password({ request, session, response }) {
     try {
       const { username_lupapassword, email_lupapassword } = request.all()

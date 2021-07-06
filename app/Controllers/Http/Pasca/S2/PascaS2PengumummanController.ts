@@ -7,16 +7,16 @@ import { message } from 'App/Global'
 
 const className: string = 'PascaS2PengumummanController' //sesuaikan
 const renderName: string = 'pasca/s2' //sesuaikan
-const picture_name : string = 'banner_s2.jpg' //sesuikan
-
+const picture_name: string = 'banner_s2.jpg' //sesuikan
+const subfolder: string = `/${Env.get('PREFIX')}`
 
 export default class PascaS2PengumummanController {
   public async get_pengumuman({ view, auth }) {
     await auth.authenticate()
     const get_pengumuman = await Services.get_pengumuman()
-    const uploadAction: string = '/admin/' + renderName + '/pengumuman/upload-image'
+    const uploadAction: string = subfolder + '/admin/' + renderName + '/pengumuman/upload-image'
     const tahunSasaran = await Services.get_sasaran()
-    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction,tahunSasaran })
+    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction, tahunSasaran })
   }
 
   public async upload_image({ request }) {
@@ -39,7 +39,7 @@ export default class PascaS2PengumummanController {
         request.all()
 
       const store = await Services.update_pengumuman(
-        Env.get('APP_URL') + '/uploads/'+picture_name,
+        Env.get('APP_URL') + '/uploads/' + picture_name,
         pengumuman,
         laporan_online,
         tujuan,

@@ -8,6 +8,7 @@ import { message } from 'App/Global'
 const className: string = 'D3PengumummanController' //sesuaikan
 const renderName: string = 'd3' //sesuiakan
 const picture_name: string = 'banner_d3.jpg' //sesuikan
+const subfolder: string = `/${Env.get('PREFIX')}`
 
 export default class D3PengumummanController {
   public async get_pengumuman({ view, auth }) {
@@ -15,8 +16,8 @@ export default class D3PengumummanController {
     const tahunSasaran = await Services.get_sasaran()
 
     const get_pengumuman = await Services.get_pengumuman()
-    const uploadAction: string = '/admin/' + renderName + '/pengumuman/upload-image'
-    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction,tahunSasaran })
+    const uploadAction: string = subfolder + '/admin/' + renderName + '/pengumuman/upload-image'
+    return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction, tahunSasaran })
   }
 
   public async upload_image({ request }) {

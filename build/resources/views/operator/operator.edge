@@ -1,6 +1,6 @@
 @layout('layout.layout')
 @section('style')
-<link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+<link href="{{appUrl()}}/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -253,9 +253,9 @@
 </div>
 @endsection
 @section('script')
-<script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+<script src="{{appUrl()}}/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 
-<script src="/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
+<script src="{{appUrl()}}/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
 @if(flashMessages.get('notification_user'))
 <script>
   $('#modal_tambah').modal('show')

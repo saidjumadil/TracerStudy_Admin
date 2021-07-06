@@ -6,7 +6,7 @@ import { Choice } from 'App/Global/Type'
 
 View.global('appUrl', (path: string) => {
   const APP_URL: string = Env.get('APP_URL')
-
+  console.log(Env.get('APP_URL'))
   return path ? `${APP_URL}/${path}` : APP_URL
 })
 

@@ -7,6 +7,7 @@ const Env_1 = __importDefault(global[Symbol.for('ioc.use')]("Adonis/Core/Env"));
 exports.default = Env_1.default.rules({
     HOST: Env_1.default.schema.string({ format: 'host' }),
     PORT: Env_1.default.schema.number(),
+    PREFIX: Env_1.default.schema.string(),
     APP_KEY: Env_1.default.schema.string(),
     APP_NAME: Env_1.default.schema.string(),
     APP_URL: Env_1.default.schema.string(),

@@ -11,11 +11,12 @@ const Global_1 = global[Symbol.for('ioc.use')]("App/Global");
 const className = 'ProfesiPengumummanController';
 const renderName = 'profesi';
 const picture_name = 'banner_profesi.jpg';
+const subfolder = `/${Env_1.default.get('PREFIX')}`;
 class ProfesiPengumummanController {
     async get_pengumuman({ view, auth }) {
         await auth.authenticate();
         const get_pengumuman = await ProfesiServices_1.default.get_pengumuman();
-        const uploadAction = '/admin/' + renderName + '/pengumuman/upload-image';
+        const uploadAction = subfolder + '/admin/' + renderName + '/pengumuman/upload-image';
         const tahunSasaran = await ProfesiServices_1.default.get_sasaran();
         return view.render(renderName + '/pengumuman', { get_pengumuman, uploadAction, tahunSasaran });
     }
