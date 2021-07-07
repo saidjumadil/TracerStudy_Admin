@@ -1,17 +1,6 @@
 <!DOCTYPE html>
 
-<!--
-Template Name: Metronic - Bootstrap 4 HTML, React, Angular 11 & VueJS Admin Dashboard Theme
-Author: KeenThemes
-Website: http://www.keenthemes.com/
-Contact: support@keenthemes.com
-Follow: www.twitter.com/keenthemes
-Dribbble: www.dribbble.com/keenthemes
-Like: www.facebook.com/keenthemes
-Purchase: https://1.envato.market/EA4JP
-Renew Support: https://1.envato.market/EA4JP
-License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
--->
+
 <html lang="en" class="theme-admin">
 
 <!--begin::Head-->
@@ -20,9 +9,8 @@ License: You must have a valid license purchased only from themeforest(the above
   <base href="">
   <meta charset="utf-8" />
   <title>Tracer Study</title>
-  <meta name="description" content="Updates and statistics" />
+  <meta name="description" content="Tracer Study" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="canonical" href="https://keenthemes.com/metronic" />
 
   <!--begin::Fonts-->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
@@ -46,7 +34,7 @@ License: You must have a valid license purchased only from themeforest(the above
   <!--begin::Layout Themes(used by all pages)-->
 
   <!--end::Layout Themes-->
-  <link rel="shortcut icon" href="{{ appUrl() }}/assets/media/logos/favicon.ico" />
+  <link rel="shortcut icon" href="{{appUrl()}}/assets/media/logos/favicon.ico" />
   <link rel="stylesheet" href="{{ appUrl() }}/assets/css/custom/stepper.css">
 
 
@@ -71,13 +59,10 @@ License: You must have a valid license purchased only from themeforest(the above
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
 
 
-        <!--[html-partial:include:{"file":"partials/_header-mobile.html"}]/-->
         @include('layout/partials/_header-mobile')
 
-        <!--[html-partial:include:{"file":"partials/_header.html"}]/-->
         @include('layout/partials/_header')
 
-        <!--[html-partial:include:{"file":"partials/_header-menu.html"}]/-->
         @include('layout/partials/_header-menu')
 
         <!--begin::Container-->
@@ -86,7 +71,6 @@ License: You must have a valid license purchased only from themeforest(the above
           <!--begin::Content Wrapper-->
           <div class="main d-flex flex-column flex-row-fluid">
 
-            <!--[html-partial:include:{"file":"partials/_subheader/subheader-v1.html"}]/-->
             @include('layout/partials/_subheader/subheader-v1')
             <div class="content flex-column-fluid" id="kt_content">
               @if(tahap)
@@ -104,7 +88,6 @@ License: You must have a valid license purchased only from themeforest(the above
         <!--end::Container-->
 
         @include('layout/partials/_footer')
-        <!--[html-partial:include:{"file":"partials/_footer.html"}]/-->
       </div>
 
       <!--end::Wrapper-->
@@ -114,10 +97,6 @@ License: You must have a valid license purchased only from themeforest(the above
   </div>
 
   <!--end::Main-->
-  <script>
-    var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";
-
-  </script>
 
   <!--begin::Global Config(global config for global JS scripts)-->
   <script>
@@ -190,16 +169,7 @@ License: You must have a valid license purchased only from themeforest(the above
   <script src="{{ appUrl() }}/assets/js/scripts.bundle.js"></script>
   <script src="{{ appUrl() }}/assets/js/custom/dropdown.js"></script>
   <script src="{{ appUrl() }}/assets/js/custom/dynamic-validation.js"></script>
-
   <!--end::Global Theme Bundle-->
-
-  <!--begin::Page Vendors(used by this page)-->
-  {{--  <script src="{{ appUrl() }}/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script> --}}
-
-  <!--end::Page Vendors-->
-
-  <!--begin::Page Scripts(used by this page)-->
-  {{--  <script src="{{ appUrl() }}/assets/js/pages/widgets.js"></script> --}}
 
   <!--end::Page Scripts-->
   @!section('script')
