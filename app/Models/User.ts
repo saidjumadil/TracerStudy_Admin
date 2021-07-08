@@ -67,12 +67,12 @@ export default class D3User extends BaseModel {
 
   //cek email masih tersedia atau tidak
   public static async get_availabe_username(username: string) {
-    return await Database.connection(this.conn).from('users').where('username', username)
+    return await Database.connection(this.conn).from('users').where('username', username).first()
   }
 
   //cek email masih tersedia atau tidak
   public static async get_availabe_email(email: string) {
-    return await Database.connection(this.conn).from('users').where('email', email)
+    return await Database.connection(this.conn).from('users').where('email', email).first()
   }
 
   //get akun ini untuk validasi sesuia dengan username untuk reset password akun
@@ -81,6 +81,7 @@ export default class D3User extends BaseModel {
       .from('users')
       .where('username', username)
       .where('email', email_lupapassword)
+      .first()
   }
 
   //menambahkan akun baru

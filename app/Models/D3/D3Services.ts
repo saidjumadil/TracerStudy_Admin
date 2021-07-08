@@ -311,7 +311,7 @@ export default class Services extends BaseModel {
 
   //cek email masih tersedia atau tidak
   public static async get_availabe_email(email: string) {
-    return await Database.connection(conn).from('users').where('email', email)
+    return await Database.connection(conn).from('users').where('email', email).first()
   }
 
   /* edit email responden*/
