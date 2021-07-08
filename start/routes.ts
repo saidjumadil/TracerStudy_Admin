@@ -475,3 +475,5 @@ Route.group(() => {
     .as('admin')
     .middleware(['user'])
 }).prefix(Env.get('PREFIX'))
+
+Route.get('*', ({ view }) => view.render('errors/not-found'))

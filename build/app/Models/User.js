@@ -41,6 +41,12 @@ class D3User extends Orm_1.BaseModel {
                 .whereNot('permission_profesi', 2);
         }
     }
+    static async get_availabe_username(username) {
+        return await Database_1.default.connection(this.conn).from('users').where('username', username);
+    }
+    static async get_availabe_email(email) {
+        return await Database_1.default.connection(this.conn).from('users').where('email', email);
+    }
     static async get_available_users(username, email_lupapassword) {
         return await Database_1.default.connection(this.conn)
             .from('users')

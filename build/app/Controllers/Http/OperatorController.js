@@ -27,6 +27,16 @@ class OperatorController {
     async register_users({ request, session, response }) {
         try {
             const { nama, username, email, legacy_role, permission } = request.all();
+            const cek_username = await User_1.default.get_availabe_username(username);
+            if (cek_username) {
+                message(session, 'notification_user', 'danger', 'username sudah pernah digunakan!');
+                return response.redirect('back');
+            }
+            const cek_email = await User_1.default.get_availabe_email(email);
+            if (cek_email) {
+                message(session, 'notification_user', 'danger', 'email sudah pernah digunakan!');
+                return response.redirect('back');
+            }
             const permission_d3 = permission.includes('1') ? legacy_role : 0;
             const permission_pasca_s2 = permission.includes('2') ? legacy_role : 0;
             const permission_pasca_s3 = permission.includes('3') ? legacy_role : 0;

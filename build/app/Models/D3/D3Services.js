@@ -232,6 +232,9 @@ class Services extends Orm_1.BaseModel {
             role: 5,
         });
     }
+    static async get_availabe_email(email) {
+        return await Database_1.default.connection(conn).from('users').where('email', email);
+    }
     static async edit_responden(nim, email) {
         return await Database_1.default.connection(conn).from('users').where('nim', nim).update({
             email: email,

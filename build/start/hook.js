@@ -7,7 +7,6 @@ const View_1 = __importDefault(global[Symbol.for('ioc.use')]("Adonis/Core/View")
 const Env_1 = __importDefault(global[Symbol.for('ioc.use')]("Adonis/Core/Env"));
 View_1.default.global('appUrl', (path) => {
     const APP_URL = Env_1.default.get('APP_URL');
-    console.log(Env_1.default.get('APP_URL'));
     return path ? `${APP_URL}/${path}` : APP_URL;
 });
 View_1.default.global('webService', (path) => {
