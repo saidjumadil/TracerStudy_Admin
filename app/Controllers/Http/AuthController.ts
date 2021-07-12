@@ -9,7 +9,6 @@ import { formatDate, message } from 'App/Global'
 
 const className: string = 'AuthController'
 
-
 export default class AuthController {
   public index({ view }) {
     return view.render('login')
@@ -103,13 +102,13 @@ export default class AuthController {
     }
   }
 
-  public async ActionLupaPassword({ request, response , session}) {
+  public async ActionLupaPassword({ request, response, session }) {
     try {
       const { username_lupapassword, email_lupapassword } = request.all()
       //cek username dan email valid atau tidak
       const get_akun = await User.get_available_users(username_lupapassword, email_lupapassword)
-      if (get_akun[0]) {
-         //cek perubahan password
+      if (get_akun) {
+        //cek perubahan password
         let cek_perubahan_password = await User.cek_perubahan_password(username_lupapassword)
         let jumlah_ubah_password = cek_perubahan_password.password_jumlah_terakhir_reset
         //waktu yg dizinkan untuk mengubah password
@@ -120,7 +119,7 @@ export default class AuthController {
         var waktu_sekarang = new Date(get_time_now)
         //if not admin maka cuma boleh ubah password maksimal 2 kali 1x24jam
         if (
-          get_akun[0].legacy_role > 2 &&
+          get_akun.legacy_role > 2 &&
           waktu_sekarang < waktu_diizinkan_ubah &&
           cek_perubahan_password.password_jumlah_terakhir_reset >= 2
         ) {
@@ -141,7 +140,7 @@ export default class AuthController {
         await User.ubah_password(username_lupapassword, hashPassword)
         // kirim email
         const emailData = {
-          nama: get_akun[0].nama,
+          nama: get_akun.nama,
           username: username_lupapassword,
           password: passwordClear,
         }
@@ -154,7 +153,11 @@ export default class AuthController {
         }
 
         //set jumlah ubah password
-        await User.jumlah_ubah_password(username_lupapassword, waktu_sekarang, jumlah_ubah_password + 1)
+        await User.jumlah_ubah_password(
+          username_lupapassword,
+          waktu_sekarang,
+          jumlah_ubah_password + 1
+        )
 
         const kirimEmail = await Mail.send((message) => {
           message
@@ -177,7 +180,12 @@ export default class AuthController {
         )
         return response.redirect('back')
       } else {
-        message(session, 'notification_lupapassword', 'warning', 'NPM atau email! belum terdaftar!')
+        message(
+          session,
+          'notification_lupapassword',
+          'warning',
+          'username atau email! belum terdaftar!'
+        )
         return response.redirect('back')
       }
     } catch (error) {
@@ -187,7 +195,6 @@ export default class AuthController {
       return response.redirect('back')
     }
   }
-
 
   public generate_password() {
     try {

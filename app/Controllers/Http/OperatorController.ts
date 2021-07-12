@@ -146,14 +146,14 @@ export default class OperatorController {
       const { username_lupapassword, email_lupapassword } = request.all()
       //cek username dan email valid atau tidak
       const get_akun = await User.get_available_users(username_lupapassword, email_lupapassword)
-      if (get_akun[0]) {
+      if (get_akun) {
         const passwordClear = this.generate_password()
         const hashPassword = await Hash.make(passwordClear)
         //reset password
         await User.ubah_password(username_lupapassword, hashPassword)
         // kirim email
         const emailData = {
-          nama: get_akun[0].nama,
+          nama: get_akun.nama,
           username: username_lupapassword,
           password: passwordClear,
         }
@@ -179,7 +179,7 @@ export default class OperatorController {
         )
         return response.redirect('back')
       } else {
-        message(session, 'notification', 'warning', 'NPM atau email! belum terdaftar!')
+        message(session, 'notification', 'warning', 'username atau email! belum terdaftar!')
         return response.redirect('back')
       }
     } catch (error) {
