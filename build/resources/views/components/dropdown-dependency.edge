@@ -1,0 +1,34 @@
+@set('lainnya',false)
+
+<div class="form-group">
+  <label for="{{ name }}">
+    {{ label }}
+    @if(validasi[0])
+    <span class="text-danger">*</span>
+    @endif
+  </label>
+  <select class="form-control" data-dependency-id="{{ id }}" data-type='dropdown-dependency' name="{{ name }}"
+    id="{{ name }}" data-fv-not-empty='{{ validasi[0] }}' data-fv-not-empty___message='Pertanyaan ini wajib diisi'
+    data-key='{{ name }}'>
+    <option value="">-- Pilih Opsi --</option>
+    @each(value in choice)
+    @if(value.id == 10000)
+    @set('lainnya',true)
+    @endif
+
+    <option value="{{ value.id }}">{{ value.nama }}</option>
+    @endeach
+  </select>
+</div>
+
+@if(lainnya)
+<input type="text" name="lainnya[]" data-id='{{ name }}' placeholder="lainnya..."
+  class="form-control {{form_class}} d-none">
+<input type="hidden" name="id_pertanyaan_lainnya[]" data-id='{{ name }}' value="{{ id }}" class="d-none">
+@endif
+
+
+
+
+@!component('components/pertanyaan_category',{ 'soals':soals ,'form_class':'ml-5
+d-none','angka_dependency':angka_dependency,'ascii':ascii} )

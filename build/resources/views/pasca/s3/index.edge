@@ -1,0 +1,177 @@
+@layout('layout.layout')
+
+@section('content')
+{{--  stepper  --}}
+<div class="row justify-content-center mb-5">
+  <div class="col-md-12">
+    <div class="stepper">
+      <li class="{{ (!sasaran) ? 'pending':'active' }}">
+        @if(!sasaran)
+          @if([1,2].includes(auth.user.legacy_role))
+            <a href="{{ route('admin.pasca.s3.sasaran') }}">
+              Set Tahun Sasaran
+            </a>
+          @else
+            Set Tahun Sasaran
+          @endif
+        @else
+        Set Tahun Sasaran
+        @endif
+      </li>
+      <li class="{{ (!sasaran) ?  '' : 'active' }}">
+        Import Data Populasi
+      </li>
+      <li class="{{ (!sasaran) ? '' : (sasaran.status_import_monitoring === 0) ? 'pending': 'active'  }}">
+        @if(sasaran)
+        @if(sasaran.status_import_monitoring === 0)
+          @if([1,2].includes(auth.user.legacy_role))
+            <a href="{{ route('admin.pasca.s3.data.importuser') }}">
+              Import Users Monitoring
+            </a>
+          @else
+            Import Users Monitoring
+          @endif
+        @else
+        Import Users Monitoring
+        @endif
+        @else
+        Import Users Monitoring
+        @endif
+      </li>
+      @if(sasaran)
+      <li class="{{ (sasaran.status_import_monitoring === 0) ? '': (sasaran.waktu_mulai) ? 'active':'pending' }}">
+        @if(sasaran.status_import_monitoring === 1)
+          @if([1,2].includes(auth.user.legacy_role))
+            <a href="{{ route('admin.pasca.s3.jadwal') }}">
+              Set Jadwal
+            </a>
+          @else
+            Set Jadwal
+          @endif
+        @else
+        Set Jadwal
+        @endif
+      </li>
+      @else
+      <li class="">
+        Set Jadwal
+      </li>
+      @endif
+      @if(sasaran)
+      <li class="{{ (!sasaran.waktu_berakhir) ? '': (sasaran.waktu_berakhir <= Date.now()) ? 'active':'pending' }}">
+        Selesai
+        <br>
+        {{{ getTimeFormatStep(sasaran.waktu_berakhir) || '' }}}
+      </li>
+      @else
+      <li class="">
+        Selesai
+      </li>
+      @endif
+    </div>
+  </div>
+</div>
+{{--  end stepper  --}}
+
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">
+      Rekap Pengisian Tracer Study
+    </h3>
+
+  </div>
+  <div class="card-body text-bold ">
+    <div id='showAlert'>
+      @if(flashMessages.get('notification'))
+      <div
+        class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+        role="alert">
+        <span>{{ flashMessages.get('notification.message') }}</span>
+      </div>
+      @endif
+    </div>
+    <form>
+      {{ csrfField() }}
+      @!component('components/dropdown-range',{
+      'name':'tahun',
+      'label':'Tahun Tracer',
+      'required':false,
+      'start': getCurrentYear(),
+      'end':2017
+      })
+
+      @!component('components/dropdown',{
+      label:'Periode Wisuda',
+      name:'periode',
+      validasi:[false,false,false],
+      choice:[
+      { id:0, nama:'Semua Periode' },
+      { id:1, nama:'Periode 1' },
+      { id:2, nama:'Periode 2' },
+      { id:3, nama:'Periode 3' },
+      { id:4, nama:'Periode 4' },
+      ]
+      })
+      <div class="form-group text-right">
+
+        <button type="submit" id="btnDataIndex" class="btn btn-primary">Cari</button>
+      </div>
+    </form>
+    <div id="showDataIndex"></div>
+  </div>
+</div>
+
+@endsection
+
+@section('script')
+<script src="{{appUrl()}}/assets/js/custom/view-data-index.js"></script>
+
+<script>
+  const btnDataIndex = document.querySelector('#btnDataIndex')
+  const showDataIndex = document.querySelector('#showDataIndex')
+  const showAlert = document.querySelector('#showAlert')
+  const loading = ['spinner', 'spinner-left', 'spinner-light', 'disabled'];
+  const routeActionDataIndex = '{{ appUrl()+route(RouteActionDataIndex) }}'
+
+  const getPeriodeFormat = (tahun, periode) => {
+    if (periode === '0') return tahun + ' Semua Periode'
+    return tahun + ' Periode ' + periode
+  }
+  btnDataIndex.addEventListener('click', res => {
+    res.preventDefault()
+    btnDataIndex.classList.add(...loading)
+    showDataIndex.innerHTML = drawLoading()
+    const periode = document.querySelector('[name="periode"]').value
+    const tahun = document.querySelector('[name="tahun"]').value
+
+
+
+    if (!periode || !tahun) {
+      showDataIndex.innerHTML = ''
+      showAlert.innerHTML = Alert('danger', 'Pilih Tahun dan Periode terlebih dahulu')
+      return btnDataIndex.classList.remove(...loading)
+    }
+
+    fetch(`${routeActionDataIndex}/?tahun=${tahun}&&periode=${periode}`)
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data.get_data[0].length)
+        if (data.get_data[0].length === 0) {
+
+          showDataIndex.innerHTML = ''
+          showAlert.innerHTML = Alert('info',
+            `Belum ada pengguna yang mendaftar pada Tracer Study ${getPeriodeFormat(tahun,periode)}`)
+          return
+        }
+        showAlert.innerHTML = ''
+        showDataIndex.innerHTML = drawDatatable(data.get_data[0])
+      })
+    // console.log(routeActionDataIndex)
+    btnDataIndex.classList.remove(...loading)
+
+
+  })
+
+</script>
+
+@endsection

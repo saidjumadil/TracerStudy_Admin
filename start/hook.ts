@@ -264,3 +264,7 @@ View.global('getTimeFormatStep', function (value: string) {
     days[hari]
   }, ${String(date).padStart(2, '0')} ${months[bulan]} ${tahun} <br> ${String(jam).padStart(2, '0')}:${String(menit).padStart(2, '0')} WIB`
 })
+
+View.global('getNowYear', function () {
+  return new Date().getFullYear()
+})
