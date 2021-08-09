@@ -94,7 +94,11 @@ class Services extends Orm_1.BaseModel {
         return await Database_1.default.connection(conn).from('users_kd_fjjp7').select('kd_fjjp7');
     }
     static async get_fakultas() {
-        return await Database_1.default.connection(conn).query().from('users_fakultas');
+        return await Database_1.default.connection(conn)
+            .query()
+            .from('users_fakultas')
+            .join('users_kd_fjjp7', 'users_fakultas.kd_fakultas2', '=', 'users_kd_fjjp7.kd_fakultas2')
+            .groupBy('users_fakultas.kd_fakultas2');
     }
     static async get_prodi(id_fakultas) {
         return await Database_1.default.connection(conn)

@@ -101,7 +101,11 @@ export default class Services extends BaseModel {
 
   /* mengambil daftar fakultas */
   public static async get_fakultas() {
-    return await Database.connection(conn).query().from('users_fakultas')
+    return await Database.connection(conn)
+      .query()
+      .from('users_fakultas')
+      .join('users_kd_fjjp7', 'users_fakultas.kd_fakultas2', '=', 'users_kd_fjjp7.kd_fakultas2')
+      .groupBy('users_fakultas.kd_fakultas2')
   }
 
   /* mengambil daftar prodi */
