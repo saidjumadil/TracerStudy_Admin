@@ -122,12 +122,51 @@ export default class Services extends BaseModel {
       .from('users_mapping_kd_fjjp7')
       .where('kd_fjjp7_non', kd_fjjp7)
       .orWhere('kd_fjjp7_reg', kd_fjjp7)
-      .first()
+      .first() 
+        //TODO: ubah jadi fecth
   }
 
   /* get data pengisi dari tabel monitoring */
   // FIXME: data mengabaikan periode wisuda
+    //TODO: ubah paramater jadi dua
   public static async get_data_pengisi(periode_wisuda: string, kd_fjjp7_non: string, kd_fjjp7_reg) {
+   //parameter kedua = arrayMapping
+   //let resultDatas = []
+   //if semua periode
+  //  for (let i = 0; i < arrayMapping.length; implements++) {
+  //   periode_wisuda = periode_wisuda.substring(0, 4)
+  //   resultDatas = await Database.connection(conn)
+  //       .from('users_monitoring')
+  //       .where((query) => {
+  //         query
+  //           .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
+  //           .whereRaw("SUBSTR(nim,3,7)= '" + arrayMapping[i] + "'")
+  //       })
+  //       .orWhere((query) => {
+  //         query
+  //           .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
+  //           .whereRaw("SUBSTR(nim,3,7)= '" + arrayMapping[i] + "'")
+  //       })
+
+  //  }
+   //else periode tertentu
+  //  for (let i = 0; i < arrayMapping.length; implements++) {
+  //   periode_wisuda = periode_wisuda.substring(0, 4)
+  //   resultDatas = await Database.connection(conn)
+  //       .from('users_monitoring')
+  //       .where((query) => {
+  //         query
+  //           .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
+  //           .whereRaw("SUBSTR(nim,3,7)= '" + arrayMapping[i] + "'")
+  //       })
+  //       .orWhere((query) => {
+  //         query
+  //           .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
+  //           .whereRaw("SUBSTR(nim,3,7)= '" + arrayMapping[i] + "'")
+  //       })
+
+  //  }
+ 
     if (periode_wisuda.substring(4, 5) === '0') {
       periode_wisuda = periode_wisuda.substring(0, 4)
       return await Database.connection(conn)

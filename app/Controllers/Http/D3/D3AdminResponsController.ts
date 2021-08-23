@@ -42,25 +42,30 @@ export default class D3AdminResponsController {
     })
   }
 
+  //TODO: perbaiki select mapping
   /* ajax mengambil daftar pengisi kuesioner berdasarkan prodi */
   public async ajax_data_pengisi({ request }) {
     try {
       let { tahun, periode, kd_fjjp7 } = request.all()
       let periode_wisuda: string = 'null'
       if (tahun && periode) periode_wisuda = tahun.concat(periode)
+       //TODO: ubah variabel jadi array
       let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7) //get kd_fjjp7 non dan reg
       //jika admin maka bisa lihat periode sasaran tracer sebelumnya
       if (periode_wisuda !== 'null') {
         console.log(periode_wisuda)
+          //TODO: ubah paramater jadi dua
         const get_data_pengisi = await Services.get_data_pengisi(
           periode_wisuda,
           kd_fjjp7_non,
           kd_fjjp7_reg
         )
+      
         return { get_data_pengisi }
       } else {
         //jika enum maka ambil data periode yg skrg saja
         const get_periode_wisuda = await Services.get_sasaran() // get periode skrg
+          //TODO: ubah paramater jadi dua
         const get_data_pengisi = await Services.get_data_pengisi(
           get_periode_wisuda.tahun,
           kd_fjjp7_non,
