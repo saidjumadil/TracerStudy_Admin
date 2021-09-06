@@ -30,14 +30,14 @@ export default class ProfesiAdminResponsController {
     const tahunSasaran = await Services.get_sasaran()
     let daftar_sasaran = await Services.get_list_sasaran()
     if (auth.user.legacy_role === 4) {
-      daftar_sasaran = daftar_sasaran.filter(row => row.tahun.substring(0, 4) === tahunSasaran.tahun.substring(0, 4))
+      daftar_sasaran = daftar_sasaran.filter(
+        (row) => row.tahun.substring(0, 4) === tahunSasaran.tahun.substring(0, 4)
+      )
     }
     const GetFakultas = await Services.get_fakultas()
     const RouteActionProdi = `admin.${renderName}.get_prodi`
     const RouteActionDataPengisi = `admin.${renderName}.get_data_pengisi`
     const RouteActionUpdateDataPengisi = `admin.${renderName}.data.update_data_pengisi`
-
-
 
     return view.render(renderName + '/data/pengisi', {
       GetFakultas,
@@ -56,16 +56,13 @@ export default class ProfesiAdminResponsController {
       let periode_wisuda: string = 'null'
       if (tahun && periode) periode_wisuda = tahun.concat(periode)
       let kd_fjjp7_mapping = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7) //get kd_fjjp7 non dan reg
-      //TODO: buat handler show kalo mapping nga ada
+
       if (kd_fjjp7_mapping.length === 0) {
-        return "tidak tersedia di mapping"
+        return { message: 'Data User Mapping tidak tersedia' }
       }
       //jika admin maka bisa lihat periode sasaran tracer sebelumnya
       if (periode_wisuda !== 'null') {
-        const get_data_pengisi = await Services.get_data_pengisi(
-          periode_wisuda,
-          kd_fjjp7_mapping
-        )
+        const get_data_pengisi = await Services.get_data_pengisi(periode_wisuda, kd_fjjp7_mapping)
         return { get_data_pengisi }
       } else {
         //jika enum maka ambil data periode yg skrg saja
@@ -114,7 +111,6 @@ export default class ProfesiAdminResponsController {
   //     return { get_data_pengisi: [] }
   //   }
   // }
-
 
   /* memperbarui data pengisi kuesioner pada table users_monitoring */
   public async update_data_pengisi({ request, session }) {
