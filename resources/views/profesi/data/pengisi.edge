@@ -19,13 +19,15 @@
 
 
     <div class="card-body">
-      @if(flashMessages.get('notification'))
-      <div
-        class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
-        role="alert">
-        <span>{{ flashMessages.get('notification.message') }}</span>
+      <div id="showAlert">
+        @if(flashMessages.get('notification'))
+        <div
+          class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification.type') }} alert-dismissible animated fadeIn"
+          role="alert">
+          <span>{{ flashMessages.get('notification.message') }}</span>
+        </div>
+        @endif
       </div>
-      @endif
       @if([1,2].includes(auth.user.legacy_role))
 
       @!component('components/dropdown-range',{
@@ -111,6 +113,7 @@
   const fakultas = document.querySelector('#fakultas')
   const jurusan = document.querySelector('#jurusan')
   const showDataPengisi = document.querySelector('#showDataPengisi')
+  const showAlert = document.querySelector('#showAlert')
 
   // handle fakultas
   fakultas.addEventListener('change', res => {
@@ -134,8 +137,14 @@
     // console.log(id)
     showDataPengisi.innerHTML = drawLoading()
     fetch(`${routeDataPengisi}/?kd_fjjp7=${id}&&tahun=${tahun}&&periode=${periode}`)
-      .then(response => response.json())
-      .then(data => {
+    .then(response => response.json())
+    .then(data => {
+        if(data.message){
+          showAlert.innerHTML = Alert('danger',data.message)
+          showDataPengisi.innerHTML = ''
+          return
+        }
+        showAlert.innerHTML = ''
         // console.log(data.get_data_pengisi)
         showDataPengisi.innerHTML = drawDatatable(data.get_data_pengisi, `{{ csrfField() }}`)
         $('#kt_datatable2').DataTable({
