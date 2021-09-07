@@ -57,7 +57,7 @@ export default class PascaS2AdminResponsController {
       if (tahun && periode) periode_wisuda = tahun.concat(periode)
       let kd_fjjp7_mapping = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7) //get kd_fjjp7 non dan reg
       if (kd_fjjp7_mapping.length === 0) {
-        return { message: 'Data User Mapping tidak tersedia' }
+        return { message: 'Data User Mapping (kode fjjp7 ' + kd_fjjp7 + ') tidak tersedia ' }
       }
       //jika admin maka bisa lihat periode sasaran tracer sebelumnya
       if (periode_wisuda !== 'null') {
