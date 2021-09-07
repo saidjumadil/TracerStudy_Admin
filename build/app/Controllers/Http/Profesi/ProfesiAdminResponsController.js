@@ -27,7 +27,10 @@ class ProfesiAdminResponsController {
     async pengisi({ view, auth }) {
         await auth.authenticate();
         const tahunSasaran = await ProfesiServices_1.default.get_sasaran();
-        const daftar_sasaran = await ProfesiServices_1.default.get_list_sasaran();
+        let daftar_sasaran = await ProfesiServices_1.default.get_list_sasaran();
+        if (auth.user.legacy_role === 4) {
+            daftar_sasaran = daftar_sasaran.filter((row) => row.tahun.substring(0, 4) === tahunSasaran.tahun.substring(0, 4));
+        }
         const GetFakultas = await ProfesiServices_1.default.get_fakultas();
         const RouteActionProdi = `admin.${renderName}.get_prodi`;
         const RouteActionDataPengisi = `admin.${renderName}.get_data_pengisi`;
@@ -47,15 +50,17 @@ class ProfesiAdminResponsController {
             let periode_wisuda = 'null';
             if (tahun && periode)
                 periode_wisuda = tahun.concat(periode);
-            let { kd_fjjp7_non, kd_fjjp7_reg } = await ProfesiServices_1.default.get_users_mapping_kd_fjjp7(kd_fjjp7);
+            let kd_fjjp7_mapping = await ProfesiServices_1.default.get_users_mapping_kd_fjjp7(kd_fjjp7);
+            if (kd_fjjp7_mapping.length === 0) {
+                return { message: 'Data User Mapping tidak tersedia' };
+            }
             if (periode_wisuda !== 'null') {
-                console.log(periode_wisuda);
-                const get_data_pengisi = await ProfesiServices_1.default.get_data_pengisi(periode_wisuda, kd_fjjp7_non, kd_fjjp7_reg);
+                const get_data_pengisi = await ProfesiServices_1.default.get_data_pengisi(periode_wisuda, kd_fjjp7_mapping);
                 return { get_data_pengisi };
             }
             else {
                 const get_periode_wisuda = await ProfesiServices_1.default.get_sasaran();
-                const get_data_pengisi = await ProfesiServices_1.default.get_data_pengisi(get_periode_wisuda.tahun, kd_fjjp7_non, kd_fjjp7_reg);
+                const get_data_pengisi = await ProfesiServices_1.default.get_data_pengisi(get_periode_wisuda.tahun, kd_fjjp7_mapping);
                 return { get_data_pengisi };
             }
         }
@@ -102,10 +107,10 @@ class ProfesiAdminResponsController {
             let { tahun, periode, kd_fjjp7_prodi } = request.all();
             let periode_wisuda = tahun.concat(periode);
             const [kd_fjjp7, prodi] = kd_fjjp7_prodi.split(':');
-            let { kd_fjjp7_non, kd_fjjp7_reg } = await ProfesiServices_1.default.get_users_mapping_kd_fjjp7(kd_fjjp7);
+            let kd_fjjp7_non = await ProfesiServices_1.default.get_users_mapping_kd_fjjp7(kd_fjjp7);
             let datas = [];
             for (let index = 0; index < table_name.length; index++) {
-                const get_jawabans = await ProfesiServices_1.default.get_jawaban_users(periode_wisuda, kd_fjjp7_non, kd_fjjp7_reg, table_name[index]);
+                const get_jawabans = await ProfesiServices_1.default.get_jawaban_users(periode_wisuda, kd_fjjp7_non, table_name[index]);
                 datas.push(get_jawabans);
             }
             if (!datas[0][0]) {

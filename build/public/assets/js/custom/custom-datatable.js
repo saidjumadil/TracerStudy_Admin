@@ -143,3 +143,11 @@ const getTimeFormat = (value) => {
     months[bulan]
   } ${tahun}. Pukul ${String(jam).padStart(2, '0')}:${String(menit).padStart(2, '0')} WIB`
 }
+
+const Alert = (tipe, pesan) => {
+  return `<div
+    class="m-alert m-alert--outline alert alert-${tipe} alert-dismissible animated fadeIn"
+    role="alert">
+    <span>${pesan}</span>
+    </div>`
+}

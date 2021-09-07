@@ -107,41 +107,41 @@ class Services extends Orm_1.BaseModel {
             .where('kd_fakultas2', id_fakultas);
     }
     static async get_users_mapping_kd_fjjp7(kd_fjjp7) {
-        return await Database_1.default.connection(conn)
+        let arrTracerKdfjjp7 = [];
+        const mapping = await Database_1.default.connection(conn)
             .from('users_mapping_kd_fjjp7')
-            .where('kd_fjjp7_non', kd_fjjp7)
-            .orWhere('kd_fjjp7_reg', kd_fjjp7)
-            .first();
+            .where('kd_fjjp7_reg', kd_fjjp7);
+        for (let i = 0; i < mapping.length; i++) {
+            arrTracerKdfjjp7.push(mapping[i].kd_fjjp7_non);
+        }
+        return arrTracerKdfjjp7;
     }
-    static async get_data_pengisi(periode_wisuda, kd_fjjp7_non, kd_fjjp7_reg) {
+    static async get_data_pengisi(periode_wisuda, kd_fjjp7_non) {
+        let arrUserMonitoring = [];
         if (periode_wisuda.substring(4, 5) === '0') {
             periode_wisuda = periode_wisuda.substring(0, 4);
-            return await Database_1.default.connection(conn)
-                .from('users_monitoring')
-                .where((query) => {
-                query
+            for (let i = 0; i < kd_fjjp7_non.length; i++) {
+                const data = await Database_1.default.connection(conn)
+                    .from('users_monitoring')
                     .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
-                    .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'");
-            })
-                .orWhere((query) => {
-                query
-                    .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
-                    .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'");
-            });
+                    .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non[i] + "'");
+                if (data.length !== null) {
+                    arrUserMonitoring.push(...data);
+                }
+            }
+            return arrUserMonitoring;
         }
         else {
-            return await Database_1.default.connection(conn)
-                .from('users_monitoring')
-                .where((query) => {
-                query
+            for (let i = 0; i < kd_fjjp7_non.length; i++) {
+                const data = await Database_1.default.connection(conn)
+                    .from('users_monitoring')
                     .where('periode_wisuda', periode_wisuda)
-                    .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non + "'");
-            })
-                .orWhere((query) => {
-                query
-                    .where('periode_wisuda', periode_wisuda)
-                    .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_reg + "'");
-            });
+                    .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non[i] + "'");
+                if (data.length !== null) {
+                    arrUserMonitoring.push(...data);
+                }
+            }
+            return arrUserMonitoring;
         }
     }
     static async update_data_pengisi(nim, hp_valid_1, hp_valid_2, monitoring_1, monitoring_2, monitoring_3) {
@@ -163,39 +163,38 @@ class Services extends Orm_1.BaseModel {
             .whereRaw("periode_wisuda like '" + tahun + "%'")
             .first();
     }
-    static async get_jawaban_users(periode_wisuda, kd_fjjp7_non, kd_fjjp7_reg, nama_tabel) {
+    static async get_jawaban_users(periode_wisuda, kd_fjjp7_non, nama_tabel) {
+        let arrDatas = [];
         if (periode_wisuda.substring(4, 5) === '0') {
             let tahun_lulus = periode_wisuda.substring(0, 4);
-            return await Database_1.default.connection(conn)
-                .from('users')
-                .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-                .select(nama_tabel + '.*')
-                .where((query) => {
-                query
+            for (let i = 0; i < kd_fjjp7_non.length; i++) {
+                const data = await Database_1.default.connection(conn)
+                    .from('users')
+                    .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
+                    .select(nama_tabel + '.*')
                     .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
-                    .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'");
-            })
-                .orWhere((query) => {
-                query
-                    .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
-                    .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_reg + "'");
-            });
+                    .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non[i] + "'")
+                    .where('users.status_completion', 1);
+                if (data.length !== null) {
+                    arrDatas.push(...data);
+                }
+            }
+            return arrDatas;
         }
         else {
-            return await Database_1.default.connection(conn)
-                .from('users')
-                .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-                .select(nama_tabel + '.*')
-                .where((query) => {
-                query
+            for (let i = 0; i < kd_fjjp7_non.length; i++) {
+                const data = await Database_1.default.connection(conn)
+                    .from('users')
+                    .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
+                    .select(nama_tabel + '.*')
                     .where('users.tahun_lulus', periode_wisuda)
-                    .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'");
-            })
-                .orWhere((query) => {
-                query
-                    .where('users.tahun_lulus', periode_wisuda)
-                    .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_reg + "'");
-            });
+                    .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non[i] + "'")
+                    .where('users.status_completion', 1);
+                if (data.length !== null) {
+                    arrDatas.push(...data);
+                }
+            }
+            return arrDatas;
         }
     }
     static async import_monitoring(tahun) {

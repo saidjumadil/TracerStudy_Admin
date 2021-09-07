@@ -16,80 +16,80 @@ export default class Services extends BaseModel {
     if (periode === '0') {
       return await Database.connection(conn).rawQuery(
         'SELECT' +
-        ' lulusan.nama_fakultas, ' +
-        ' lulusan.nama_prodi, ' +
-        ' COUNT(*) AS jumlah_pendaftar, ' +
-        ' COUNT(lulusan.tanggal_isi) AS selesai ' +
-        ' FROM ' +
-        ' (SELECT ' +
-        ' mapping_prodi.tanggal_isi, ' +
-        ' f.nama_fakultas AS nama_fakultas, ' +
-        ' mapping_prodi.fak, ' +
-        ' mapping_prodi.prodi AS nama_prodi, ' +
-        ' mapping_prodi.kd_fjjp7, ' +
-        ' mapping_prodi.kdbaru ' +
-        ' FROM ' +
-        ' (SELECT ' +
-        ' p.nama_prodi AS prodi, ' +
-        ' a.tanggal_isi, ' +
-        ' p.kd_fjjp7, ' +
-        ' p.kd_fakultas2 AS fak, ' +
-        ' IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru ' +
-        ' FROM ' +
-        ' users a ' +
-        ' LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non ' +
-        ' LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) ' +
-        ' WHERE ' +
-        " SUBSTR(a.tahun_lulus, 1, 4) = '" +
-        tahun +
-        "' " +
-        ' ORDER BY p.kd_fjjp7) AS mapping_prodi ' +
-        ' LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2' +
-        ' WHERE ' +
-        ' mapping_prodi.kd_fjjp7 IN (' +
-        list_kd_fjjp7 +
-        ')) AS lulusan ' +
-        ' GROUP BY lulusan.nama_prodi ' +
-        ' ORDER BY lulusan.fak'
+          ' lulusan.nama_fakultas, ' +
+          ' lulusan.nama_prodi, ' +
+          ' COUNT(*) AS jumlah_pendaftar, ' +
+          ' COUNT(lulusan.tanggal_isi) AS selesai ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' mapping_prodi.tanggal_isi, ' +
+          ' f.nama_fakultas AS nama_fakultas, ' +
+          ' mapping_prodi.fak, ' +
+          ' mapping_prodi.prodi AS nama_prodi, ' +
+          ' mapping_prodi.kd_fjjp7, ' +
+          ' mapping_prodi.kdbaru ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' p.nama_prodi AS prodi, ' +
+          ' a.tanggal_isi, ' +
+          ' p.kd_fjjp7, ' +
+          ' p.kd_fakultas2 AS fak, ' +
+          ' IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru ' +
+          ' FROM ' +
+          ' users a ' +
+          ' LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non ' +
+          ' LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) ' +
+          ' WHERE ' +
+          " SUBSTR(a.tahun_lulus, 1, 4) = '" +
+          tahun +
+          "' " +
+          ' ORDER BY p.kd_fjjp7) AS mapping_prodi ' +
+          ' LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2' +
+          ' WHERE ' +
+          ' mapping_prodi.kd_fjjp7 IN (' +
+          list_kd_fjjp7 +
+          ')) AS lulusan ' +
+          ' GROUP BY lulusan.nama_prodi ' +
+          ' ORDER BY lulusan.fak'
       )
     } else {
       return await Database.connection(conn).rawQuery(
         'SELECT' +
-        ' lulusan.nama_fakultas, ' +
-        ' lulusan.nama_prodi, ' +
-        ' COUNT(*) AS jumlah_pendaftar, ' +
-        ' COUNT(lulusan.tanggal_isi) AS selesai ' +
-        ' FROM ' +
-        ' (SELECT ' +
-        ' mapping_prodi.tanggal_isi, ' +
-        ' f.nama_fakultas AS nama_fakultas, ' +
-        ' mapping_prodi.fak, ' +
-        ' mapping_prodi.prodi AS nama_prodi, ' +
-        ' mapping_prodi.kd_fjjp7, ' +
-        ' mapping_prodi.kdbaru ' +
-        ' FROM ' +
-        ' (SELECT ' +
-        ' p.nama_prodi AS prodi, ' +
-        ' a.tanggal_isi, ' +
-        ' p.kd_fjjp7, ' +
-        ' p.kd_fakultas2 AS fak, ' +
-        ' IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru ' +
-        ' FROM ' +
-        ' users a ' +
-        ' LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non ' +
-        ' LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) ' +
-        ' WHERE ' +
-        " SUBSTR(a.tahun_lulus, 1, 5) = '" +
-        periode_wisuda +
-        "' " +
-        ' ORDER BY p.kd_fjjp7) AS mapping_prodi ' +
-        ' LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2' +
-        ' WHERE ' +
-        ' mapping_prodi.kd_fjjp7 IN (' +
-        list_kd_fjjp7 +
-        ')) AS lulusan ' +
-        ' GROUP BY lulusan.nama_prodi ' +
-        ' ORDER BY lulusan.fak'
+          ' lulusan.nama_fakultas, ' +
+          ' lulusan.nama_prodi, ' +
+          ' COUNT(*) AS jumlah_pendaftar, ' +
+          ' COUNT(lulusan.tanggal_isi) AS selesai ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' mapping_prodi.tanggal_isi, ' +
+          ' f.nama_fakultas AS nama_fakultas, ' +
+          ' mapping_prodi.fak, ' +
+          ' mapping_prodi.prodi AS nama_prodi, ' +
+          ' mapping_prodi.kd_fjjp7, ' +
+          ' mapping_prodi.kdbaru ' +
+          ' FROM ' +
+          ' (SELECT ' +
+          ' p.nama_prodi AS prodi, ' +
+          ' a.tanggal_isi, ' +
+          ' p.kd_fjjp7, ' +
+          ' p.kd_fakultas2 AS fak, ' +
+          ' IFNULL (map.kd_fjjp7_reg, p.kd_fjjp7) AS kdbaru ' +
+          ' FROM ' +
+          ' users a ' +
+          ' LEFT JOIN users_mapping_kd_fjjp7 map ON SUBSTR(a.nim, 3, 7) = map.kd_fjjp7_non ' +
+          ' LEFT JOIN users_kd_fjjp7 p ON p.kd_fjjp7 = IFNULL (map.kd_fjjp7_reg, SUBSTR(a.nim, 3, 7)) ' +
+          ' WHERE ' +
+          " SUBSTR(a.tahun_lulus, 1, 5) = '" +
+          periode_wisuda +
+          "' " +
+          ' ORDER BY p.kd_fjjp7) AS mapping_prodi ' +
+          ' LEFT JOIN users_fakultas f ON mapping_prodi.fak = f.kd_fakultas2' +
+          ' WHERE ' +
+          ' mapping_prodi.kd_fjjp7 IN (' +
+          list_kd_fjjp7 +
+          ')) AS lulusan ' +
+          ' GROUP BY lulusan.nama_prodi ' +
+          ' ORDER BY lulusan.fak'
       )
     }
   }
@@ -118,8 +118,9 @@ export default class Services extends BaseModel {
 
   /*mengambil data  users_mapping_kd_fjjp7*/
   public static async get_users_mapping_kd_fjjp7(kd_fjjp7) {
-    let arrTracerKdfjjp7 = []
-    const mapping = await Database.connection(conn)
+    let arrTracerKdfjjp7: any[] = []
+
+    const mapping: any[] = await Database.connection(conn)
       .from('users_mapping_kd_fjjp7')
       .where('kd_fjjp7_reg', kd_fjjp7)
 
@@ -141,11 +142,11 @@ export default class Services extends BaseModel {
   /* get data pengisi dari tabel monitoring */
   //versi baru (select berdasarkan kd_fjjp7_non)
   public static async get_data_pengisi(periode_wisuda: string, kd_fjjp7_non) {
-    let arrUserMonitoring = []
+    let arrUserMonitoring: any[] = []
     if (periode_wisuda.substring(4, 5) === '0') {
       periode_wisuda = periode_wisuda.substring(0, 4)
       for (let i = 0; i < kd_fjjp7_non.length; i++) {
-        const data = await Database.connection(conn)
+        const data: any[] = await Database.connection(conn)
           .from('users_monitoring')
           .whereRaw("periode_wisuda like '" + periode_wisuda + "%'")
           .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non[i] + "'")
@@ -156,7 +157,7 @@ export default class Services extends BaseModel {
       return arrUserMonitoring
     } else {
       for (let i = 0; i < kd_fjjp7_non.length; i++) {
-        const data = await Database.connection(conn)
+        const data: any[] = await Database.connection(conn)
           .from('users_monitoring')
           .where('periode_wisuda', periode_wisuda)
           .whereRaw("SUBSTR(nim,3,7)= '" + kd_fjjp7_non[i] + "'")
@@ -169,7 +170,7 @@ export default class Services extends BaseModel {
   }
   //versi sebelumnya
   // FIXME: data mengabaikan periode wisuda
-  // public static async get_data_pengisi(periode_wisuda: string, kd_fjjp7_non: string, kd_fjjp7_reg) { 
+  // public static async get_data_pengisi(periode_wisuda: string, kd_fjjp7_non: string, kd_fjjp7_reg) {
   //   if (periode_wisuda.substring(4, 5) === '0') {
   //     periode_wisuda = periode_wisuda.substring(0, 4)
   //     return await Database.connection(conn)
@@ -242,11 +243,11 @@ export default class Services extends BaseModel {
     kd_fjjp7_non: any,
     nama_tabel: string
   ) {
-    let arrDatas = []
+    let arrDatas: any[] = []
     if (periode_wisuda.substring(4, 5) === '0') {
       let tahun_lulus = periode_wisuda.substring(0, 4)
       for (let i = 0; i < kd_fjjp7_non.length; i++) {
-        const data = await Database.connection(conn)
+        const data: any[] = await Database.connection(conn)
           .from('users')
           .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
           .select(nama_tabel + '.*')
@@ -260,7 +261,7 @@ export default class Services extends BaseModel {
       return arrDatas
     } else {
       for (let i = 0; i < kd_fjjp7_non.length; i++) {
-        const data = await Database.connection(conn)
+        const data: any[] = await Database.connection(conn)
           .from('users')
           .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
           .select(nama_tabel + '.*')
