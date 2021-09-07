@@ -53,7 +53,7 @@ class PascaS3AdminResponsController {
                 periode_wisuda = tahun.concat(periode);
             let kd_fjjp7_mapping = await PascaS3Services_1.default.get_users_mapping_kd_fjjp7(kd_fjjp7);
             if (kd_fjjp7_mapping.length === 0) {
-                return { message: 'Data User Mapping tidak tersedia' };
+                return { message: 'Data User Mapping (kode fjjp7 ' + kd_fjjp7 + ') tidak tersedia ' };
             }
             if (periode_wisuda !== 'null') {
                 console.log(periode_wisuda);

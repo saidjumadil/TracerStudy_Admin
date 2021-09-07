@@ -52,7 +52,7 @@ class ProfesiAdminResponsController {
                 periode_wisuda = tahun.concat(periode);
             let kd_fjjp7_mapping = await ProfesiServices_1.default.get_users_mapping_kd_fjjp7(kd_fjjp7);
             if (kd_fjjp7_mapping.length === 0) {
-                return { message: 'Data User Mapping tidak tersedia' };
+                return { message: 'Data User Mapping (kode fjjp7 ' + kd_fjjp7 + ') tidak tersedia ' };
             }
             if (periode_wisuda !== 'null') {
                 const get_data_pengisi = await ProfesiServices_1.default.get_data_pengisi(periode_wisuda, kd_fjjp7_mapping);
