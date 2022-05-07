@@ -1,4 +1,6 @@
-const drawData = (data, csrf) => {
+/* eslint-disable prettier/prettier */
+
+const drawData = (data, csrf, role) => {
   let datas = ''
   data.map((row, index) => {
     datas += `
@@ -15,32 +17,46 @@ const drawData = (data, csrf) => {
           </span>
         </td>
         <td>${row.no_hape_1 || '-'}</td>
-        <td> <label class="radio justify-content-center"> <input type="radio" data-id='${index}' value='0' ${
+        <td> <label class="radio justify-content-center"> <input type="radio" ${
+          role === '3' ? 'disabled' : ''
+        } data-id='${index}' value='0' ${
       row.hp_valid_1 === 0 ? 'checked' : ''
     } name="hp_valid_1[${index}]"><span></span>
           </label> </td>
-        <td> <label class="radio justify-content-center"> <input type="radio" data-id='${index}' value='1' ${
+        <td> <label class="radio justify-content-center"> <input type="radio" ${
+          role === '3' ? 'disabled' : ''
+        } data-id='${index}' value='1' ${
       row.hp_valid_1 === 1 ? 'checked' : ''
     } name="hp_valid_1[${index}]"><span></span>
           </label> </td>
         <td>${row.no_hape_2 || '-'}</td>
-        <td> <label class="radio justify-content-center"> <input type="radio" data-id='${index}' value='0' ${
+        <td> <label class="radio justify-content-center"> <input type="radio" ${
+          role === '3' ? 'disabled' : ''
+        } data-id='${index}' value='0' ${
       row.hp_valid_2 === 0 ? 'checked' : ''
     } name="hp_valid_2[${index}]"><span></span>
           </label> </td>
-        <td> <label class="radio justify-content-center"> <input type="radio" data-id='${index}' value='1' ${
+        <td> <label class="radio justify-content-center"> <input type="radio" ${
+          role === '3' ? 'disabled' : ''
+        } data-id='${index}' value='1' ${
       row.hp_valid_1 === 1 ? 'checked' : ''
     } name="hp_valid_2[${index}]"><span></span>
           </label> </td>
-        <td> <label class="checkbox"> <input type="checkbox" data-id='${index}' value='${
-      row.nim
-    }' ${row.monitoring_1 ? 'checked' : ''} name="monitoring_1[]"> <span></span> </label> </td>
-        <td> <label class="checkbox"> <input type="checkbox" data-id='${index}' value='${
-      row.nim
-    }' ${row.monitoring_2 ? 'checked' : ''} name="monitoring_2[]"> <span></span> </label> </td>
-        <td> <label class="checkbox"> <input type="checkbox" data-id='${index}' value='${
-      row.nim
-    }' ${row.monitoring_3 ? 'checked' : ''} name="monitoring_3[]"> <span></span> </label> </td>
+        <td> <label class="checkbox"> <input type="checkbox" ${
+          role === '3' ? 'disabled' : ''
+        } data-id='${index}' value='${row.nim}' ${
+      row.monitoring_1 ? 'checked' : ''
+    } name="monitoring_1[]"> <span></span> </label> </td>
+        <td> <label class="checkbox"> <input type="checkbox" ${
+          role === '3' ? 'disabled' : ''
+        } data-id='${index}' value='${row.nim}' ${
+      row.monitoring_2 ? 'checked' : ''
+    } name="monitoring_2[]"> <span></span> </label> </td>
+        <td> <label class="checkbox"> <input type="checkbox" ${
+          role === '3' ? 'disabled' : ''
+        } data-id='${index}' value='${row.nim}' ${
+      row.monitoring_3 ? 'checked' : ''
+    } name="monitoring_3[]"> <span></span> </label> </td>
         <td>${getTimeFormat(row.tanggal_isi) || '-'}</td>
         <td>
           ${
@@ -57,7 +73,7 @@ const drawData = (data, csrf) => {
   return datas
 }
 
-const drawDatatable = (data, csrf) => {
+const drawDatatable = (data, csrf, role = '4') => {
   return `
         <table class="table table-separate table-head-custom table-checkable w100" id="kt_datatable2">
           <thead>
@@ -85,7 +101,7 @@ const drawDatatable = (data, csrf) => {
             </tr>
           </thead>
           <tbody >
-            ${drawData(data, csrf)}
+            ${drawData(data, csrf, role)}
           </tbody>
         </table>
     `

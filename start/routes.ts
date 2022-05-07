@@ -54,7 +54,7 @@ Route.group(() => {
           )
         })
           .prefix('pengisi')
-          .middleware(['d3Enum'])
+          .middleware(['d3Kajur'])
 
         Route.group(() => {
           Route.get('', 'D3/D3AdminResponsController.hasil').as('hasil')
@@ -153,7 +153,7 @@ Route.group(() => {
             )
           })
             .prefix('pengisi')
-            .middleware(['pascaS2Enum'])
+            .middleware(['pascaS2Kajur'])
 
           Route.group(() => {
             Route.get('', 'Pasca/S2/PascaS2AdminResponsController.hasil').as('hasil')
@@ -266,7 +266,7 @@ Route.group(() => {
             )
           })
             .prefix('pengisi')
-            .middleware(['pascaS3Enum'])
+            .middleware(['pascaS3Kajur'])
 
           Route.group(() => {
             Route.get('', 'Pasca/S3/PascaS3AdminResponsController.hasil').as('hasil')
@@ -383,7 +383,7 @@ Route.group(() => {
           )
         })
           .prefix('pengisi')
-          .middleware(['profesiEnum'])
+          .middleware(['profesiKajur'])
 
         Route.group(() => {
           Route.get('', 'Profesi/ProfesiAdminResponsController.hasil').as('hasil')

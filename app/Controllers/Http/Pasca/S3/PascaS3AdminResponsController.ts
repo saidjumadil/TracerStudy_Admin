@@ -28,8 +28,9 @@ export default class PascaS3AdminResponsController {
   public async pengisi({ view, auth }) {
     await auth.authenticate()
     //get daftar sasaran
+    const tahunSasaran = await Services.get_sasaran()
     let daftar_sasaran = await Services.get_list_sasaran()
-    if (auth.user.legacy_role === 4) {
+    if ([3, 4].includes(auth.user.legacy_role)) {
       daftar_sasaran = daftar_sasaran.filter(
         (row) => row.tahun.substring(0, 4) === tahunSasaran.tahun.substring(0, 4)
       )
@@ -38,7 +39,6 @@ export default class PascaS3AdminResponsController {
     const RouteActionProdi = `admin.${routeName}.get_prodi`
     const RouteActionDataPengisi = `admin.${routeName}.get_data_pengisi`
     const RouteActionUpdateDataPengisi = `admin.${routeName}.data.update_data_pengisi`
-    const tahunSasaran = await Services.get_sasaran()
     return view.render(renderName + '/data/pengisi', {
       tahunSasaran,
       GetFakultas,

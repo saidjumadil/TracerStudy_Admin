@@ -29,7 +29,7 @@ export default class ProfesiAdminResponsController {
     //get daftar sasaran
     const tahunSasaran = await Services.get_sasaran()
     let daftar_sasaran = await Services.get_list_sasaran()
-    if (auth.user.legacy_role === 4) {
+    if ([3, 4].includes(auth.user.legacy_role)) {
       daftar_sasaran = daftar_sasaran.filter(
         (row) => row.tahun.substring(0, 4) === tahunSasaran.tahun.substring(0, 4)
       )
