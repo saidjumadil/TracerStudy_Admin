@@ -44,7 +44,7 @@ Route_1.default.group(() => {
                     Route_1.default.post('', 'D3/D3AdminResponsController.update_data_pengisi').as('update_data_pengisi');
                 })
                     .prefix('pengisi')
-                    .middleware(['d3Enum']);
+                    .middleware(['d3Kajur']);
                 Route_1.default.group(() => {
                     Route_1.default.get('', 'D3/D3AdminResponsController.hasil').as('hasil');
                     Route_1.default.post('', 'D3/D3AdminResponsController.export_hasil_users').as('export_hasil_users');
@@ -111,7 +111,7 @@ Route_1.default.group(() => {
                         Route_1.default.post('', 'Pasca/S2/PascaS2AdminResponsController.update_data_pengisi').as('update_data_pengisi');
                     })
                         .prefix('pengisi')
-                        .middleware(['pascaS2Enum']);
+                        .middleware(['pascaS2Kajur']);
                     Route_1.default.group(() => {
                         Route_1.default.get('', 'Pasca/S2/PascaS2AdminResponsController.hasil').as('hasil');
                         Route_1.default.post('', 'Pasca/S2/PascaS2AdminResponsController.export_hasil_users').as('export_hasil_users');
@@ -177,7 +177,7 @@ Route_1.default.group(() => {
                         Route_1.default.post('', 'Pasca/S3/PascaS3AdminResponsController.update_data_pengisi').as('update_data_pengisi');
                     })
                         .prefix('pengisi')
-                        .middleware(['pascaS3Enum']);
+                        .middleware(['pascaS3Kajur']);
                     Route_1.default.group(() => {
                         Route_1.default.get('', 'Pasca/S3/PascaS3AdminResponsController.hasil').as('hasil');
                         Route_1.default.post('', 'Pasca/S3/PascaS3AdminResponsController.export_hasil_users').as('export_hasil_users');
@@ -246,7 +246,7 @@ Route_1.default.group(() => {
                     Route_1.default.post('', 'Profesi/ProfesiAdminResponsController.update_data_pengisi').as('update_data_pengisi');
                 })
                     .prefix('pengisi')
-                    .middleware(['profesiEnum']);
+                    .middleware(['profesiKajur']);
                 Route_1.default.group(() => {
                     Route_1.default.get('', 'Profesi/ProfesiAdminResponsController.hasil').as('hasil');
                     Route_1.default.post('', 'Profesi/ProfesiAdminResponsController.export_hasil_users').as('export_hasil_users');

@@ -27,15 +27,15 @@ const routeName = 'pasca.s3';
 class PascaS3AdminResponsController {
     async pengisi({ view, auth }) {
         await auth.authenticate();
+        const tahunSasaran = await PascaS3Services_1.default.get_sasaran();
         let daftar_sasaran = await PascaS3Services_1.default.get_list_sasaran();
-        if (auth.user.legacy_role === 4) {
+        if ([3, 4].includes(auth.user.legacy_role)) {
             daftar_sasaran = daftar_sasaran.filter((row) => row.tahun.substring(0, 4) === tahunSasaran.tahun.substring(0, 4));
         }
         const GetFakultas = await PascaS3Services_1.default.get_fakultas();
         const RouteActionProdi = `admin.${routeName}.get_prodi`;
         const RouteActionDataPengisi = `admin.${routeName}.get_data_pengisi`;
         const RouteActionUpdateDataPengisi = `admin.${routeName}.data.update_data_pengisi`;
-        const tahunSasaran = await PascaS3Services_1.default.get_sasaran();
         return view.render(renderName + '/data/pengisi', {
             tahunSasaran,
             GetFakultas,

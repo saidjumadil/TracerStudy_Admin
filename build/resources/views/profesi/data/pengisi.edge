@@ -50,7 +50,7 @@
       {id:4,nama:'Periode 4'},
       ]
       })
-      @elseif([4].includes(auth.user.legacy_role))
+      @elseif([3,4].includes(auth.user.legacy_role))
       <input type="hidden" name="tahun" id="tahun" value="{{getTahun(daftar_sasaran[0].tahun)}}">
       <div class="form-group">
         <label>
@@ -146,7 +146,7 @@
         }
         showAlert.innerHTML = ''
         // console.log(data.get_data_pengisi)
-        showDataPengisi.innerHTML = drawDatatable(data.get_data_pengisi, `{{ csrfField() }}`)
+        showDataPengisi.innerHTML = drawDatatable(data.get_data_pengisi, `{{ csrfField() }}`, `{{auth.user.legacy_role}}`)
         $('#kt_datatable2').DataTable({
           scrollY: '50vh',
           scrollX: true,
