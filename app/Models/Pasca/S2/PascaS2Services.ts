@@ -252,7 +252,9 @@ export default class Services extends BaseModel {
           .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non[i] + "'")
           .where('users.status_completion', 1)
         if (data.length !== null) {
-          arrDatas.push(...data)
+          const get_values = await this.id_to_value(data,nama_tabel)
+          arrDatas.push(... get_values)
+          // arrDatas.push(...data)
         }
       }
       return arrDatas
@@ -266,10 +268,111 @@ export default class Services extends BaseModel {
           .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non[i] + "'")
           .where('users.status_completion', 1)
         if (data.length !== null) {
-          arrDatas.push(...data)
+          const get_values = await this.id_to_value(data,nama_tabel)
+          arrDatas.push(... get_values)
+          // arrDatas.push(...data)
         }
       }
       return arrDatas
+    }
+  }
+
+  private static async id_to_value(data:any, nama_tabel:any) {
+    //get list field
+    let idToValueColoumn: any[] = [];
+    const tempTable1 = 'pertanyaan_'+nama_tabel.split('_')[1]
+    const query = await Database.connection(conn)
+                        .from(tempTable1)
+                        .select('nama_field','list_pilihan','trigger')
+                        .whereNotNull('list_pilihan').orWhereNotNull('trigger')
+
+    if (query!) {
+      query.forEach(element => {
+        if (element.nama_field.length && element.list_pilihan.length !== 0) {
+          const arrData : any [] = [element.nama_field, element.list_pilihan]
+          idToValueColoumn.push(arrData)
+        }
+        if (element.trigger !== null && element.trigger.length!==0) {
+          const triggerData : any [] = [element.trigger.split(',')[1], element.trigger.split(',')[0]]
+          idToValueColoumn.push(triggerData)
+        }
+      });
+    }
+
+    //TODO: query jawaban lainnya
+    let obj: any[] = [];
+    let finalResult : any[] =[]
+    //loop banyyak data dari tiap table
+    for (let j = 0; j < data.length; j++) {
+      let output: any
+      obj = JSON.parse(JSON.stringify(data))
+      // loop untuk id->value untuk tiap row
+      for (let k = 0; k < idToValueColoumn.length; k++) {
+        if (Object.keys(obj[j]).includes(idToValueColoumn[k][0])) {
+          //loop ambil masing2 value
+          for (const [key, val] of Object.entries(obj[j])) {
+            if (val && key == idToValueColoumn[k][0]) {
+              let tempResult:any
+              //check multi value
+              if (String(val).includes(',')) {
+                obj[j][key] = ''
+                let multi_values = String(val).split(',')
+                for (let l = 0; l < multi_values.length; l++) {
+                  if (Number(multi_values[l]) == 10000) {
+                    tempResult = await this.get_lainnya(nama_tabel, obj[j], key)
+                  }
+                  else {
+                    const query = await Database.connection(conn).from(idToValueColoumn[k][1]).select('nama').where('id', String(multi_values[l]))
+                    tempResult = JSON.parse(JSON.stringify(query, null, 4))[0]['nama']
+                  }
+                  // ganti value
+                  obj[j][key] = obj[j][key].concat(tempResult, (l==multi_values.length-1)?'':', ')
+                }
+              } 
+              //check single value
+              if (!String(val).includes(',')) {
+                if (val == 10000) {
+                  tempResult = await this.get_lainnya(nama_tabel, obj[j], key)
+                }
+                else if(Number(val)) {
+                  const query = await Database.connection(conn).from(idToValueColoumn[k][1]).select('nama').where('id', String(val))
+                  tempResult = JSON.parse(JSON.stringify(query, null, 4))[0]['nama']
+                }
+                // ganti value
+                obj[j][key] = tempResult
+              }
+            }
+          }
+        }
+        output = Object(obj[j]);
+      }
+      finalResult.push(output)
+    }
+    return finalResult
+  }
+
+  private static async get_lainnya(nama_tabel:string, obj:object, key:string) {
+    const tempTable1 = 'pertanyaan_'+nama_tabel.split('_')[1]
+    try {
+      const query2 = await Database.connection(conn).from('jawaban_lainnya').select('jawaban')
+                    .where('nim', obj['nim'])
+                    .where('id_pertanyaan', Database.from(tempTable1).select('id').where('nama_field', key))
+                    .where('tabel', nama_tabel)
+
+      // console.log('tes queri ',  query2)
+      if (query2.length !== 0) {
+        if (key == 'id_aktivitas') {
+          return 'Belum memungkinkan bekerja ('+query2[0].jawaban+')'
+        }
+        return 'Lainnya ('+query2[0].jawaban+')'
+      }
+      if (query2.length === 0  && key == 'id_aktivitas') {
+        return 'Belum memungkinkan bekerja'
+      }
+      
+      return 'Lainnya'
+    } catch (error) {
+      console.log('err ', error)
     }
   }
   //versi lama
