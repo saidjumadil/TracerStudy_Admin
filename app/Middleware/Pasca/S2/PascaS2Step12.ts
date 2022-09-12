@@ -4,11 +4,12 @@ import Services from 'App/Models/Pasca/S2/PascaS2Services'
 const routeName: string = 'pasca.s2.'
 export default class PascaS2Step12 {
   public async handle({ response, session }, next: () => Promise<void>) {
-    const tahunSasaran: TahunSasaran = await Services.get_sasaran() // get periode skrg
+    const tahunSasaran : TahunSasaran [] = await Services.get_sasaran() // get periode skrg
 
-    // console.log(auth)
-    if (!tahunSasaran) return await next()
-    if (!tahunSasaran.waktu_mulai) {
+    console.log(tahunSasaran)
+
+    if (tahunSasaran.length == 0) return await next()
+    if (!tahunSasaran[0].waktu_mulai) {
       message(
         session,
         'notification',
@@ -17,9 +18,9 @@ export default class PascaS2Step12 {
       )
       return response.redirect().toRoute('admin.' + routeName + 'index')
     }
-    if (Number(tahunSasaran.waktu_berakhir) < Date.now()) return await next()
 
-    if (tahunSasaran.tahun) {
+    if (Number(tahunSasaran[0].waktu_berakhir) < Date.now()) return await next()
+    if (tahunSasaran[0].tahun) {
       message(
         session,
         'notification',

@@ -7,7 +7,7 @@ export default class PascaS2Step4 {
     const tahunSasaran: TahunSasaran = await Services.get_sasaran() // get periode skrg
 
     // console.log(auth)
-    if (!tahunSasaran) {
+    if (!tahunSasaran[0]) {
       message(
         session,
         'notification',
@@ -16,7 +16,7 @@ export default class PascaS2Step4 {
       )
       return response.redirect().toRoute('admin.' + routeName + 'index')
     }
-    if (tahunSasaran.status_import_monitoring === 0) {
+    if (tahunSasaran[0].status_import_monitoring === 0) {
       message(
         session,
         'notification',

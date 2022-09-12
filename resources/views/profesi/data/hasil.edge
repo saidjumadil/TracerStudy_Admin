@@ -41,13 +41,34 @@
       {id:4,nama:'Periode 4'},
       ]
       })
+
+
+      @if([3].includes(auth.user.legacy_role))
       <div class="form-group ">
         <label for="fakultas">
           Fakultas
-          <span class="text-danger">*</span>
         </label>
-        <select class="form-control" name="fakultas" id="fakultas" data-fv-not-empty='true'
-          data-fv-not-empty___message='Pertanyaan ini wajib diisi'>
+        <select class="form-control" name="fakultas" id="fakultas" disabled>
+          @each(value in GetFakultas)
+          @if(value.kd_fakultas2 == prodi_kajur.kd_fakultas2)
+            <option value="{{ value.kd_fakultas2 }}">{{ value.nama_fakultas }}</option>
+          @endif
+          @endeach
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Jurusan</label>
+        <select class="form-control" name="jurusan" id="jurusan" disabled>
+          <option value="{{prodi_kajur.kd_fjjp7}}">{{prodi_kajur.nama_prodi}}</option>
+        </select>
+      </div>
+
+      @else
+      <div class="form-group ">
+        <label for="fakultas">
+          Fakultas
+        </label>
+        <select class="form-control" name="fakultas" id="fakultas">
           <option value="">-- pilihan anda --</option>
           @each(value in GetFakultas)
           <option value="{{ value.kd_fakultas2 }}">{{ value.nama_fakultas }}</option>
@@ -55,16 +76,12 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Jurusan
-          <span class="text-danger">*</span>
-
-
-        </label>
-        <select class="form-control" name="kd_fjjp7_prodi" data-fv-not-empty='true'
-          data-fv-not-empty___message='Pertanyaan ini wajib diisi' id="jurusan">
+        <label>Jurusan</label>
+        <select class="form-control" name="jurusan" id="jurusan">
           <option value="">-- pilihan anda --</option>
         </select>
       </div>
+      @endif
 
 
       <div class="text-right">

@@ -26,8 +26,11 @@ Route.group(() => {
     Route.group(() => {
       Route.get('', 'OperatorController.get_operator').as('operator')
       Route.post('', 'OperatorController.update_users').as('ubah_operator')
+      Route.get('get_fakultas', 'OperatorController.get_fakultas').as('get_fakultas')
+      Route.get('get_prodi', 'OperatorController.get_prodi').as('get_prodi')
 
       Route.post('tambah', 'OperatorController.register_users').as('store_operator')
+      Route.post('tambah_kajur', 'OperatorController.register_users_kajur').as('store_operator_kajur')
       Route.post('reset_password', 'OperatorController.reset_password').as('reset_password')
       Route.post('hapus_user', 'OperatorController.hapus_user').as('hapus_user')
     })

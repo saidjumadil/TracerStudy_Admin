@@ -1,0 +1,24 @@
+@set('lainnya',false)
+
+<div class="{{ form_class }}" data-target-dependency="{{ target }}" data-answer-dependency="{{ answer }}">
+  <div class="form-group ">
+    <label>
+      {{ label }}
+      @if(validasi[0])
+      <span class="text-danger">*</span>
+      @endif
+      @if(notification)
+      <span class="form-text text-info">{{{ notification }}}</span>
+      @endif
+    </label>
+    <div class="checkbox-list">
+      @each((value,index) in choice)
+      <label class="checkbox">
+        <input type="checkbox" value="{{ value.id }}" data-key='{{ name }}[]' name="{{ name }}[]">
+        <span></span>
+        {{ value.nama }}
+      </label>
+      @endeach
+    </div>
+  </div>
+</div>

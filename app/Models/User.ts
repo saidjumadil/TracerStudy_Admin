@@ -109,8 +109,28 @@ export default class D3User extends BaseModel {
     })
   }
 
+  public static async insert_users_kajur(
+    username: string,
+    kd_jurusan: string
+  ) {
+
+    await Database.connection(this.conn)
+      .from('users_kajur')
+      .where('kd_fjjp7', kd_jurusan)
+      .update({ aktif: '0'})
+    // console.log(rows[0])
+
+    return await Database.connection(this.conn).table('users_kajur').insert({
+      nim: username,
+      kd_fjjp7: kd_jurusan
+    })
+  }
+
   //menghapus user
   public static async hapus_user(username: string) {
+    await Database.connection(this.conn)
+      .from('users_kajur')
+      .where('nim', username).delete()
     return await this.query().where('username', username).delete()
   }
 

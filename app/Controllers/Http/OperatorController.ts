@@ -6,6 +6,7 @@ import User from 'App/Models/User'
 import randomstring from 'randomstring'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import Env from '@ioc:Adonis/Core/Env'
+import Database from '@ioc:Adonis/Lucid/Database'
 const className: string = 'OperatorController'
 
 function message(session, nama_notif, type, message) {
@@ -16,11 +17,33 @@ function message(session, nama_notif, type, message) {
     },
   })
 }
+
+
 export default class OperatorController {
   public async get_operator({ view, auth }) {
+    const routeFak = 'admin.get_fakultas'
+    const routeProdi = 'admin.get_prodi'
     const current_user = await auth.authenticate()
     const users = await User.get_users(current_user)
-    return view.render('operator/operator', { users })
+    return view.render('operator/operator', { users, routeFak, routeProdi })
+  }
+
+  public async get_fakultas({request}){
+    const {permission} = request.all()
+    const conn = ['','cdc_tracerstudy_d3', 'cdc_tracerstudy_pasca_s2', 'cdc_tracerstudy_pasca_s3', 'cdc_tracerstudy_profesi']
+    
+    const getFakultas = await Database.connection(conn[permission]).from('users_fakultas')
+    // console.log(getFakultas)
+    return getFakultas
+  }
+
+  public async get_prodi({request}){
+    const {id_fakultas, permission} = request.all()
+    const conn = ['','cdc_tracerstudy_d3', 'cdc_tracerstudy_pasca_s2', 'cdc_tracerstudy_pasca_s3', 'cdc_tracerstudy_profesi']
+
+    const getProdi = await Database.connection(conn[permission]).from('users_kd_fjjp7').where('kd_fakultas2', id_fakultas)
+    // console.log(getProdi)
+    return getProdi
   }
 
   public async register_users({ request, session, response }) {
@@ -81,6 +104,75 @@ export default class OperatorController {
       console.log(error)
       await ErrorLog.error_log(className, 'register_users', error.toString(), request.ip())
       message(session, 'notification_user', 'danger', 'gagal mengirim email!')
+      return response.redirect('back')
+    }
+  }
+
+  public async register_users_kajur({ request, session, response }) {
+    try {
+      const { nama, username, email, permission, password, kd_fjjp7_prodi } = request.all()
+      const legacy_role = 3
+      //cek username sudah dipakai atau belum
+      const cek_username = await User.get_availabe_username(username)
+      //jika username sudah terpakai maka tidak dizinkan daftar
+      if (cek_username) {
+        message(session, 'notification_kajur', 'danger', 'username sudah pernah digunakan!')
+        return response.redirect('back')
+      }
+      //cek email sudah dipakai atau belum
+      const cek_email = await User.get_availabe_email(email)
+      //jika email sudah terpakai maka tidak dizinkan daftar
+      if (cek_email) {
+        message(session, 'notification_kajur', 'danger', 'email sudah pernah digunakan!')
+        return response.redirect('back')
+      }
+
+      // const password = this.generate_password()
+      const permission_d3 = permission == '1' ? legacy_role : 0
+      const permission_pasca_s2 = permission.includes('2') ? legacy_role : 0
+      const permission_pasca_s3 = permission.includes('3') ? legacy_role : 0
+      const permission_profesi = permission.includes('4') ? legacy_role : 0
+      const hash_password = await Hash.make(password)
+      //insert users
+      const insert_users = await User.insert_users(
+        username,
+        nama,
+        email,
+        hash_password,
+        legacy_role,
+        permission_d3,
+        permission_pasca_s2,
+        permission_pasca_s3,
+        permission_profesi
+      )
+      
+      //insert User Kajur
+      const insert_users_kajur = await User.insert_users_kajur(username, kd_fjjp7_prodi)
+
+      if (insert_users && insert_users_kajur) {
+        // kirim email
+        const emailData = { nama, username, password }
+        console.log(emailData)
+
+        const kirimEmail = await Mail.send((message) => {
+          message
+            .to(email)
+            .from(Env.get('MAIL_USERNAME'), Env.get('MAIL_PASSWORD'))
+            .subject('Konfirmasi Akun Operator Tracer Study Universitas Syiah Kuala')
+            .htmlView('email/konfirmasi', emailData)
+        })
+
+        if (!kirimEmail) {
+          message(session, 'notification_user', 'danger', 'gagal mengirim email!')
+          return response.redirect('back')
+        }
+      }
+      message(session, 'notification_kajur', 'success', 'Berhasil menambah akun ' + nama)
+      return response.redirect('back')
+    } catch (error) {
+      console.log(error)
+      // await ErrorLog.error_log(className, 'register_users', error.toString(), request.ip())
+      message(session, 'notification_kajur', 'danger', 'gagal mengirim email!')
       return response.redirect('back')
     }
   }

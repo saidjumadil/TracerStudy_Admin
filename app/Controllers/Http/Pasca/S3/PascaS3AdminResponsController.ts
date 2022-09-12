@@ -4,7 +4,7 @@ import Services from 'App/Models/Pasca/S3/PascaS3Services'
 import ErrorLog from 'App/Models/ErrorLog'
 import { message, exportExcel, formatFileExcel } from 'App/Global'
 
-const renderName: string = 'pasca/s3' //sesuaikan
+const renderName: string = 'pasca.s3' //sesuaikan
 const excelName: string = 'pasca_s3' //sesuaikan
 const className: string = 'PascaS3AdminResponsController' //sesuaikan
 const table_name = [
@@ -27,25 +27,37 @@ export default class PascaS3AdminResponsController {
   /* menampilkan halaman daftar pengisi kuesioner dari table users_monitoring */
   public async pengisi({ view, auth }) {
     await auth.authenticate()
+    const nim = auth.user.username
+    let role = 0
+    let prodi_kajur = ""
+    
+    if([3].includes(auth.user.legacy_role)){
+      role = auth.user.legacy_role[0]
+      const prodi = await Services.get_kajur_prodi(nim)
+      prodi_kajur = await Services.get_kajur(prodi.kd_fjjp7)
+      console.log(prodi, prodi_kajur)
+    }
+
     //get daftar sasaran
-    const tahunSasaran = await Services.get_sasaran()
+    const tahunSasaran : any = await Services.get_sasaran()
     let daftar_sasaran = await Services.get_list_sasaran()
     if ([3, 4].includes(auth.user.legacy_role)) {
       daftar_sasaran = daftar_sasaran.filter(
-        (row) => row.tahun.substring(0, 4) === tahunSasaran.tahun.substring(0, 4)
+        (row) => row.tahun.substring(0, 4) === tahunSasaran[0].tahun.substring(0, 4)
       )
     }
     const GetFakultas = await Services.get_fakultas()
-    const RouteActionProdi = `admin.${routeName}.get_prodi`
-    const RouteActionDataPengisi = `admin.${routeName}.get_data_pengisi`
-    const RouteActionUpdateDataPengisi = `admin.${routeName}.data.update_data_pengisi`
+    const RouteActionProdi = `admin.${renderName}.get_prodi`
+    const RouteActionDataPengisi = `admin.${renderName}.get_data_pengisi`
+    const RouteActionUpdateDataPengisi = `admin.${renderName}.data.update_data_pengisi`
     return view.render(renderName + '/data/pengisi', {
-      tahunSasaran,
       GetFakultas,
       RouteActionProdi,
       RouteActionDataPengisi,
       RouteActionUpdateDataPengisi,
       daftar_sasaran,
+      tahunSasaran,
+      nim, prodi_kajur, role
     })
   }
 
@@ -56,18 +68,16 @@ export default class PascaS3AdminResponsController {
       let periode_wisuda: string = 'null'
       if (tahun && periode) periode_wisuda = tahun.concat(periode)
       let kd_fjjp7_mapping = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7) //get kd_fjjp7 non dan reg
-
       if (kd_fjjp7_mapping.length === 0) {
         return { message: 'Data User Mapping (kode fjjp7 ' + kd_fjjp7 + ') tidak tersedia ' }
       }
       //jika admin maka bisa lihat periode sasaran tracer sebelumnya
       if (periode_wisuda !== 'null') {
-        console.log(periode_wisuda)
         const get_data_pengisi = await Services.get_data_pengisi(periode_wisuda, kd_fjjp7_mapping)
         return { get_data_pengisi }
       } else {
         //jika enum maka ambil data periode yg skrg saja
-        const get_periode_wisuda = await Services.get_sasaran() // get periode skrg
+        const get_periode_wisuda : any = await Services.get_sasaran() // get periode skrg
         const get_data_pengisi = await Services.get_data_pengisi(
           get_periode_wisuda.tahun,
           kd_fjjp7_mapping
@@ -86,53 +96,23 @@ export default class PascaS3AdminResponsController {
   //     let { tahun, periode, kd_fjjp7 } = request.all()
   //     let periode_wisuda: string = 'null'
   //     if (tahun && periode) periode_wisuda = tahun.concat(periode)
-  //     let kd_fjjp7_mapping = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7) //get kd_fjjp7 non dan reg
-  //     //TODO: buat handler show kalo mapping nga ada
-  //     if (kd_fjjp7_mapping.length === 0) {
-  //       return "tidak tersedia di mapping"
-  //     }
-  //     //jika admin maka bisa lihat periode sasaran tracer sebelumnya
-  //     if (periode_wisuda !== 'null') {
-  //       console.log(periode_wisuda)
-  //       const get_data_pengisi = await Services.get_data_pengisi(
-  //         periode_wisuda,
-  //         kd_fjjp7_mapping
-  //       )
-  //       return { get_data_pengisi }
-  //     } else {
-  //       //jika enum maka ambil data periode yg skrg saja
-  //       const get_periode_wisuda = await Services.get_sasaran() // get periode skrg
-  //       const get_data_pengisi = await Services.get_data_pengisi(
-  //         get_periode_wisuda.tahun,
-  //         kd_fjjp7_mapping
-  //       )
-  //       return { get_data_pengisi }
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //     await ErrorLog.error_log(className, 'get_data_pengisi', error.toString(), request.ip())
-  //     return { get_data_pengisi: [] }
-  //   }
-  // }
-  //versi sebelumnya
-  // public async ajax_data_pengisi({ request }) {
-  //   try {
-  //     let { tahun, periode, kd_fjjp7 } = request.all()
-  //     let periode_wisuda: string = 'null'
-  //     if (tahun && periode) periode_wisuda = tahun.concat(periode)
+  //      //TODO: ubah variabel jadi array
   //     let { kd_fjjp7_non, kd_fjjp7_reg } = await Services.get_users_mapping_kd_fjjp7(kd_fjjp7) //get kd_fjjp7 non dan reg
   //     //jika admin maka bisa lihat periode sasaran tracer sebelumnya
   //     if (periode_wisuda !== 'null') {
   //       console.log(periode_wisuda)
+  //         //TODO: ubah paramater jadi dua
   //       const get_data_pengisi = await Services.get_data_pengisi(
   //         periode_wisuda,
   //         kd_fjjp7_non,
   //         kd_fjjp7_reg
   //       )
+
   //       return { get_data_pengisi }
   //     } else {
   //       //jika enum maka ambil data periode yg skrg saja
   //       const get_periode_wisuda = await Services.get_sasaran() // get periode skrg
+  //         //TODO: ubah paramater jadi dua
   //       const get_data_pengisi = await Services.get_data_pengisi(
   //         get_periode_wisuda.tahun,
   //         kd_fjjp7_non,
@@ -189,9 +169,20 @@ export default class PascaS3AdminResponsController {
   public async hasil({ view, auth }) {
     await auth.authenticate()
     const tahunSasaran = await Services.get_sasaran()
+    const nim = auth.user.username
+    let role = 0
+    let prodi_kajur = ""
+    
+    if([3].includes(auth.user.legacy_role)){
+      role = auth.user.legacy_role[0]
+      const prodi = await Services.get_kajur_prodi(nim)
+      prodi_kajur = await Services.get_kajur(prodi.kd_fjjp7)
+      console.log(prodi, prodi_kajur)
+    }
+
     const GetFakultas = await Services.get_fakultas()
-    const RouteActionProdi = `admin.${routeName}.get_prodi`
-    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi, tahunSasaran })
+    const RouteActionProdi = `admin.${renderName}.get_prodi`
+    return view.render(renderName + '/data/hasil', { GetFakultas, RouteActionProdi, tahunSasaran,  prodi_kajur, role })
   }
 
   /* menambilkan halaman untuk export users_monitoring */
@@ -237,7 +228,7 @@ export default class PascaS3AdminResponsController {
       }
     }
   }
-  //versi sebelumnya
+  //versi lama
   // public async export_hasil_users({ request }) {
   //   try {
   //     let { tahun, periode, kd_fjjp7_prodi } = request.all()
@@ -284,8 +275,9 @@ export default class PascaS3AdminResponsController {
 
   public async importuser({ view, auth }) {
     await auth.authenticate()
-    const sasaran = await Services.get_sasaran()
     const tahunSasaran = await Services.get_sasaran()
+    const sasaran = await Services.get_sasaran()
+
     return view.render(renderName + '/data/import_user', { sasaran, tahunSasaran })
   }
 
@@ -294,24 +286,20 @@ export default class PascaS3AdminResponsController {
     try {
       //get tahun dari tabel sasaran sasaran
       const tahun = await Services.get_sasaran()
-      let tahun_monitoring = tahun.tahun.substring(0, 4)
-      const get_import_status = await Services.get_status_monitoring(tahun_monitoring)
-      if (get_import_status) {
-        message(session, 'notification', 'warning', 'Data monitoring sudah pernah diimport!')
-        return response.redirect('back')
-      }
+      let tahun_monitoring = tahun[0].tahun.substring(0, 4)
+      // const get_import_status = await Services.get_status_monitoring(tahun_monitoring)
       const store_monitoring = await Services.import_monitoring(tahun_monitoring)
       if (store_monitoring) {
         //update status user monitoring untuk sasaran
         await Services.update_status_monitoring()
         message(session, 'notification', 'success', 'Berhasil import data monitoring')
-        return response.redirect().toRoute('admin.' + routeName + '.index')
+        return response.redirect().toRoute('admin.' + renderName + '.index')
       }
       message(session, 'notification', 'danger', 'Gagal import data monitoring')
       return response.redirect('back')
     } catch (error) {
       console.log(error)
-      await ErrorLog.error_log(className, 'store_monitoring', error.toString(), request.ip())
+      // await ErrorLog.error_log(className, 'store_monitoring', error.toString(), request.ip())
       message(session, 'notification', 'danger', 'Gagal import data monitoring')
       return response.redirect('back')
     }
@@ -328,3 +316,4 @@ export default class PascaS3AdminResponsController {
     }
   }
 }
+

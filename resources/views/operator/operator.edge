@@ -9,95 +9,211 @@
     <h3 class="card-title">
       Data Enumerator
     </h3>
-
   </div>
   <!--begin::Form-->
-  <form method="POST" id="form" action="{{route('admin.store_operator')}}">
-    <div class="card-body">
-      <!-- Button trigger modal-->
-      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_tambah">
-        <i class="fas fa-user-plus icon-sm"></i> Tambah Enum
-      </button>
-
-      <!-- Modal-->
-      <div class="modal fade" id="modal_tambah" tabindex="-1" role="dialog" aria-labelledby="modal_tambahLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modal_tambahLabel">Tambah Enumerator </h5>
-
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <i aria-hidden="true" class="ki ki-close"></i>
-              </button>
-            </div>
-            <form method="POST" id="form">
-              <div class="modal-body">
-                @if(flashMessages.get('notification_user'))
-                <div
-                  class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification_user.type') }} alert-dismissible animated fadeIn"
-                  role="alert">
-                  <span>{{ flashMessages.get('notification_user.message') }}</span>
+  <div class="card-body">
+    <div class="row ml-1">  
+      <form method="POST" id="form" action="{{route('admin.store_operator')}}">
+        <!-- Button trigger modal-->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_tambah">
+          <i class="fas fa-user-plus icon-sm"></i> Tambah Enum
+        </button>
+  
+        <!-- Modal-->
+        <div class="modal fade" id="modal_tambah" tabindex="-1" role="dialog" aria-labelledby="modal_tambahLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modal_tambahLabel">Tambah Enumerator </h5>
+  
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+              </div>
+              <form method="POST" id="form">
+                <div class="modal-body">
+                  @if(flashMessages.get('notification_user'))
+                  <div
+                    class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification_user.type') }} alert-dismissible animated fadeIn"
+                    role="alert">
+                    <span>{{ flashMessages.get('notification_user.message') }}</span>
+                  </div>
+                  @endif
+                  {{ csrfField() }}
+  
+                  @!component('components/input',{
+                  'placeholder': 'Contoh: Aqil Fiqran DziUl Haq',
+                  'name':'nama',
+                  'label':'Nama',
+                  'validasi':[true,false,false],
+                  'type':'text'
+                  })
+                  @!component('components/input',{
+                  'placeholder': 'Contoh: aqilfiqran',
+                  'name':'username',
+                  'label':'Username',
+                  'validasi':[true,false,false],
+                  'type':'text'
+                  })
+                  @!component('components/input',{
+                  'placeholder': 'Contoh: aqilfiqran@mhs.unsyiah.ac.id',
+                  'name':'email',
+                  'label':'Email',
+                  'validasi':[true,false,false],
+                  'type':'text'
+                  })
+                  <input type="hidden" name="legacy_role" id="legacy_role" value=4>
+                  @!component('components/checkbox',{
+                  label:'Jabatan Permisi',
+                  name:'permission',
+                  validasi:[true,false,false],
+                  choice:[
+                  { id:1, nama:'D3' },
+                  { id:2, nama:'Pasca S2' },
+                  { id:3, nama:'Pasca S3' },
+                  { id:4, nama:'Profesi' },
+                  ] })
+  
+  
+                  <div class="text-info"><i class="fas fa-info-circle icon-sm text-info"></i> Password akun
+                    enumerator
+                    akan
+                    dikirim ke email mereka</div>
+  
                 </div>
-                @endif
-                {{ csrfField() }}
-
-                @!component('components/input',{
-                'placeholder': 'Contoh: Aqil Fiqran DziUl Haq',
-                'name':'nama',
-                'label':'Nama',
-                'validasi':[true,false,false],
-                'type':'text'
-                })
-                @!component('components/input',{
-                'placeholder': 'Contoh: aqilfiqran',
-                'name':'username',
-                'label':'Username',
-                'validasi':[true,false,false],
-                'type':'text'
-                })
-                @!component('components/input',{
-                'placeholder': 'Contoh: aqilfiqran@mhs.unsyiah.ac.id',
-                'name':'email',
-                'label':'Email',
-                'validasi':[true,false,false],
-                'type':'text'
-                })
-                @!component('components/dropdown',{
-                label:'Jabatan',
-                name:'legacy_role',
-                validasi:[true,false,false],
-                choice:getPilihanJabatan(auth.user.legacy_role) })
-
-                @!component('components/checkbox',{
-                label:'Jabatan Permisi',
-                name:'permission',
-                validasi:[true,false,false],
-                choice:[
-                { id:1, nama:'D3' },
-                { id:2, nama:'Pasca S2' },
-                { id:3, nama:'Pasca S3' },
-                { id:4, nama:'Profesi' },
-                ] })
-
-
-                <div class="text-info"><i class="fas fa-info-circle icon-sm text-info"></i> Password akun
-                  enumerator
-                  akan
-                  dikirim ke email mereka</div>
-
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary font-weight-bold"><i class="fa fa-user-plus icon-sm"></i>
-                  Tambahkan </button>
-              </div>
-            </form>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-primary font-weight-bold"><i class="fa fa-user-plus icon-sm"></i>
+                    Tambahkan </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
+      <div class="m-3"></div>
+      {{--  Kajur  --}}
+      <form method="POST" id="form" action="{{route('admin.store_operator_kajur')}}">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_tambah_kajur">
+          <i class="fas fa-user-plus icon-sm"></i> Tambah Kajur / Kaprodi 
+        </button>
+    
+        <!-- Modal Kajur-->
+        <div class="modal fade" id="modal_tambah_kajur" tabindex="-1" role="dialog" aria-labelledby="modal_tambahLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modal_tambahLabel">Tambah Enumerator Kajur / Kaprodi </h5>
+    
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+              </div>
+              <form method="POST" id="form">
+                <div class="modal-body">
+                  @if(flashMessages.get('notification_kajur'))
+                  <div
+                    class="m-alert m-alert--outline alert alert-{{ flashMessages.get('notification_kajur.type') }} alert-dismissible animated fadeIn"
+                    role="alert">
+                    <span>{{ flashMessages.get('notification_kajur.message') }}</span>
+                  </div>
+                  @endif
+                  {{ csrfField() }}
+    
+                  @!component('components/input',{
+                  'placeholder': 'Yourname',
+                  'name':'nama',
+                  'label':'Nama',
+                  'validasi':[true,false,false],
+                  'type':'text'
+                  })
+                  @!component('components/input',{
+                  'placeholder': 'Yourusername',
+                  'name':'username',
+                  'label':'Username',
+                  'validasi':[true,false,false],
+                  'type':'text'
+                  })
+                  @!component('components/input',{
+                  'placeholder': 'yourname@email',
+                  'name':'email',
+                  'label':'Email',
+                  'validasi':[true,false,false],
+                  'type':'text'
+                  })
+                  @!component('components/input',{
+                    'placeholder': 'Password',
+                    'name':'password',
+                    'label':'Password',
+                    'validasi':[true,false,false],
+                    'type':'password'
+                    })
+
+                  <input type="hidden" name="legacy_role" id="legacy_role" value=4>
+
+                  <div class="form-group ">
+                    <label for="fakultas">
+                      Jabatan Permisi
+                      <span class="text-danger">*</span>
+                    </label>
+                    @set('permission', [
+                      { id:1, nama:'D3' },
+                      { id:2, nama:'Pasca S2' },
+                      { id:3, nama:'Pasca S3' },
+                      { id:4, nama:'Profesi' },
+                      ])
+                    <select class="form-control" name="permission" id="permission_kajur" data-fv-not-empty='true'
+                      data-fv-not-empty___message='Pertanyaan ini wajib diisi'>
+                      <option value="">-- pilihan anda --</option>
+                      @each(value in permission)
+                      <option value="{{ value.id }}">{{ value.nama }}</option>
+                      @endeach
+                    </select>
+                  </div>
+    
+                  <div class="form-group ">
+                    <label for="fakultas">
+                      Fakultas
+                      <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control" name="fakultas" id="fakultas" data-fv-not-empty='true'
+                      data-fv-not-empty___message='Pertanyaan ini wajib diisi'>
+                      <option value="">-- pilihan anda --</option>
+                      @each(value in GetFakultas)
+                      <option value="{{ value.kd_fakultas2 }}">{{ value.nama_fakultas }}</option>
+                      @endeach
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Jurusan
+                      <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control" name="kd_fjjp7_prodi" data-fv-not-empty='true'
+                      data-fv-not-empty___message='Pertanyaan ini wajib diisi' id="jurusan">
+                      <option value="">-- pilihan anda --</option>
+                    </select>
+                  </div>
+    
+                  <div class="text-info"><i class="fas fa-info-circle icon-sm text-info"></i> Password akun
+                    enumerator
+                    akan
+                    dikirim ke email mereka</div>
+    
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-primary font-weight-bold"><i class="fa fa-user-plus icon-sm"></i>
+                    Tambahkan </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
   <!--end::Form-->
 
   <!--begin::Card-->
@@ -254,7 +370,43 @@
 @endsection
 @section('script')
 <script src="{{appUrl()}}/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+<script>
+  const routeProdi = '{{appUrl() + route(routeProdi)}}'
+  const routeFak = '{{appUrl() + route(routeFak)}}'
 
+  const fakultas = document.querySelector('#fakultas')
+  const jurusan = document.querySelector('#jurusan')
+  const permission = document.querySelector('#permission_kajur')
+
+  permission.addEventListener('change', res => {
+    const target = res.target.value
+    console.log(`${routeFak}?permission=${target}`)
+    fetch(`${routeFak}?permission=${target}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        fakultas.innerHTML = '<option value="">-- pilihan anda --</option>'
+
+        for(let item of data){
+          fakultas.innerHTML += `<option value="${ item.kd_fakultas2 }">${ item.nama_fakultas }</option>`
+        }
+      })
+  })
+
+  fakultas.addEventListener('change', res => {
+    const id = res.target.value
+    console.log(id)
+    fetch(`${routeProdi}/?id_fakultas=${id}&&permission=${permission.value}`)
+      .then(response => response.json())
+      .then(data => {
+        jurusan.innerHTML = '<option>-- pilihan anda --</option>';
+        data.forEach(row => {
+          jurusan.innerHTML += '<option value="' + row.kd_fjjp7 + '">' + row
+            .nama_prodi + '</option>';
+        })
+      })
+  })
+</script>
 <script src="{{appUrl()}}/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
 @if(flashMessages.get('notification_user'))
 <script>

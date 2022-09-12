@@ -5,6 +5,7 @@ import Pengumuman from './ProfesiPengumuman'
 import Sasaran from './ProfesiSasaran'
 
 const conn: string = 'cdc_tracerstudy_profesi' //sesuaikan
+const connAdmin: string = 'cdc_tracerstudy_admin' // sesuaikan
 const conn_exsurvey: string = 'cdc_exsurvey' // sesuaikan
 const jenjang: string = '1' //kode jenjang harus cek kdfjjp7
 
@@ -118,6 +119,7 @@ export default class Services extends BaseModel {
   /*mengambil data  users_mapping_kd_fjjp7*/
   public static async get_users_mapping_kd_fjjp7(kd_fjjp7) {
     let arrTracerKdfjjp7: any[] = []
+
     const mapping: any[] = await Database.connection(conn)
       .from('users_mapping_kd_fjjp7')
       .where('kd_fjjp7_reg', kd_fjjp7)
@@ -134,6 +136,7 @@ export default class Services extends BaseModel {
   //     .where('kd_fjjp7_non', kd_fjjp7)
   //     .orWhere('kd_fjjp7_reg', kd_fjjp7)
   //     .first()
+  //   //TODO: ubah jadi fecth
   // }
 
   /* get data pengisi dari tabel monitoring */
@@ -165,7 +168,8 @@ export default class Services extends BaseModel {
       return arrUserMonitoring
     }
   }
-  // versi lama
+  //versi sebelumnya
+  // FIXME: data mengabaikan periode wisuda
   // public static async get_data_pengisi(periode_wisuda: string, kd_fjjp7_non: string, kd_fjjp7_reg) {
   //   if (periode_wisuda.substring(4, 5) === '0') {
   //     periode_wisuda = periode_wisuda.substring(0, 4)
@@ -374,60 +378,7 @@ export default class Services extends BaseModel {
       console.log('err ', error)
     }
   }
-  // public static async get_jawaban_users(
-  //   periode_wisuda: string,
-  //   kd_fjjp7_non: any,
-  //   nama_tabel: string
-  // ) {
-  //   if (kd_fjjp7_non.length === 1) {
-  //     if (periode_wisuda.substring(4, 5) === '0') {
-  //       let tahun_lulus = periode_wisuda.substring(0, 4)
-  //       return await Database.connection(conn)
-  //         .from('users')
-  //         .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-  //         .select(nama_tabel + '.*')
-  //         .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
-  //         .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'")
-  //       //.whereNotNull('users.tanggal_isi')
-  //     } else {
-  //       return await Database.connection(conn)
-  //         .from('users')
-  //         .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-  //         .select(nama_tabel + '.*')
-  //         .where('users.tahun_lulus', periode_wisuda)
-  //         .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non + "'")
-  //       //.whereNotNull('users.tanggal_isi')
-  //     }
-  //   } else {
-  //     let arrDatas = []
-  //     if (periode_wisuda.substring(4, 5) === '0') {
-  //       let tahun_lulus = periode_wisuda.substring(0, 4)
-  //       for (let i = 0; i < kd_fjjp7_non.length; i++) {
-  //         const data = await Database.connection(conn)
-  //           .from('users')
-  //           .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-  //           .select(nama_tabel + '.*')
-  //           .whereRaw("users.tahun_lulus like '" + tahun_lulus + "%'")
-  //           .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non[i] + "'")
-  //         //.whereNotNull('users.tanggal_isi')
-  //         arrDatas.push(...data)
-  //       }
-  //     } else {
-  //       for (let i = 0; i < kd_fjjp7_non.length; i++) {
-  //         const data = await Database.connection(conn)
-  //           .from('users')
-  //           .join(nama_tabel, 'users.nim', '=', nama_tabel.concat('.nim'))
-  //           .select(nama_tabel + '.*')
-  //           .where('users.tahun_lulus', periode_wisuda)
-  //           .whereRaw("SUBSTR(users.nim,3,7)= '" + kd_fjjp7_non[i] + "'")
-  //         //.whereNotNull('users.tanggal_isi')
-
-  //       }
-  //     }
-
-  //   }
-  // }
-  //versi sebelumnya
+  //versi lama
   // public static async get_jawaban_users(
   //   periode_wisuda: string,
   //   kd_fjjp7_non: string,
@@ -474,20 +425,77 @@ export default class Services extends BaseModel {
 
   /* untuk memasukan data dari alumni pada database exit survei ke table users_monitoring */
   public static async import_monitoring(tahun: string) {
+    const get_import_status = await Services.get_status_monitoring(tahun)
+
+    //Data Populasi
+    let dataPopulasi = await Database.connection(conn)
+    .query()
+    .from('populasi')
+    .select(
+      'nim',
+      'nama_mhs as nama', 
+      'periode as periode_wisuda'
+    )
+    .whereRaw("periode like '" + tahun + "%'")
+    .whereRaw("SUBSTR(nim,5,1)= '" + jenjang + "'") //sesuaikan dengan fjjp7
+
+    //Data Monitoring
+    let dataMonitoring = await Database.connection(conn)
+    .query()
+    .from('users_monitoring')
+    .select(
+      'nim',
+    )
+    .whereRaw("periode_wisuda like '" + tahun + "%'")
+    .whereRaw("SUBSTR(nim,5,1)= '" + jenjang + "'")
+    
+    //menampung data nim yang sudah dibuat
+    let nimData : any[] = []
+    for(let data of dataMonitoring){
+      nimData.push(data.nim)
+    }
+    
+    //Data Exit Survey
     let datas = await Database.connection(conn_exsurvey)
       .query()
       .from('alumni')
       .select(
         'nim',
-        'nama_lengkap as nama',
-        'periode_wisuda',
         'hape1 as no_hape_1',
         'hape2 as no_hape_2'
       )
       .whereRaw("periode_wisuda like '" + tahun + "%'")
       .whereRaw("SUBSTR(nim,5,1)= '" + jenjang + "'") //sesuaikan dengan fjjp7
+    
+    //Import Data pupolasi ke user_monitoring
+    if (!get_import_status){
+      await Database.connection(conn).table('users_monitoring').multiInsert(dataPopulasi)
+      console.log("Berhasil import dari tabel populasi")
+    }
+    else{
+      for(let data of dataPopulasi){
+        if(!nimData.includes(data.nim)){
+          await Database.connection(conn).table('users_monitoring').insert(data)
+          console.log("Data yang ditambahkan : " + data.nim + " " + data.nama)
+        }
+      }
+    }
+
+    
+    let count = 0
+
+    for (let data of datas){
+        await Database.connection(conn)
+          .query()
+          .from('users_monitoring')
+          .where('nim', data.nim)
+          .update(data)
+        count++
+        console.log(data.nim)
+    }  
+    console.log("Jumlah yang di import : " + count + " orang")
     //hasil datas ke users_monitoring
-    return await Database.connection(conn).table('users_monitoring').multiInsert(datas)
+    return true
   }
 
   /* update status monitoring pada table sasaran */
@@ -537,14 +545,27 @@ export default class Services extends BaseModel {
     })
   }
 
+  public static async off_sasaran() {
+    //set semua status_aktif jadi 0
+    return await Database.connection(conn).from('sasaran').update({ status_aktif: 0 })
+  }
+
   /* mengambil data dari table sasaran yang sedang aktif */
   public static async get_list_sasaran() {
-    return await Database.connection(conn).from('sasaran')
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1)
   }
 
   /* mengambil data dari table sasaran yang sedang aktif */
   public static async get_sasaran() {
-    return await Database.connection(conn).from('sasaran').where('status_aktif', 1).first()
+    return await Database.connection(conn).from('sasaran').where('status_aktif', 1)
+  }
+
+  public static async get_kajur_prodi(nim : string) {
+    return await Database.connection(connAdmin).from('users_kajur').where('aktif', 1).where('nim', nim).first()
+  }
+
+  public static async get_kajur(kd_fjjp7 : string) {
+    return await Database.connection(conn).from('users_kd_fjjp7').select('*').where('kd_fjjp7', kd_fjjp7).first()
   }
 
   /* mengambil informasi apakah sasaran sudah pernah di buat pada tracer study sebelumnya */
@@ -555,6 +576,7 @@ export default class Services extends BaseModel {
       return await Database.connection(conn)
         .from('sasaran')
         .whereRaw("tahun like '" + sasaran + "%'")
+        .where('status_aktif', 1)
         .first()
     } else {
       //cek sudah pernah di tracer secara semua periode
@@ -568,7 +590,11 @@ export default class Services extends BaseModel {
         return true
       }
       //jika belum pernah diset sasaran semua periode maka opsi set perperiode dizinkan
-      return await Database.connection(conn).from('sasaran').where('tahun', new_sasaran).first()
+      return await Database.connection(conn)
+        .from('sasaran')
+        .where('tahun', new_sasaran)
+        .where('status_aktif', 1)
+        .first()
     }
   }
 
@@ -604,7 +630,7 @@ export default class Services extends BaseModel {
   /* mengubah sasaran tracer study */
   public static async set_sasaran(tahun_periode: string, status_import: number) {
     //set semua status_aktif jadi 0
-    await Database.connection(conn).from('sasaran').update({ status_aktif: 0 })
+    // await Database.connection(conn).from('sasaran').update({ status_aktif: 0 })
 
     return await Database.connection(conn).table('sasaran').insert({
       tahun: tahun_periode,
@@ -620,13 +646,11 @@ export default class Services extends BaseModel {
 
   /* mengubah jadwal tracer study yg sedang aktif */
   public static async set_jadwal(waktu_mulai: Date, waktu_berakhir: Date) {
-    const SearchId = { status_aktif: 1 }
-
     const Updates = {
       waktu_mulai: waktu_mulai,
       waktu_berakhir: waktu_berakhir,
     }
-    return await Sasaran.updateOrCreate(SearchId, Updates)
+    return await Sasaran.query().where('status_aktif', 1).update(Updates)
   }
 
   /* mengambil data pengumuman */

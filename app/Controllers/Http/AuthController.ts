@@ -106,6 +106,7 @@ export default class AuthController {
     try {
       const { username_lupapassword, email_lupapassword } = request.all()
       //cek username dan email valid atau tidak
+      console.log(request.all())
       const get_akun = await User.get_available_users(username_lupapassword, email_lupapassword)
       if (get_akun) {
         //cek perubahan password

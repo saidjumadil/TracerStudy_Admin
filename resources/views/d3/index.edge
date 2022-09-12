@@ -7,13 +7,13 @@
     <div class="stepper">
       <li class="{{ (!sasaran) ? 'pending':'active' }}">
         @if(!sasaran)
-          @if([1,2].includes(auth.user.legacy_role))
-            <a href="{{ route('admin.d3.sasaran') }}">
-              Set Tahun Sasaran
-            </a>
-          @else
-            Set Tahun Sasaran
-          @endif
+        @if([1,2].includes(auth.user.role))
+        <a href="{{ route('admin.d3.sasaran') }}">
+          Set Tahun Sasaran
+        </a>
+        @else
+        Set Tahun Sasaran
+        @endif
         @else
         Set Tahun Sasaran
         @endif
@@ -21,16 +21,16 @@
       <li class="{{ (!sasaran) ?  '' : 'active' }}">
         Import Data Populasi
       </li>
-      <li class="{{ (!sasaran) ? '' : (sasaran.status_import_monitoring === 0) ? 'pending': 'active'  }}">
+      <li class="{{ (!sasaran) ? '' : (sasaran[0].status_import_monitoring === 0) ? 'pending': 'active'  }}">
         @if(sasaran)
-        @if(sasaran.status_import_monitoring === 0)
-          @if([1,2].includes(auth.user.legacy_role))
-            <a href="{{ route('admin.d3.data.importuser') }}">
-              Import Users Monitoring
-            </a>
-          @else
-            Import Users Monitoring
-          @endif
+        @if(sasaran[0].status_import_monitoring === 0)
+        @if([1,2].includes(auth.user.legacy_role))
+        <a href="{{ route('admin.d3.data.importuser') }}">
+          Import Users Monitoring
+        </a>
+        @else
+        Import Users Monitoring
+        @endif
         @else
         Import Users Monitoring
         @endif
@@ -39,15 +39,15 @@
         @endif
       </li>
       @if(sasaran)
-      <li class="{{ (sasaran.status_import_monitoring === 0) ? '': (sasaran.waktu_mulai) ? 'active':'pending' }}">
-        @if(sasaran.status_import_monitoring === 1)
-          @if([1,2].includes(auth.user.legacy_role))
-            <a href="{{ route('admin.d3.jadwal') }}">
-              Set Jadwal
-            </a>
-          @else
-            Set Jadwal
-          @endif
+      <li class="{{ (sasaran[0].status_import_monitoring === 0) ? '': (sasaran[0].waktu_mulai) ? 'active':'pending' }}">
+        @if(sasaran[0].status_import_monitoring === 1)
+        @if([1,2].includes(auth.user.legacy_role))
+        <a href="{{ route('admin.d3.jadwal') }}">
+          Set Jadwal
+        </a>
+        @else
+        Set Jadwal
+        @endif
         @else
         Set Jadwal
         @endif
@@ -58,10 +58,10 @@
       </li>
       @endif
       @if(sasaran)
-      <li class="{{ (!sasaran.waktu_berakhir) ? '': (sasaran.waktu_berakhir <= Date.now()) ? 'active':'pending' }}">
+      <li class="{{ (!sasaran[0].waktu_berakhir) ? '': (sasaran[0].waktu_berakhir <= Date.now()) ? 'active':'pending' }}">
         Selesai
         <br>
-        {{{ getTimeFormatStep(sasaran.waktu_berakhir) || '' }}}
+        {{{ getTimeFormatStep(sasaran[0].waktu_berakhir) || '' }}}
       </li>
       @else
       <li class="">

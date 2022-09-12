@@ -5,12 +5,12 @@ import Services from 'App/Models/D3/D3Services'
 const routeName: string = 'd3.'
 export default class D3Step12 {
   public async handle({ response, session }, next: () => Promise<void>) {
-    const tahunSasaran: TahunSasaran = await Services.get_sasaran() // get periode skrg
+    const tahunSasaran : TahunSasaran [] = await Services.get_sasaran() // get periode skrg
 
-    // console.log(auth)
+    console.log(tahunSasaran)
 
-    if (!tahunSasaran) return await next()
-    if (!tahunSasaran.waktu_mulai) {
+    if (tahunSasaran.length == 0) return await next()
+    if (!tahunSasaran[0].waktu_mulai) {
       message(
         session,
         'notification',
@@ -20,8 +20,8 @@ export default class D3Step12 {
       return response.redirect().toRoute('admin.' + routeName + 'index')
     }
 
-    if (Number(tahunSasaran.waktu_berakhir) < Date.now()) return await next()
-    if (tahunSasaran.tahun) {
+    if (Number(tahunSasaran[0].waktu_berakhir) < Date.now()) return await next()
+    if (tahunSasaran[0].tahun) {
       message(
         session,
         'notification',

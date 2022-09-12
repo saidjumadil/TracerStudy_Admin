@@ -228,6 +228,22 @@ View.global('getPeriodeSasaran', function (daftarSasaran: any) {
   return choice
 })
 
+View.global('getTitleSasaranTahun', function (sasaran: string) {
+  if (!sasaran) return ''
+  let tahun = sasaran.toString().substring(0, 4)
+
+  return tahun
+})
+
+View.global('getTitleSasaranPeriode', function (sasaran: string) {
+  if (!sasaran) return ''
+  let periode = sasaran.toString().substring(4, 5)
+
+  if (periode === '0') return ' Semua Periode'
+  
+  return periode
+})
+
 View.global('getTimeFormatStep', function (value: string) {
   if (!value) return ''
   const months = {

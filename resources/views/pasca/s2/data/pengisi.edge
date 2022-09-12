@@ -29,14 +29,14 @@
         @endif
       </div>
 
-      @if([1,2].includes(auth.user.legacy_role))
+      @if([1,2,3].includes(auth.user.legacy_role))
 
       @!component('components/dropdown-range',{
       'name':'tahun',
       'label':'Tahun Wisuda',
       'required':false,
       'start': getCurrentYear(),
-      'end':2017
+      'end':2012
       })
 
       @!component('components/dropdown',{
@@ -51,7 +51,7 @@
       {id:4,nama:'Periode 4'},
       ]
       })
-      @elseif([3,4].includes(auth.user.legacy_role))
+      @elseif([4].includes(auth.user.legacy_role))
       <input type="hidden" name="tahun" id="tahun" value="{{getTahun(daftar_sasaran[0].tahun)}}">
       <div class="form-group">
         <label>
@@ -67,7 +67,28 @@
       'choice': getPeriodeSasaran(daftar_sasaran)
       })
       @endif
+      
+      @if([3].includes(auth.user.legacy_role))
+      <div class="form-group ">
+        <label for="fakultas">
+          Fakultas
+        </label>
+        <select class="form-control" name="fakultas" id="fakultas" disabled>
+          @each(value in GetFakultas)
+          @if(value.kd_fakultas2 == prodi_kajur.kd_fakultas2)
+            <option value="{{ value.kd_fakultas2 }}">{{ value.nama_fakultas }}</option>
+          @endif
+          @endeach
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Jurusan</label>
+        <select class="form-control" name="jurusan" id="jurusan" disabled>
+          <option value="{{prodi_kajur.kd_fjjp7}}">{{prodi_kajur.nama_prodi}}</option>
+        </select>
+      </div>
 
+      @else
       <div class="form-group ">
         <label for="fakultas">
           Fakultas
@@ -85,8 +106,16 @@
           <option value="">-- pilihan anda --</option>
         </select>
       </div>
+      @endif
+
+      <div class="text-right">
+        <div id='cari' class="btn btn-primary"><i class="fa fa-search icon-sm"></i> Cari </div>
+      </div>
+
     </div>
   </form>
+
+  
   <!--end::Form-->
 
   <!--begin::Card-->
@@ -104,22 +133,24 @@
 <script src="{{appUrl()}}/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 
 <script src="{{appUrl()}}/assets/js/custom/custom-datatable.js"></script>
-<script>
-  const showAlert = document.querySelector('#showAlert')
 
+<script>
   // route action
   const routeProdi = '{{appUrl()+ route(RouteActionProdi) }}'
   const routeDataPengisi = '{{ appUrl()+route(RouteActionDataPengisi) }}'
+  const showAlert = document.querySelector('#showAlert')
   const routeUpdateDataPengisi = '{{ appUrl()+route(RouteActionUpdateDataPengisi) }}'
   // console.log(routeProdi)
   // console.log(routeDataPengisi)
   const fakultas = document.querySelector('#fakultas')
   const jurusan = document.querySelector('#jurusan')
+  const cari = document.querySelector('#cari')
   const showDataPengisi = document.querySelector('#showDataPengisi')
 
   // handle fakultas
   fakultas.addEventListener('change', res => {
     const id = res.target.value
+    
     fetch(`${routeProdi}/?id_fakultas=${id}`)
       .then(response => response.json())
       .then(data => {
@@ -131,24 +162,25 @@
   })
 
   // handle jurusan
-  jurusan.addEventListener('change', res => {
+  cari.addEventListener('click', res => {
     const tahun = document.querySelector('#tahun').value || 0
     const periode = document.querySelector('#periode').value || 0
-
-    const id = res.target.value
-    // console.log(id)
+    const id = jurusan.value || 0
+    const role = {{role}}
+    
     showDataPengisi.innerHTML = drawLoading()
     fetch(`${routeDataPengisi}/?kd_fjjp7=${id}&&tahun=${tahun}&&periode=${periode}`)
       .then(response => response.json())
       .then(data => {
-        if(data.message){
-          showAlert.innerHTML = Alert('danger',data.message)
+        console.log(data)
+        if (data.message) {
+          showAlert.innerHTML = Alert('danger', data.message)
           showDataPengisi.innerHTML = ''
           return
         }
         showAlert.innerHTML = ''
         // console.log(data.get_data_pengisi)
-        showDataPengisi.innerHTML = drawDatatable(data.get_data_pengisi, `{{ csrfField() }}`, `{{auth.user.legacy_role}}`)
+        showDataPengisi.innerHTML = drawDatatable(data.get_data_pengisi, `{{ csrfField() }}`)
         $('#kt_datatable2').DataTable({
           scrollY: '50vh',
           scrollX: true,
@@ -160,57 +192,64 @@
         })
 
         const realtimeDatas = document.querySelectorAll('#showDataPengisi input')
-        const csrf = document.querySelector(`[name='_csrf']`).value
-        realtimeDatas.forEach(rowData => {
-          rowData.addEventListener('change', ({
-            target
-          }) => {
-            const nim = getValue(target.getAttribute('data-id'), 'nim', 'nim')
-            const monitoring_1 = getValue(target.getAttribute('data-id'), 'monitoring_1', 'monitoring_1')
-            const monitoring_2 = getValue(target.getAttribute('data-id'), 'monitoring_2', 'monitoring_2')
-            const monitoring_3 = getValue(target.getAttribute('data-id'), 'monitoring_3', 'monitoring_3')
-            const hp_valid_1 = getValue(target.getAttribute('data-id'), 'hp_valid_1', 'hp')
-            const hp_valid_2 = getValue(target.getAttribute('data-id'), 'hp_valid_2', 'hp')
-
-            const status = document.querySelector(
-              `td[data-id='${target.getAttribute('data-id')}'][name='status']`)
-
-            status.innerHTML = Status('warning', 'Diproses')
-            fetch(routeUpdateDataPengisi, {
-                method: 'POST',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'x-csrf-token': csrf
-                },
-                body: JSON.stringify({
-                  nim,
-                  monitoring_1,
-                  monitoring_2,
-                  monitoring_3,
-                  hp_valid_1,
-                  hp_valid_2
+        if(role == 3){
+          realtimeDatas.forEach(rowData => {
+            rowData.disabled = true
+          })
+        }
+        else {
+          const csrf = document.querySelector(`[name='_csrf']`).value
+          realtimeDatas.forEach(rowData => {
+            rowData.addEventListener('change', ({
+              target
+            }) => {
+              const nim = getValue(target.getAttribute('data-id'), 'nim', 'nim')
+              const monitoring_1 = getValue(target.getAttribute('data-id'), 'monitoring_1', 'monitoring_1')
+              const monitoring_2 = getValue(target.getAttribute('data-id'), 'monitoring_2', 'monitoring_2')
+              const monitoring_3 = getValue(target.getAttribute('data-id'), 'monitoring_3', 'monitoring_3')
+              const hp_valid_1 = getValue(target.getAttribute('data-id'), 'hp_valid_1', 'hp')
+              const hp_valid_2 = getValue(target.getAttribute('data-id'), 'hp_valid_2', 'hp')
+  
+              const status = document.querySelector(
+                `td[data-id='${target.getAttribute('data-id')}'][name='status']`)
+  
+              status.innerHTML = Status('warning', 'Diproses')
+              fetch(routeUpdateDataPengisi, {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'x-csrf-token': csrf
+                  },
+                  body: JSON.stringify({
+                    nim,
+                    monitoring_1,
+                    monitoring_2,
+                    monitoring_3,
+                    hp_valid_1,
+                    hp_valid_2
+                  })
                 })
-              })
-              .then(response => response.json())
-              .then(data => {
-                if (data.isSuccess)
-                  setTimeout(() => {
-                    status.innerHTML = Status('success', 'Tersimpan')
-                  }, 1000);
-                else
+                .then(response => response.json())
+                .then(data => {
+                  if (data.isSuccess)
+                    setTimeout(() => {
+                      status.innerHTML = Status('success', 'Tersimpan')
+                    }, 1000);
+                  else
+                    setTimeout(() => {
+                      status.innerHTML = Status('danger', 'Gagal Tersimpan')
+                    }, 1000);
+                })
+                .catch(error => {
                   setTimeout(() => {
                     status.innerHTML = Status('danger', 'Gagal Tersimpan')
                   }, 1000);
-              })
-              .catch(error => {
-                setTimeout(() => {
-                  status.innerHTML = Status('danger', 'Gagal Tersimpan')
-                }, 1000);
-                console.log(error)
-              })
+                  console.log(error)
+                })
+            })
           })
-        })
+        }
       })
   })
 

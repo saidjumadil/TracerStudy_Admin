@@ -14,11 +14,21 @@ let alumni = Env.get('WS_ALUMNI_PROFESI') //sesuaikan
 export default class ProfesiAdminsController {
   public async index({ view, auth }) {
     await auth.authenticate()
+    const tahunSasaran = await Services.get_sasaran()
+    const role = auth.user.role
+    const nim = auth.user.nim
+    let prodi_kajur = ""
+    
+    if(role == 3){
+      prodi_kajur = await Services.get_kajur_prodi(nim)
+      console.log(prodi_kajur)
+    }
 
     // message(session)
     const sasaran = await Services.get_sasaran()
     const RouteActionDataIndex: string = `admin.${renderName}.get_data_index`
-    const tahunSasaran = await Services.get_sasaran()
+    console.log(sasaran);
+    
 
     return view.render(renderName + '/index', { sasaran, RouteActionDataIndex, tahunSasaran })
   }
@@ -52,12 +62,14 @@ export default class ProfesiAdminsController {
   }
 
   public async sasaran({ view, auth }) {
+    console.log("tes")
     await auth.authenticate()
     const get_sasaran = await Services.get_sasaran()
     const cekPopulasiRoute: string = subfolder + '/admin/' + renderName + '/ajax-cek-populasi'
     const getPopulasiRoute: string = subfolder + '/admin/' + renderName + '/ajax-get-populasi'
     const ubahSasaranRoute: string = subfolder + '/admin/' + renderName + '/sasaran'
     const tahunSasaran = await Services.get_sasaran()
+
     return view.render(renderName + '/sasaran', {
       get_sasaran,
       cekPopulasiRoute,
@@ -137,68 +149,52 @@ export default class ProfesiAdminsController {
   public async set_sasaran({ request, session }) {
     try {
       let { tahun, periode } = request.all()
-      var tahun_periode = tahun.toString().concat(periode.toString())
-      let current_sasaran = await Services.get_sasaran()
-      //convert sasaran ke number
-      if (current_sasaran) {
-        let num_current: number = Number(current_sasaran.tahun)
-        let num_new_sasaran: number = Number(tahun_periode)
-        //cek sasaran sesuai aturan atau tidak
+      console.log(tahun)
+      if(periode.toString() == "1,2,3,4"){
+        periode = [0]
+      }
+      console.log(periode.toString())
+      let update
+      Services.off_sasaran()
+
+      for (let period of periode){
+        var tahun_periode = tahun.toString().concat(period.toString())
+        let current_sasaran = await Services.get_sasaran()
+        console.log(current_sasaran)
+        //convert sasaran ke number
+        // let num_current: number = Number(current_sasaran.tahun)
+        // let num_new_sasaran: number = Number(tahun_periode)
+        
         let cek_sasaran = await Services.cek_sasaran(tahun_periode)
-        // jika cek sasaran false dan tahun sasaran baru > tahun sasaran sekarang maka izinkan untuk update tahun sasaran
-        if (!cek_sasaran && num_new_sasaran > num_current) {
-          let status_import = 0
-          //cek monitoring sudah diimport apa belum
-          const get_status_monitoring = await Services.get_status_monitoring(tahun)
-          if (get_status_monitoring) {
-            status_import = 1
-          }
-          //update sasaran
-          let update = await Services.set_sasaran(tahun_periode, status_import)
-          if (update) {
-            message(
-              session,
-              'notification_sasaran',
-              'success',
-              'Berhasil mengubah sasaran Tracer Study'
-            )
-            return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
-          }
-        } else {
-          message(
-            session,
-            'notification_sasaran',
-            'danger',
-            'Gagal mengubah karena sasaran sudah pernah dibuat!'
-          )
-          return { isSuccess: false }
-        }
-      } else {
+        console.log(cek_sasaran)
+  
         let status_import = 0
         //cek monitoring sudah diimport apa belum
         const get_status_monitoring = await Services.get_status_monitoring(tahun)
-        if (get_status_monitoring) {
-          status_import = 1
-        }
+        console.log(get_status_monitoring)
+        
         //update sasaran
-        let update = await Services.set_sasaran(tahun_periode, status_import)
-        if (update) {
-          message(
-            session,
-            'notification_sasaran',
-            'success',
-            'Berhasil mengubah sasaran Tracer Study'
-          )
-          return { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
-        } else {
-          message(
-            session,
-            'notification_sasaran',
-            'danger',
-            'Gagal mengubah karena sasaran sudah pernah dibuat!'
-          )
-        }
+        update = await Services.set_sasaran(tahun_periode, status_import)
       }
+
+      let dataMessage
+
+      if (update) {
+        message(
+          session,
+          'notification_sasaran',
+          'success',
+          'Berhasil mengubah sasaran Tracer Study'
+        )
+        dataMessage =  { isSuccess: true, message: 'Berhasil mengubah sasaran Tracer Study' }
+      }
+      else {
+        // await ErrorLog.error_log(className, 'set_sasaran', error.toString(), request.ip())
+        message(session, 'notification_sasaran', 'danger', 'Gagal mengubah sasaran Tracer Study')
+        dataMessage = { isSuccess: false }
+      } 
+
+      return dataMessage
     } catch (error) {
       console.log(error)
       await ErrorLog.error_log(className, 'set_sasaran', error.toString(), request.ip())
@@ -209,8 +205,8 @@ export default class ProfesiAdminsController {
 
   public async jadwal({ view, auth }) {
     await auth.authenticate()
-    const get_jadwal = await Services.get_jadwal()
     const tahunSasaran = await Services.get_sasaran()
+    const get_jadwal = await Services.get_jadwal()
     return view.render(renderName + '/jadwal', { get_jadwal, tahunSasaran })
   }
 
@@ -227,7 +223,7 @@ export default class ProfesiAdminsController {
       }
     } catch (error) {
       console.log(error)
-      await ErrorLog.error_log(className, 'set_jadwal', error.toString(), request.ip())
+      // await ErrorLog.error_log(className, 'set_jadwal', error.toString(), request.ip())
       message(session, 'notification_jadwal', 'danger', 'Gagal mengubah jadwal Tracer Study')
       return response.redirect('back')
     }
