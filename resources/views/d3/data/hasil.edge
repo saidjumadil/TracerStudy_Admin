@@ -50,7 +50,7 @@
         </label>
         <select class="form-control" name="fakultas" id="fakultas" disabled>
           @each(value in GetFakultas)
-          @if(value.kd_fakultas2 == prodi_kajur.kd_fakultas2)
+          @if(value.kd_fakultas2 == prodi_kajur[0].kd_fakultas2)
             <option value="{{ value.kd_fakultas2 }}">{{ value.nama_fakultas }}</option>
           @endif
           @endeach
@@ -58,8 +58,10 @@
       </div>
       <div class="form-group">
         <label>Jurusan</label>
-        <select class="form-control" name="jurusan" id="jurusan" disabled>
-          <option value="{{prodi_kajur.kd_fjjp7}}">{{prodi_kajur.nama_prodi}}</option>
+        <select class="form-control" name="jurusan" id="jurusan">
+          @each(item in prodi_kajur)
+          <option value="{{item.kd_fjjp7}}">{{item.nama_prodi}}</option>
+          @endeach
         </select>
       </div>
 

@@ -164,13 +164,7 @@
                       { id:3, nama:'Pasca S3' },
                       { id:4, nama:'Profesi' },
                       ])
-                    <select class="form-control" name="permission" id="permission_kajur" data-fv-not-empty='true'
-                      data-fv-not-empty___message='Pertanyaan ini wajib diisi'>
-                      <option value="">-- pilihan anda --</option>
-                      @each(value in permission)
-                      <option value="{{ value.id }}">{{ value.nama }}</option>
-                      @endeach
-                    </select>
+                    
                   </div>
     
                   <div class="form-group ">
@@ -181,12 +175,12 @@
                     <select class="form-control" name="fakultas" id="fakultas" data-fv-not-empty='true'
                       data-fv-not-empty___message='Pertanyaan ini wajib diisi'>
                       <option value="">-- pilihan anda --</option>
-                      @each(value in GetFakultas)
+                      @each(value in getFakultas)
                       <option value="{{ value.kd_fakultas2 }}">{{ value.nama_fakultas }}</option>
                       @endeach
                     </select>
                   </div>
-                  <div class="form-group">
+                  {{--  <div class="form-group">
                     <label>Jurusan
                       <span class="text-danger">*</span>
                     </label>
@@ -194,7 +188,7 @@
                       data-fv-not-empty___message='Pertanyaan ini wajib diisi' id="jurusan">
                       <option value="">-- pilihan anda --</option>
                     </select>
-                  </div>
+                  </div>  --}}
     
                   <div class="text-info"><i class="fas fa-info-circle icon-sm text-info"></i> Password akun
                     enumerator
@@ -393,19 +387,19 @@
       })
   })
 
-  fakultas.addEventListener('change', res => {
-    const id = res.target.value
-    console.log(id)
-    fetch(`${routeProdi}/?id_fakultas=${id}&&permission=${permission.value}`)
-      .then(response => response.json())
-      .then(data => {
-        jurusan.innerHTML = '<option>-- pilihan anda --</option>';
-        data.forEach(row => {
-          jurusan.innerHTML += '<option value="' + row.kd_fjjp7 + '">' + row
-            .nama_prodi + '</option>';
-        })
-      })
-  })
+  // fakultas.addEventListener('change', res => {
+  //   const id = res.target.value
+  //   console.log(id)
+  //   fetch(`${routeProdi}/?id_fakultas=${id}&&permission=${permission.value}`)
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       jurusan.innerHTML = '<option>-- pilihan anda --</option>';
+  //       data.forEach(row => {
+  //         jurusan.innerHTML += '<option value="' + row.kd_fjjp7 + '">' + row
+  //           .nama_prodi + '</option>';
+  //       })
+  //     })
+  // })
 </script>
 <script src="{{appUrl()}}/assets/js/pages/crud/datatables/basic/custom-scrollable.js"></script>
 @if(flashMessages.get('notification_user'))

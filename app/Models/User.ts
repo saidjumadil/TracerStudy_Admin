@@ -84,6 +84,22 @@ export default class D3User extends BaseModel {
       .first()
   }
 
+  //cek permission
+  public static async cek_permission(id_fakultas){
+    const conn = ['', 'cdc_tracerstudy_d3', 'cdc_tracerstudy_pasca_s2', 'cdc_tracerstudy_pasca_s3', 'cdc_tracerstudy_profesi']
+    let fakultas : any = []
+
+    for(let item = 1 ; item < conn.length ; item++){
+      const getFakultas = await Database.connection(conn[item]).from('users_fakultas')
+      for(let data of getFakultas){
+        if(data.id == id_fakultas){
+          fakultas.push(item)
+        }
+      }
+    }
+    return fakultas
+  }
+
   //menambahkan akun baru
   public static async insert_users(
     username: string,

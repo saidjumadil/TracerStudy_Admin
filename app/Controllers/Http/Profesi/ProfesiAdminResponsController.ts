@@ -28,13 +28,13 @@ export default class ProfesiAdminResponsController {
     await auth.authenticate()
     const nim = auth.user.username
     let role = 0
-    let prodi_kajur = ""
+    let prodi_kajur : any
     
     if([3].includes(auth.user.legacy_role)){
       role = auth.user.legacy_role[0]
       const prodi = await Services.get_kajur_prodi(nim)
       prodi_kajur = await Services.get_kajur(prodi.kd_fjjp7)
-      console.log(prodi, prodi_kajur)
+      // console.log({prodi, prodi_kajur})
     }
 
     //get daftar sasaran
@@ -170,7 +170,7 @@ export default class ProfesiAdminResponsController {
     const tahunSasaran = await Services.get_sasaran()
     const nim = auth.user.username
     let role = 0
-    let prodi_kajur = ""
+    let prodi_kajur : any
     
     if([3].includes(auth.user.legacy_role)){
       role = auth.user.legacy_role[0]
@@ -315,3 +315,4 @@ export default class ProfesiAdminResponsController {
     }
   }
 }
+

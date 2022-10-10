@@ -566,7 +566,7 @@ export default class Services extends BaseModel {
   }
 
   public static async get_kajur(kd_fjjp7 : string) {
-    return await Database.connection(conn).from('users_kd_fjjp7').select('*').where('kd_fjjp7', kd_fjjp7).first()
+    return await Database.connection(conn).from('users_kd_fjjp7').select('*').where('kd_fakultas2', kd_fjjp7)
   }
 
   /* mengambil informasi apakah sasaran sudah pernah di buat pada tracer study sebelumnya */

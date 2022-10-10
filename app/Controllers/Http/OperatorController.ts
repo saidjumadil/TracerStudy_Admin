@@ -25,7 +25,18 @@ export default class OperatorController {
     const routeProdi = 'admin.get_prodi'
     const current_user = await auth.authenticate()
     const users = await User.get_users(current_user)
-    return view.render('operator/operator', { users, routeFak, routeProdi })
+    const conn = ['cdc_tracerstudy_d3', 'cdc_tracerstudy_pasca_s2', 'cdc_tracerstudy_pasca_s3', 'cdc_tracerstudy_profesi']
+    let fakultas : any = {}
+
+    for(let item of conn){
+      const getFakultas = await Database.connection(item).from('users_fakultas')
+      for(let data of getFakultas){
+        if(!fakultas[data.id]){
+          fakultas[data.id] = data
+        }
+      }
+    }
+    return view.render('operator/operator', { users, routeFak, routeProdi, getFakultas : fakultas })
   }
 
   public async get_fakultas({request}){
@@ -59,7 +70,7 @@ export default class OperatorController {
       //cek email sudah dipakai atau belum
       const cek_email = await User.get_availabe_email(email)
       //jika email sudah terpakai maka tidak dizinkan daftar
-      if (cek_email) {
+      if (false) {
         message(session, 'notification_user', 'danger', 'email sudah pernah digunakan!')
         return response.redirect('back')
       }
@@ -110,8 +121,10 @@ export default class OperatorController {
 
   public async register_users_kajur({ request, session, response }) {
     try {
-      const { nama, username, email, permission, password, kd_fjjp7_prodi } = request.all()
+      const { nama, username, email, password, fakultas } = request.all()
       const legacy_role = 3
+      const permission = await User.cek_permission(fakultas)
+      
       //cek username sudah dipakai atau belum
       const cek_username = await User.get_availabe_username(username)
       //jika username sudah terpakai maka tidak dizinkan daftar
@@ -128,10 +141,10 @@ export default class OperatorController {
       }
 
       // const password = this.generate_password()
-      const permission_d3 = permission == '1' ? legacy_role : 0
-      const permission_pasca_s2 = permission.includes('2') ? legacy_role : 0
-      const permission_pasca_s3 = permission.includes('3') ? legacy_role : 0
-      const permission_profesi = permission.includes('4') ? legacy_role : 0
+      const permission_d3 = permission.includes(1) ? legacy_role : 0
+      const permission_pasca_s2 = permission.includes(2) ? legacy_role : 0
+      const permission_pasca_s3 = permission.includes(3) ? legacy_role : 0
+      const permission_profesi = permission.includes(4) ? legacy_role : 0
       const hash_password = await Hash.make(password)
       //insert users
       const insert_users = await User.insert_users(
@@ -147,7 +160,7 @@ export default class OperatorController {
       )
       
       //insert User Kajur
-      const insert_users_kajur = await User.insert_users_kajur(username, kd_fjjp7_prodi)
+      const insert_users_kajur = await User.insert_users_kajur(username, fakultas)
 
       if (insert_users && insert_users_kajur) {
         // kirim email
