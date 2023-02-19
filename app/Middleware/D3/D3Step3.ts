@@ -4,7 +4,7 @@ import Services from 'App/Models/D3/D3Services'
 const routeName: string = 'd3.'
 export default class D3Step3 {
   public async handle({ response, session }, next: () => Promise<void>) {
-    const tahunSasaran: TahunSasaran = await Services.get_sasaran() // get periode skrg
+    const tahunSasaran: TahunSasaran[] = await Services.get_sasaran() // get periode skrg
 
     // console.log(auth)
     if (!tahunSasaran[0]) {

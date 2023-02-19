@@ -4,7 +4,7 @@ import Services from 'App/Models/Pasca/S3/PascaS3Services'
 const routeName: string = 'pasca.s3.'
 export default class PascaS3Step4 {
   public async handle({ response, session }, next: () => Promise<void>) {
-    const tahunSasaran: TahunSasaran = await Services.get_sasaran() // get periode skrg
+    const tahunSasaran: TahunSasaran[] = await Services.get_sasaran() // get periode skrg
 
     // console.log(auth)
     if (!tahunSasaran[0]) {
