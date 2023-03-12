@@ -4,7 +4,7 @@ import Services from 'App/Models/Profesi/ProfesiServices'
 const routeName: string = 'profesi.'
 export default class ProfesiStep3 {
   public async handle({ response, session }, next: () => Promise<void>) {
-    const tahunSasaran: TahunSasaran = await Services.get_sasaran() // get periode skrg
+    const tahunSasaran: TahunSasaran[] = await Services.get_sasaran() // get periode skrg
 
     // console.log(auth)
     if (!tahunSasaran[0]) {
