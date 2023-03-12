@@ -4,7 +4,7 @@
 <div class="card card-custom">
   <div class="card-header">
     <h3 class="card-title">
-      <a href="{{route('admin.profesi.index')}}" class="text-primary mr-3"><i
+      <a href="{{route('admin.d3.index')}}" class="text-primary mr-3"><i
           class="far fa-arrow-alt-circle-left icon-xl text-primary"></i></a> Ubah Tahun Sasaran
     </h3>
 
@@ -94,6 +94,41 @@
       </div>
     </form>
   </div>
+  <div class="modal fade" id="modal_tambah_populasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tambah Populasi </h5>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i aria-hidden="true" class="ki ki-close"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="alert alert-custom alert-outline-info" role="alert">
+            <div class="alert-text text-justify">
+              <div><i class="fas fa-info-circle icon-sm text-info"></i> PERHATIAN</div>
+              <p>
+                Data populasi untuk tahun sasaran yang dituju belum tersedia. apakah anda ingin menambahkan data
+                populasi yang terbaru ?
+              </p>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Batal</button>
+          <button type="submit" id="tambah_populasi" class="btn btn-primary font-weight-bold"><i
+              class="fa fa-user-plus icon-sm"></i>
+            Tambahkan </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end::Form-->
+</div>
 
   <!--end::Form-->
 </div>
@@ -142,7 +177,7 @@
             data.message))
           setTimeout(() => {
 
-            window.location.replace(`{{ appUrl('tracer-study-admin/admin/profesi') }}`);
+            window.location.replace(`{{ appUrl('tracer-study-admin/admin/d3') }}`);
           }, 1000);
         } else {
           alertSasaran.removeChild(alertSasaran.childNodes[0]);
@@ -190,14 +225,51 @@
           })
         } else {
           // sasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Data Populasi tidak ditemukan'))
-          // $('#modal_tambah_populasi').modal('show')
-          alertSasaran.removeChild(alertSasaran.childNodes[0]);
-          alertSasaran.insertAdjacentHTML("afterbegin", alert('danger',
-            `Data populasi S1 belum dimasukkan untuk tahun ${tahun}. tolong diimport terlebih dahulu pada Web Tracer S1 Laporan`
-          ))
+          $('#modal_tambah_populasi').modal('show')
         }
 
         sasaranBtn.classList.remove(...loading)
+      })
+  })
+
+  tambahPopulasi.addEventListener('click', response => {
+    tambahPopulasi.classList.add(...loading)
+    // console.log('tambah populasi')
+    const tahun = document.querySelector('[name="tahun"]').value
+    const periode = [...document.querySelectorAll('[name="periode[]"]:checked')].map(e => e.value);
+    let data = {
+      tahun,
+      periode
+    }
+    fetch(getPopulasiRoute, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+
+        // console.log(data)
+        tambahPopulasi.classList.remove(...loading)
+        if (data.isSuccess) {
+          alertSasaran.removeChild(alertSasaran.childNodes[0]);
+          alertSasaran.insertAdjacentHTML("afterbegin", alert('success',
+          `Populasi tahun ${tahun} telah ditambahkan sebanyak ${data.total_inserted} data`))
+          ubahSasaran({
+            tahun,
+            periode
+          })
+        } else{
+          alertSasaran.removeChild(alertSasaran.childNodes[0]);
+          alertSasaran.insertAdjacentHTML("afterbegin", alert('danger', 'Web Service tidak dapat diakses. Mohon coba lagi nanti'))
+        }
+
+        $('#modal_tambah_populasi').modal('hide')
+
       })
   })
 

@@ -27,7 +27,7 @@ export default class D3AdminsController {
     // message(session)
     const sasaran = await Services.get_sasaran()
     const RouteActionDataIndex: string = `admin.${renderName}.get_data_index`
-    console.log(sasaran);
+    console.log(sasaran)
     
 
     return view.render(renderName + '/index', { sasaran, RouteActionDataIndex, tahunSasaran })

@@ -155,7 +155,7 @@
     fetch(`${routeActionDataIndex}/?tahun=${tahun}&&periode=${periode}`)
       .then(response => response.json())
       .then(data => {
-        // console.log(data.get_data[0].length)
+        console.log(data)
         if (data.get_data[0].length === 0) {
 
           showDataIndex.innerHTML = ''
